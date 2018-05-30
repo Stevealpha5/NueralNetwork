@@ -3,26 +3,40 @@ package com.company.NuralNetwork;
 
 public class Layer
 {
-    Nuron[] layer;
+    /**
+     * dataOut = the output data for the layer where each index is the output of a neuron
+     *
+     * layer = the array of neurons that make up the layer
+     */
+    private float[] dataOut;
+    private Neuron[] layer;
 
-    public Layer(int numberOfNuerons)
+    /**
+     * @param numberOfNuerons the number of neurons in this layer
+     * @param numInPrevLayer the number of neurons in the layer before to tell each neuron how many inputs it's getting
+     */
+    public Layer(int numberOfNuerons, int numInPrevLayer)
     {
-        layer = new Nuron[numberOfNuerons - 1];
+        layer = new Neuron[numberOfNuerons];
+        dataOut = new float[numberOfNuerons];
 
-        for (Nuron nuron:layer)
+        for (int i = 0; i < layer.length; i++)
         {
-            nuron = new Nuron();
+            layer[i] = new Neuron(numInPrevLayer);
         }
     }
 
-    public void fire(float[] dataIn)
+    /**
+     * @param dataIn the output data from the previous layer, if this is the input layer then this is simply the input data
+     * @return an array of the values outputted by each neuron
+     */
+    public float[] fire(float[] dataIn)
     {
         for(int i = 0; i < layer.length; i++)
         {
-            for(int j = 0; j < dataIn.length; j++)
-            {
-
-            }
+            dataOut[i] = layer[i].fire(dataIn);
         }
+
+        return dataOut;
     }
 }
