@@ -8,13 +8,16 @@ public class NueralNetwork
      * NN (Neural Network) = the array of layers that make up the neural network
      */
     private Layer[] NN;
+    private int[] nueronCfg;
 
     /**
-     * @param nuerons saves the input into the array 'nuerons' where index 0 is the input layer and the last index is the output layer, the value at each index is the number of
+     * @param nuerons saves the input into the array 'neurons' where index 0 is the input layer and the last index is the output layer, the value at each index is the number of
      *                neurons in that layer
      */
     public NueralNetwork(int ... nuerons)//5.3.3
     {
+        nueronCfg = nuerons;
+
         //the - 1 is because the output layer is not a layer it will be returned as a float[]
         NN = new Layer[nuerons.length -1];
 
@@ -91,5 +94,14 @@ public class NueralNetwork
                 }
             }
         }
+    }
+
+    /**
+     * @return The configuration of the neurons in the network where index 0 is the input layer and the last index is the output layer, the value at each index is the number of
+     *                neurons in that layer
+     */
+    public int[] getNueronCfg()
+    {
+        return nueronCfg;
     }
 }
