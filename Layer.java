@@ -15,13 +15,13 @@ class Layer
     private int numberOfNuerons;
 
     /**
-     * @param numberOfNuerons the number of neurons in this layer
+     * @param numberOfNeurons the number of neurons in this layer
      * @param numInPrevLayer the number of neurons in the layer before to tell each neuron how many inputs it's getting
      */
-    Layer(int numberOfNuerons, int numInPrevLayer)
+    Layer(int numberOfNeurons, int numInPrevLayer)
     {
-        layer = new Neuron[numberOfNuerons];
-        dataOut = new float[numberOfNuerons];
+        layer = new Neuron[numberOfNeurons];
+        dataOut = new float[numberOfNeurons];
 
         for (int i = 0; i < layer.length; i++)
         {

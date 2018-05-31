@@ -2,7 +2,7 @@ package com.company.NuralNetwork;
 
 import java.util.ArrayList;
 
-public class NueralNetwork
+public class NeuralNetwork
 {
     /**
      * NN (Neural Network) = the array of layers that make up the neural network
@@ -11,19 +11,19 @@ public class NueralNetwork
     private int[] nueronCfg;
 
     /**
-     * @param nuerons saves the input into the array 'neurons' where index 0 is the input layer and the last index is the output layer, the value at each index is the number of
+     * @param neurons saves the input into the array 'neurons' where index 0 is the input layer and the last index is the output layer, the value at each index is the number of
      *                neurons in that layer
      */
-    public NueralNetwork(int ... nuerons)//5.3.3
+    public NeuralNetwork(int ... neurons)//5.3.3
     {
-        nueronCfg = nuerons;
+        nueronCfg = neurons;
 
         //the - 1 is because the output layer is not a layer it will be returned as a float[]
-        NN = new Layer[nuerons.length -1];
+        NN = new Layer[neurons.length -1];
 
         for(int i = 0; i < NN.length; i++)
         {
-            NN[i] = new Layer(nuerons[i + 1], nuerons[i]);
+            NN[i] = new Layer(neurons[i + 1], neurons[i]);
         }
 
     }
@@ -100,7 +100,7 @@ public class NueralNetwork
      * @return The configuration of the neurons in the network where index 0 is the input layer and the last index is the output layer, the value at each index is the number of
      *                neurons in that layer
      */
-    public int[] getNueronCfg()
+    public int[] getNeuronCfg()
     {
         return nueronCfg;
     }
