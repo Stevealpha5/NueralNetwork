@@ -12,7 +12,7 @@ public class Mating
      *
      * random = you should know what this is
      */
-    private static float MUTATION_CHANCE = 0.015f;
+    private static float MUTATION_CHANCE = 0.0015f;
     private static Random random = new Random();
 
     /**
