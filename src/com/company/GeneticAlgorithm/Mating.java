@@ -12,7 +12,7 @@ public class Mating
      *
      * random = you should know what this is
      */
-    private static float MUTATION_CHANCE = 0.0015f;
+    private static float MUTATION_CHANCE = 0.025f;
     private static Random random = new Random();
 
     /**
@@ -22,7 +22,33 @@ public class Mating
      * @return outputs a new neural network with the same neuron configuration as the parent
      * the only difference is the genes have been shuffled up
      */
+    //TODO add check to make sure the parents have the same neuron configuration
     public static NeuralNetwork simpleMate(NeuralNetwork NN1, NeuralNetwork NN2)
+    {
+        ArrayList<Float> DNA1 = NN1.getDNA();
+        ArrayList<Float> DNA2 = NN2.getDNA();
+        ArrayList<Float> childDNA = new ArrayList<Float>();
+
+        NeuralNetwork child = new NeuralNetwork(NN1.getNeuronCfg());
+
+        for (int i = 0; i < DNA1.size(); i++)
+        {
+            if(random.nextBoolean())
+            {
+                childDNA.add(DNA1.get(i));
+            }else{
+                childDNA.add(DNA2.get(i));
+            }
+
+            if(random.nextFloat() < MUTATION_CHANCE)
+                childDNA.add(i, random.nextFloat());
+        }
+
+        child.setDNA(childDNA);
+        return child;
+    }
+
+    public static NeuralNetwork simpleMateBinary(NeuralNetwork NN1, NeuralNetwork NN2)
     {
         ArrayList<Float> DNA1 = NN1.getDNA();
         ArrayList<Float> DNA2 = NN2.getDNA();

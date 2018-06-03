@@ -1,7 +1,5 @@
 package com.company.NuralNetwork;
 
-import com.company.GeneticAlgorithm.Mating;
-
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -10,15 +8,16 @@ public class NeuralNetwork
     /**
      * NN (Neural Network) = the array of layers that make up the neural network
      *
-     * nueronCfg = the configuration of the neurons in the network where index 0 is the input layer and the last index is the output layer, the value at each index is the number of
+     * neuronCfg = the configuration of the neurons in the network where index 0 is the input layer and the last index is the output layer, the value at each index is the number of
      *                neurons in that layer
      *
      * fitness = the fitness score
      */
-    Random r = new Random();//temp, I'm using it to randomize the fitness for arena testing
+    Random r = new Random();//temp, I'm using it to randomize
+    // the fitness for arena testing
     private Layer[] NN;
-    private int[] nueronCfg;
-    public int fitness = r.nextInt(13);
+    private int[] neuronCfg;
+    public int fitness;// = r.nextInt(13);
 
     /**
      * @param neurons saves the input into the array 'neurons' where index 0 is the input layer and the last index is the output layer, the value at each index is the number of
@@ -26,7 +25,7 @@ public class NeuralNetwork
      */
     public NeuralNetwork(int ... neurons)//5.3.3
     {
-        nueronCfg = neurons;
+        neuronCfg = neurons;
 
         //the - 1 is because the output layer is not a layer it will be returned as a float[]
         NN = new Layer[neurons.length -1];
@@ -112,6 +111,6 @@ public class NeuralNetwork
      */
     public int[] getNeuronCfg()
     {
-        return nueronCfg;
+        return neuronCfg;
     }
 }

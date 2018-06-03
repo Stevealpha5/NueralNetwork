@@ -99,24 +99,15 @@ public class Arena
             {
                 float r = random.nextFloat();
 
-                /*System.out.println("Random: " + r);
-                System.out.println("I: " + i);
-                System.out.println("Length: " + population.length);
-                System.out.println("Coefficient: " + ((float) population.length / (float) (i + 1)));
-                System.out.println("Condition: " + r * ((float) population.length / (float) (i + 1)));*/
-
                 //adjusts the chances of survival based on fitness NOTE: the population must be sorted by fitness
                 if (r * ((float) population.length / (float) (i + 1)) < deathPercent)
                 {
-                    //System.out.println("I DIED!!!!    " + i);
                     population[i] = null;
                     killCounter++;
                 }
 
-                if(killCounter >= (int)(deathPercent * population.length))
+                if (killCounter >= (int) (deathPercent * population.length))
                     return;
-
-                //System.out.println("____________________________________________");
             }
         }
     }
@@ -157,4 +148,17 @@ public class Arena
             System.out.println(individual.fitness);
         }
     }
+
+    public void printBestStats()
+    {
+        System.out.println("DNA: " + population[0].getDNA());
+        System.out.println("Fitness: " + population[0].fitness);
+    }
+
+    public int getHighestFitness()
+    {
+        return population[0].fitness;
+    }
+
+
 }
