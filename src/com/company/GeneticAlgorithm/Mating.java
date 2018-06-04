@@ -12,7 +12,7 @@ public class Mating
      *
      * random = you should know what this is
      */
-    private static float MUTATION_CHANCE = 0.025f;
+    private static float MUTATION_CHANCE = 0.05f;
     private static Random random = new Random();
 
     /**
@@ -72,4 +72,19 @@ public class Mating
         child.setDNA(childDNA);
         return child;
     }
+
+   /* private ArrayList<Integer> floatToBitArray(ArrayList<Float> DNAin)
+    {
+        long bits;
+        int[] tempDNA;
+
+        ArrayList<Integer> bitDNA;
+
+        for (int i = 0; i < DNAin.size(); i++)
+        {
+            bits = Float.floatToRawIntBits(DNAin.get(i));
+
+
+        }
+    }*/
 }

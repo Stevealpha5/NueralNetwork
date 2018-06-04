@@ -35,13 +35,8 @@ public class Main
             System.out.println(anOut);
         }*/
 
-
-
         MultiplicationSim sim = new MultiplicationSim(50000, 4, 4);
         sim.runUntil(95000);
-
-
-
 
     }
 

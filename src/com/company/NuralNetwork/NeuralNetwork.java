@@ -71,8 +71,6 @@ public class NeuralNetwork
                 {
                     DNA.add(NN[i].getNeuronWeights(j)[k]);//saves the weights to the DNA
 
-                    /*System.out.println("I: " + i + " J: " + j + " k: " + k);
-                    System.out.println("Value: " + NN[i].getNeuronWeights(j)[k]);*/
                 }
             }
         }
