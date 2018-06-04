@@ -1,5 +1,9 @@
 package com.company.NuralNetwork;
 
+import java.io.ByteArrayInputStream;
+import java.io.DataInputStream;
+import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -58,45 +62,50 @@ public class NeuralNetwork
      * that will be used in the genetic algorithm
      * @return A float array list that will be used by the genetic algorithm
      */
-    public ArrayList<Float> getDNA()
+    public byte[] getDNA()
     {
-        ArrayList<Float> DNA = new ArrayList<Float>();
+        ArrayList<Float> DNAFloat = new ArrayList<Float>();
+        byte[] DNAByte;
 
         for(int i = 0; i < NN.length; i++)//layers in NN
         {
             for(int j = 0; j < NN[i].getNeurons().length; j++)//Neurons in layer
             {
-                DNA.add(NN[i].getNeuron(j).bais); //saves the bais value
+                DNAFloat.add(NN[i].getNeuron(j).bais); //saves the bais value
                 for (int k = 0; k < NN[i].getNeuronWeights(j).length; k++)//weights in neurons
                 {
-                    DNA.add(NN[i].getNeuronWeights(j)[k]);//saves the weights to the DNA
+                    DNAFloat.add(NN[i].getNeuronWeights(j)[k]);//saves the weights to the DNA
 
                 }
             }
         }
 
-        return DNA;
+        DNAByte = floatArrayToByteArray(DNAFloat);
+
+        return DNAByte;
     }
 
     /**
      * This sets the DNA of this neural net equal to that of the DNA being passed in
-     * @param DNA The new DNA values for this neural net NOTE: the new DNA <b>MUST</>
+     * @param inputDNA The new DNA values for this neural net NOTE: the new DNA <b>MUST</>
      *            have come from a neural net with identical layer configuration
      */
-    public void setDNA(ArrayList<Float> DNA)
+    public void setDNA(byte[] inputDNA)
     {
+        float[] DNA = floatArrayFromByteArray(inputDNA);
+
         int DNACounter = 0;
 
         for(int i = 0; i < NN.length; i++)//layers in NN
         {
             for(int j = 0; j < NN[i].getNeurons().length; j++)//Neurons in layer
             {
-                NN[i].getNeuron(j).bais = DNA.get(DNACounter);
+                NN[i].getNeuron(j).bais = DNA[DNACounter];
                 DNACounter++;
 
                 for (int k = 0; k < NN[i].getNeuronWeights(j).length; k++)//weights in neurons
                 {
-                    NN[i].getNeuronWeights(j)[k] = DNA.get(DNACounter);
+                    NN[i].getNeuronWeights(j)[k] = DNA[DNACounter];
                     DNACounter++;
                 }
             }
@@ -111,4 +120,35 @@ public class NeuralNetwork
     {
         return neuronCfg;
     }
+
+    private byte[] floatArrayToByteArray(ArrayList<Float> values)
+    {
+        ByteBuffer buffer = ByteBuffer.allocate(4 * values.size());
+
+        for (float value : values){
+            buffer.putFloat(value);
+        }
+
+        return buffer.array();
+    }
+
+    private static float[] floatArrayFromByteArray(byte[] buffer)
+    {
+        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(buffer);
+        DataInputStream dataInputStream = new DataInputStream(byteArrayInputStream);
+        float[] floatArray = new float[buffer.length / 4];  // 4 bytes per float
+        for (int i = 0; i < floatArray.length; i++)
+        {
+            try
+            {
+                floatArray[i] = dataInputStream.readFloat();
+            } catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+        }
+
+        return  floatArray;
+    }
+
 }

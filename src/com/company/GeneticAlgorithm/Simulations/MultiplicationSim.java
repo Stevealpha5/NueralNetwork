@@ -1,6 +1,7 @@
 package com.company.GeneticAlgorithm.Simulations;
 
 import com.company.GeneticAlgorithm.Arena;
+import com.company.NuralNetwork.ActivationFunctions;
 import com.company.NuralNetwork.NeuralNetwork;
 
 import java.util.Random;
@@ -22,8 +23,10 @@ public class MultiplicationSim
      */
     private int defualtFitness = 100000;
     private NeuralNetwork[] population;
-    private float[][] input = {{0,0,0,1},{0,0,1,1},{0,1,0,1},{1,0,0,1},{1,0,1,1},{1,0,1,0},{1,1,1,0}};
-    private float[][] expectedOutput = {{0,0,0,0},{0,0,0,0},{0,0,0,1},{0,0,1,0},{0,1,1,0},{0,1,0,0},{0,1,1,0}};
+    /*private float[][] input = {{0,0,1,1},{0,1,0,1},{1,0,0,1},{1,0,1,1},{1,0,1,0},{1,1,1,0}};
+    private float[][] expectedOutput = {{0,0,0,0},{0,0,0,1},{0,0,1,0},{0,1,1,0},{0,1,0,0},{0,1,1,0}};*/
+    private float[][] input = {{1},{2},{3},{4},{5},{6}};
+    private float[][] expectedOutput = {{0,0,1},{0,1,0},{0,1,1},{1,0,0},{1,0,1},{1,1,0}};
     private Arena arena;
     private int[] neuronCFG;
 
@@ -41,7 +44,7 @@ public class MultiplicationSim
             population[i] = new NeuralNetwork(neuronCFG);
         }
 
-        arena = new Arena(population, 0.05f);
+        arena = new Arena(population, 0.25f);
     }
 
     /**
@@ -91,35 +94,33 @@ public class MultiplicationSim
     {
         float[] output;
 
-        Random r = new Random();
-        int inputIndex = r.nextInt(input.length);
 
         for(int i = 0; i < population.length; i++)
         {
-            output = population[i].fire(input[inputIndex]);
-            population[i].fitness = fitnessCalc(output, inputIndex);
-            //System.out.println(population[i].fitness);
+            int fitnessDeducted = 0;
+            population[i].fitness = defualtFitness;
+
+            for(int j = 0; j < input.length; j++)
+            {
+                output = population[i].fire(input[j]);
+
+                for(int k = 0; k < output.length; k++)
+                {
+                     fitnessDeducted = (int) ((Math.abs(output[k] - expectedOutput[j][k])) * 1000);
+
+                    if(Float.isNaN(output[k]))
+                        fitnessDeducted = 25000;
+
+                    population[i].fitness -= fitnessDeducted;
+/*
+                    System.out.println("Output, Expected: " + output[k] + ',' + expectedOutput[j][k]);
+                    System.out.println("Fitness Deducted: " + fitnessDeducted);*/
+                }
+            }
+
         }
 
     }
 
-    /**
-     * Calculates the fitness based on the networks output
-     * @param NNOutput the output of the fired network
-     * @param inputIndex whatever input was passed to the network
-     * @return the fitness of the network
-     */
-    private int fitnessCalc(float[] NNOutput, int inputIndex)
-    {
-        int fitness = defualtFitness;
-
-        for(int i = 0; i < NNOutput.length; i++)
-        {
-            fitness -= (Math.abs(NNOutput[i] - expectedOutput[inputIndex][i])) * 10000;
-            //System.out.println(NNOutput[i]);
-        }
-
-        return fitness;
-    }
 
 }

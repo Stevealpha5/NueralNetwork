@@ -151,7 +151,14 @@ public class Arena
 
     public void printBestStats()
     {
-        System.out.println("DNA: " + population[0].getDNA());
+        System.out.print("DNA: " + '{');
+        for(byte x: population[0].getDNA())
+        {
+            System.out.print(x);
+            System.out.print(',');
+        }
+
+        System.out.println('}');
         System.out.println("Fitness: " + population[0].fitness);
     }
 

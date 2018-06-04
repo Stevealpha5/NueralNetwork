@@ -12,7 +12,7 @@ public class Mating
      *
      * random = you should know what this is
      */
-    private static float MUTATION_CHANCE = 0.05f;
+    private static float MUTATION_CHANCE = 0.025f;
     private static Random random = new Random();
 
     /**
@@ -25,66 +25,29 @@ public class Mating
     //TODO add check to make sure the parents have the same neuron configuration
     public static NeuralNetwork simpleMate(NeuralNetwork NN1, NeuralNetwork NN2)
     {
-        ArrayList<Float> DNA1 = NN1.getDNA();
-        ArrayList<Float> DNA2 = NN2.getDNA();
-        ArrayList<Float> childDNA = new ArrayList<Float>();
+        byte[] DNA1 = NN1.getDNA();
+        byte[] DNA2 = NN2.getDNA();
+        byte[] childDNA = new byte[DNA1.length];
+        byte[] randomByte = new byte[1];
 
         NeuralNetwork child = new NeuralNetwork(NN1.getNeuronCfg());
 
-        for (int i = 0; i < DNA1.size(); i++)
+        for (int i = 0; i < DNA1.length; i++)
         {
             if(random.nextBoolean())
             {
-                childDNA.add(DNA1.get(i));
+                childDNA[i] = DNA1[i];
             }else{
-                childDNA.add(DNA2.get(i));
+                childDNA[i] = DNA2[i];
             }
 
             if(random.nextFloat() < MUTATION_CHANCE)
-                childDNA.add(i, random.nextFloat());
+                random.nextBytes(randomByte);
+            childDNA[i] = randomByte[0];
         }
 
         child.setDNA(childDNA);
         return child;
     }
 
-    public static NeuralNetwork simpleMateBinary(NeuralNetwork NN1, NeuralNetwork NN2)
-    {
-        ArrayList<Float> DNA1 = NN1.getDNA();
-        ArrayList<Float> DNA2 = NN2.getDNA();
-        ArrayList<Float> childDNA = new ArrayList<Float>();
-
-        NeuralNetwork child = new NeuralNetwork(NN1.getNeuronCfg());
-
-        for (int i = 0; i < DNA1.size(); i++)
-        {
-            if(random.nextBoolean())
-            {
-                childDNA.add(DNA1.get(i));
-            }else{
-                childDNA.add(DNA2.get(i));
-            }
-
-            if(random.nextFloat() < MUTATION_CHANCE)
-                childDNA.add(i, random.nextFloat());
-        }
-
-        child.setDNA(childDNA);
-        return child;
-    }
-
-   /* private ArrayList<Integer> floatToBitArray(ArrayList<Float> DNAin)
-    {
-        long bits;
-        int[] tempDNA;
-
-        ArrayList<Integer> bitDNA;
-
-        for (int i = 0; i < DNAin.size(); i++)
-        {
-            bits = Float.floatToRawIntBits(DNAin.get(i));
-
-
-        }
-    }*/
 }
