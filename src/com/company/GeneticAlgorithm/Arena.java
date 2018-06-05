@@ -160,6 +160,7 @@ public class Arena
 
         System.out.println('}');
         System.out.println("Fitness: " + population[0].fitness);
+        System.out.println("% Accuracy: " + population[0].percentRight);
     }
 
     public int getHighestFitness()

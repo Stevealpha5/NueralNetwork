@@ -22,6 +22,7 @@ public class NeuralNetwork
     private Layer[] NN;
     private int[] neuronCfg;
     public int fitness;// = r.nextInt(13);
+    public float percentRight = 0;
 
     /**
      * @param neurons saves the input into the array 'neurons' where index 0 is the input layer and the last index is the output layer, the value at each index is the number of

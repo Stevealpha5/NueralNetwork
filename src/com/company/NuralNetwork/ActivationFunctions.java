@@ -4,7 +4,7 @@ public class ActivationFunctions
 {
     public static float sigmoid(float x)
     {
-        return (float)(1 / (1 + Math.exp(-x * 0.2)));
+        return (float)(1 / (1 + Math.exp(-x)));
     }
 /*
     public static float sigmoidLookUp(float x)

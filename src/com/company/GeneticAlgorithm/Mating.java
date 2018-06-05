@@ -12,7 +12,7 @@ public class Mating
      *
      * random = you should know what this is
      */
-    private static float MUTATION_CHANCE = 0.025f;
+    private static float MUTATION_CHANCE = 0.05f;
     private static Random random = new Random();
 
     /**
@@ -42,8 +42,15 @@ public class Mating
             }
 
             if(random.nextFloat() < MUTATION_CHANCE)
+            {
                 random.nextBytes(randomByte);
-            childDNA[i] = randomByte[0];
+                if(random.nextBoolean())
+                {
+                    childDNA[i] += randomByte[0];
+                }else{
+                    childDNA[i] -= randomByte[0];
+                }
+            }
         }
 
         child.setDNA(childDNA);

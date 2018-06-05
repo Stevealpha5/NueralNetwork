@@ -23,10 +23,8 @@ public class MultiplicationSim
      */
     private int defualtFitness = 100000;
     private NeuralNetwork[] population;
-    /*private float[][] input = {{0,0,1,1},{0,1,0,1},{1,0,0,1},{1,0,1,1},{1,0,1,0},{1,1,1,0}};
-    private float[][] expectedOutput = {{0,0,0,0},{0,0,0,1},{0,0,1,0},{0,1,1,0},{0,1,0,0},{0,1,1,0}};*/
-    private float[][] input = {{1},{2},{3},{4},{5},{6}};
-    private float[][] expectedOutput = {{0,0,1},{0,1,0},{0,1,1},{1,0,0},{1,0,1},{1,1,0}};
+    private float[][] input = {{0,0,1,1},{0,1,0,1},{1,0,0,1},{1,0,1,1},{1,0,1,0},{1,1,1,0}};
+    private float[][] expectedOutput = {{0,0,0,0},{0,0,0,1},{0,0,1,0},{0,1,1,0},{0,1,0,0},{0,1,1,0}};
     private Arena arena;
     private int[] neuronCFG;
 
@@ -44,7 +42,7 @@ public class MultiplicationSim
             population[i] = new NeuralNetwork(neuronCFG);
         }
 
-        arena = new Arena(population, 0.25f);
+        arena = new Arena(population, 0.5f);
     }
 
     /**
@@ -57,7 +55,13 @@ public class MultiplicationSim
         {
             assingeFitness();
             arena.evolve();
-            arena.printBestStats();
+
+            if(i % 10 == 0)
+            {
+                System.out.println("_____________________________________________________________________________________");
+                System.out.println("Generation: " + i);
+                arena.printBestStats();
+            }
         }
 
     }
@@ -75,6 +79,8 @@ public class MultiplicationSim
             assingeFitness();
             arena.evolve();
 
+            generation++;
+
             if(generation % 10 == 0)
             {
                 System.out.println("_____________________________________________________________________________________");
@@ -82,7 +88,7 @@ public class MultiplicationSim
                 arena.printBestStats();
             }
 
-            generation++;
+
         }
 
     }
@@ -100,27 +106,40 @@ public class MultiplicationSim
             int fitnessDeducted = 0;
             population[i].fitness = defualtFitness;
 
+
+            int numberRight = 0;
+
             for(int j = 0; j < input.length; j++)
             {
                 output = population[i].fire(input[j]);
 
+                int numRight = 0;
                 for(int k = 0; k < output.length; k++)
                 {
-                     fitnessDeducted = (int) ((Math.abs(output[k] - expectedOutput[j][k])) * 1000);
+
+                    if((int)(output[k] + .5) == (int)expectedOutput[j][k])
+                    {
+                        numRight++;
+                        numberRight++;
+                    }else
+                    {
+                        fitnessDeducted += 200;
+                    }
 
                     if(Float.isNaN(output[k]))
-                        fitnessDeducted = 25000;
+                        fitnessDeducted += 25000;
 
-                    population[i].fitness -= fitnessDeducted;
-/*
-                    System.out.println("Output, Expected: " + output[k] + ',' + expectedOutput[j][k]);
-                    System.out.println("Fitness Deducted: " + fitnessDeducted);*/
                 }
+
+                fitnessDeducted -= Math.pow(10, numRight);
+
+                population[i].fitness -= fitnessDeducted;
             }
+
+            population[i].percentRight = (float) numberRight / (4.0f * (float)input.length);
 
         }
 
     }
-
 
 }
