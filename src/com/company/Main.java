@@ -1,5 +1,6 @@
 package com.company;
 
+import com.company.GANeuralNetwork.GANeuralNetwork;
 import com.company.GeneticAlgorithm.Simulations.MultiplicationSim;
 import com.company.NuralNetwork.NeuralNetwork;
 
@@ -9,10 +10,68 @@ public class Main
 
     public static void main(String[] args)
     {
-        test();
+        testGANN();
+
+        //test();
 
         //sim();
 
+    }
+
+    private static void testGANN()
+    {/*
+        int[] array = {1,2,3,4,5};
+        int[] tempArray;
+
+        int zerosRemoved = 0;
+
+        for(int i = 1; i < array.length - 1; i++)
+        {
+
+            if(array[i] == 0)
+            {
+                System.arraycopy(array, i + 1, array, i, array.length - 1 - i);
+                i--;
+                zerosRemoved++;
+            }
+        }
+
+        if(zerosRemoved > 0)
+        {
+            tempArray = new int[array.length - zerosRemoved];
+
+            System.arraycopy(array, 0, tempArray, 0, array.length - zerosRemoved);
+
+            array = tempArray;
+        }
+
+        for(int x: array)
+        {
+            System.out.println(x);
+        }
+
+        System.out.println("_____________________________________________________");
+        tempArray = array;
+        for(int x: tempArray)
+        {
+            System.out.println(x);
+        }*/
+
+        /*
+        int[] array = {1,2,3,4,5};
+
+        int targetIndex = 0;
+        for( int sourceIndex = 0;  sourceIndex < array.length;  sourceIndex++ )
+        {
+            if( array[sourceIndex] != 0 )
+                array[targetIndex++] = array[sourceIndex];
+        }
+        int[] newArray = new int[targetIndex];
+        System.arraycopy( array, 0, newArray, 0, targetIndex );*/
+
+
+
+       GANeuralNetwork nn = new GANeuralNetwork(5, 2);
     }
 
     private static void sim()
@@ -23,7 +82,9 @@ public class Main
 
     private static void test()
     {
-        byte[] DNA = {14,56,27,-65,62,-28,57,-127,-102,-38,109,-1,64,-19,19,-6,-49,-34,21,26,-107,-126,22,16,-65,-32,-51,-80,-29,-42,-95,39,-10,-115,37,97,109,103,-76,-43,112,53,127,28,17,87,64,14,69,4,-41,8,-105,-111,103,45,23,-18,29,-81,15,-121,24,54,50,-59,-64,-106,12,-23,84,-24,-11,65,-19,-72,125,-93,-1,119,56,-107,-24,-122,-32,14,7,119,51,-38,18,-65,71,54,100,38,-38,-46,12,72,-124,68,-121,-41,119,36,-11,-111,14,-10,64,51,-29,-79,-12,58,-7,64,26,-5,50,38,9,48,-113,-31,-31,-6,-49,67,-103,17,-38,90,105,54,-26,-109,69,63,-37,124,-70,110,-6,-77,-121,-114,119,61,-128,43,78,-70,47,36,-78,-104,-124,124};
+        byte[] DNA = {6,107,-49,50,110,-78,-60,-62,-71,-17,-121,-49,47,119,2,61,-62,-53,-17,-84,44,22,-108,-67,-61,66,-15,-85,10,0,-9,-65,45,-16,6,-108,18,-119,-30,96,-105,118,-112,16,-49,-120,-43,-64,-91,29,38,-57,1,-47,-55,-22,112,-38,4,127,-18,113,11,93,-53,-30,-5,79,100,-44,-45,119,-118,77,110,46,-13,-48,16,16,-11,-57,-100,-22,90,-67,-45,38,-83,25,37,-47,23,-105,-39,26,-122,-99,9,-25,89,29,32,29,1,-33,-96,-100,36,-83,64,22,-24,-89,46,41,41,-80,113,109,21,17,-109,-106,124,-106,12,-5,-51,-13,48,-123,62,100,104,33,-93,-55,-33,68,-5,1,-118,121,-101,-19,42,-41,-97,-37,5,48,83,75,59,77,-17,108,88,-120};
+
+
         float[][] input = {{0,0,1,1},{0,1,0,1},{1,0,0,1},{1,0,1,1},{1,0,1,0},{1,1,1,0}, {1,1,0,0}};
         float[][] expectedOutput = {{0,0,0,0},{0,0,0,1},{0,0,1,0},{0,1,1,0},{0,1,0,0},{0,1,1,0},{0,0,0,0}};
         float[] out;

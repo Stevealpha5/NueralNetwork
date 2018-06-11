@@ -1,10 +1,7 @@
 package com.company.GeneticAlgorithm.Simulations;
 
 import com.company.GeneticAlgorithm.Arena;
-import com.company.NuralNetwork.ActivationFunctions;
 import com.company.NuralNetwork.NeuralNetwork;
-
-import java.util.Random;
 
 public class MultiplicationSim
 {

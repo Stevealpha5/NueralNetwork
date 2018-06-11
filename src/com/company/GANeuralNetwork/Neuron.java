@@ -1,4 +1,4 @@
-package com.company.NuralNetwork;
+package com.company.GANeuralNetwork;
 
 import com.company.Utils.ActivationFunctions;
 

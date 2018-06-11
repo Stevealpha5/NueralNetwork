@@ -1,4 +1,4 @@
-package com.company.NuralNetwork;
+package com.company.GANeuralNetwork;
 
 import com.company.Utils.Utils;
 
@@ -9,38 +9,34 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class NeuralNetwork
+public class GANeuralNetwork
 {
-    /**
-     * NN (Neural Network) = the array of layers that make up the neural network
-     *
-     * neuronCfg = the configuration of the neurons in the network where index 0 is the input layer and the last index is the output layer, the value at each index is the number of
-     *                neurons in that layer
-     *
-     * fitness = the fitness score
-     */
-    Random r = new Random();//temp, I'm using it to randomize
-    // the fitness for arena testing
+
+    private Random r = new Random();
+
+    private int neuronLimit = 5;
+    private int depthLimit = 6;
+
     private Layer[] NN;
-    private int[] neuronCfg;
+    private int[] neuronCfg = new int[r.nextInt(depthLimit) + 2];
+    private float[] weights;
+    private float[] baises;
     public int fitness;// = r.nextInt(13);
     public float percentRight = 0;
 
-    /**
-     * @param neurons saves the input into the array 'neurons' where index 0 is the input layer and the last index is the output layer, the value at each index is the number of
-     *                neurons in that layer
-     */
-    public NeuralNetwork(int ... neurons)//5.3.3
+    public GANeuralNetwork(int inputLayer, int outputLayer)
     {
-        neuronCfg = neurons;
 
-        //the - 1 is because the output layer is not a layer it will be returned as a float[]
-        NN = new Layer[neurons.length -1];
+        if(inputLayer <= 0 || outputLayer <= 0)
+            System.out.println("You stupid");
 
-        for(int i = 0; i < NN.length; i++)
-        {
-            NN[i] = new Layer(neurons[i + 1], neurons[i]);
-        }
+        for(int i = 0; i < neuronCfg.length; i++)
+            neuronCfg[i] = r.nextInt(neuronLimit);
+
+        neuronCfg[0] = inputLayer;
+        neuronCfg[neuronCfg.length - 1] = outputLayer;
+        neuronCfg = Utils.removeZeros(neuronCfg);
+
 
     }
 
@@ -83,7 +79,7 @@ public class NeuralNetwork
             }
         }
 
-        DNAByte = Utils.floatArrayToByteArray(DNAFloat);
+        DNAByte = floatArrayToByteArray(DNAFloat);
 
         return DNAByte;
     }
@@ -95,7 +91,7 @@ public class NeuralNetwork
      */
     public void setDNA(byte[] inputDNA)
     {
-        float[] DNA = Utils.floatArrayFromByteArray(inputDNA);
+        float[] DNA = floatArrayFromByteArray(inputDNA);
 
         int DNACounter = 0;
 
@@ -124,5 +120,34 @@ public class NeuralNetwork
         return neuronCfg;
     }
 
+    private byte[] floatArrayToByteArray(ArrayList<Float> values)
+    {
+        ByteBuffer buffer = ByteBuffer.allocate(4 * values.size());
+
+        for (float value : values){
+            buffer.putFloat(value);
+        }
+
+        return buffer.array();
+    }
+
+    private static float[] floatArrayFromByteArray(byte[] buffer)
+    {
+        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(buffer);
+        DataInputStream dataInputStream = new DataInputStream(byteArrayInputStream);
+        float[] floatArray = new float[buffer.length / 4];  // 4 bytes per float
+        for (int i = 0; i < floatArray.length; i++)
+        {
+            try
+            {
+                floatArray[i] = dataInputStream.readFloat();
+            } catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+        }
+
+        return  floatArray;
+    }
 
 }
