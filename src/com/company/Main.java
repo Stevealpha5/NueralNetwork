@@ -71,9 +71,24 @@ public class Main
 
 
 
-       GANeuralNetwork nn = new GANeuralNetwork(2, 1);
+        float[] in = {2, 1};
 
-       nn.printRawDNA();
+        float[] out1;
+        float[] out2;
+        float[] out3;
+
+        System.out.println("\n\n\n\n" + "NN" + "\n");
+       GANeuralNetwork nn = new GANeuralNetwork(2, 1);
+       nn.printFormattedDNA();
+
+        System.out.println("\n\n\n\n" + "NN2" + "\n");
+       GANeuralNetwork nn2 = new GANeuralNetwork(1, 2);
+       nn2.printFormattedDNA();
+
+        System.out.println("\n\n\n\n" + "NN2a" + "\n");
+       nn2.setDNA(nn.getNeuronCfg(), nn.getWeights(), nn.getBaises());
+       nn2.printFormattedDNA();
+
     }
 
     private static void sim()

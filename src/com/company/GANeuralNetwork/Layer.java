@@ -4,12 +4,19 @@ package com.company.GANeuralNetwork;
 class Layer
 {
     /**
+     * weights = the weights of all of the neurons in the layer
+     *
+     * baises = the baises of all of the neuron in the layer
+     *
      * dataOut = the output data for the layer where each index is the output of a neuron
      *
      * layer = the array of neurons that make up the layer
      *
      * numberOfNuerons = the number neurons in this layer
      */
+    float[][] weights;
+    float[] baises;
+
     private float[] dataOut;
     private Neuron[] layer;
     private int numberOfNuerons;
@@ -42,6 +49,19 @@ class Layer
 
         return dataOut;
     }
+
+    /**
+     * sets the weights and baises of all of the neuron in the layer
+     */
+    void setNeuronWeightsAndBaises()
+    {
+        for(int i = 0; i < layer.length; i++)
+        {
+            layer[i].weightIndex = weights[i];
+            layer[i].bais = baises[i];
+        }
+    }
+
 
     int getNumberOfNuerons()
     {

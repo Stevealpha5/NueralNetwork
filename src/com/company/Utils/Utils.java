@@ -9,6 +9,10 @@ import java.util.ArrayList;
 public class Utils
 {
 
+    /**
+     * @param values the values that need to be converted to a byte array
+     * @return the byte array that came from the passed array list
+     */
     public static byte[] floatArrayToByteArray(ArrayList<Float> values)
     {
         ByteBuffer buffer = ByteBuffer.allocate(4 * values.size());
@@ -20,6 +24,10 @@ public class Utils
         return buffer.array();
     }
 
+    /***
+     * @param buffer the byte array that needs to be converted to a float
+     * @return an array of floats form the input bytes
+     */
     public static float[] floatArrayFromByteArray(byte[] buffer)
     {
         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(buffer);
@@ -39,6 +47,11 @@ public class Utils
         return  floatArray;
     }
 
+    /***
+     * Converts an int to binary in form of a byte array
+     * @param value input value to be converted to binary
+     * @return a byte array that is the int in binary
+     */
     public static byte[] intToBinary(int value)
     {
         String tmp = Integer.toBinaryString(value);
@@ -60,6 +73,11 @@ public class Utils
         return res;
     }
 
+    /**
+     * Removes the zeros for an int array
+     * @param input the array that the zeros are to be removed from
+     * @return a new array that has the zeros removed from it
+     */
     public static int[] removeZeros(int[] input)
     {
         int targetIndex = 0;

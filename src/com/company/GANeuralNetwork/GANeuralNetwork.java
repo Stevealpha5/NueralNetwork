@@ -10,21 +10,37 @@ import static com.company.Utils.Utils.*;
 public class GANeuralNetwork
 {
 
+    /***
+     * r = you know what this does
+     *
+     * neuronLimit = the maximum amount of neurons per layer that will be randomly generated
+     * depthLimit = the maximum amount of layers that will be randomly generated
+     *
+     * NN = an array of Layers that make up the neural network itself
+     * neuronDfg = the layout of the network, the number of indexes is i=the number of layers and the number in each index is the number of neurons for that layer
+     * weights = the weights for all of the neuron in the network
+     * baises = all of th baises for all of the neuron in the network
+     * fitness = this networks fitness rating
+     */
     private Random r = new Random();
 
-    private int neuronLimit = 3;
-    private int depthLimit = 3;
+    private int neuronLimit = 10;
+    private int depthLimit = 10;
 
     private Layer[] NN;
     private int[] neuronCfg;
     private float[][][] weights;
     private float[][] baises;
-    public int fitness;// = r.nextInt(13);
-    public float percentRight = 0;
+    public int fitness;
 
+
+    /**
+     * Constructs a neural network that is designed to work with genetic algorithms
+     * @param inputLayer number of input neurons
+     * @param outputLayer number of output neurons
+     */
     public GANeuralNetwork(int inputLayer, int outputLayer)
     {
-
         if (inputLayer <= 0 || outputLayer <= 0)
             System.out.println("You stupid");
 
@@ -32,10 +48,13 @@ public class GANeuralNetwork
         initWeights();
         intiBaises();
 
-
-
     }
 
+    /**
+     * Properly formats the NeuronCfg by removing all of the zeros and making sure the input and output layers are correctly assigned
+     * @param inputLayer number of input neurons
+     * @param outputLayer number of output neurons
+     */
     private void initNeuronCFG(int inputLayer, int outputLayer)
     {
         neuronCfg = new int[r.nextInt(depthLimit) + 2];
@@ -48,17 +67,16 @@ public class GANeuralNetwork
         neuronCfg = Utils.removeZeros(neuronCfg);
     }
 
+    /**
+     * assigns values to all of the weights in the network
+     */
     private void initWeights()
     {
-        //System.out.println("# of layers: " + weights.length);
-
         weights = new float[neuronCfg.length][][];
 
         for (int i = 0; i < weights.length; i++)
         {
             weights[i] = new float[neuronCfg[i]][];
-
-           // System.out.println("# of neurons on layer " + i + ": " + weights[i].length);
 
             for (int j = 0; j < weights[i].length; j++)
             {
@@ -74,12 +92,14 @@ public class GANeuralNetwork
                 {
                     weights[i][j][k] = r.nextFloat();
                 }
-               // System.out.println("# of weights for neuron # " + j + " in layer " + i + ": " + weights[i][j].length);
 
             }
         }
     }
 
+    /**
+     * assigns values to all of the baises in the network
+     */
     private void intiBaises()
     {
         baises = new float[neuronCfg.length][];
@@ -95,7 +115,10 @@ public class GANeuralNetwork
         }
     }
 
-    public void printHumanReadableDNA()
+    /**
+     * Prints all of the network information (neuron  config, weights, and baises) in a nice pretty format
+     */
+    public void printFormattedDNA()
     {
         System.out.print("Neuron Config: ");
 
@@ -134,6 +157,9 @@ public class GANeuralNetwork
 
     }
 
+    /**
+     * prints all of the network information (neuron  config, weights, and baises) formatted as arrays, to be copy and pasted into a network
+     */
     public void printRawDNA()
     {
         System.out.print("Neuron Config: ");
@@ -221,69 +247,61 @@ public class GANeuralNetwork
     }
 
     /**
-     * Oh boy this is a method... It cycles through all of the neurons layer by layer to save the bais value and the weights to 'DNA'
-     * that will be used in the genetic algorithm
-     * @return A float array list that will be used by the genetic algorithm
+     * Changes the network based on input DNA
+     * @param neuronCfg new neuron configuration data
+     * @param weights new weight data
+     * @param baises new bais data
      */
-    public byte[] getDNA()
+    public void setDNA(int[] neuronCfg, float[][][] weights, float[][] baises)
     {
-        ArrayList<Float> DNAFloat = new ArrayList<Float>();
-        byte[] DNAByte;
+       this.neuronCfg = neuronCfg;
+       this.weights = weights;
+       this.baises = baises;
 
-        for(int i = 0; i < NN.length; i++)//layers in NN
-        {
-            for(int j = 0; j < NN[i].getNeurons().length; j++)//Neurons in layer
-            {
-                DNAFloat.add(NN[i].getNeuron(j).bais); //saves the bais value
-                for (int k = 0; k < NN[i].getNeuronWeights(j).length; k++)//weights in neurons
-                {
-                    DNAFloat.add(NN[i].getNeuronWeights(j)[k]);//saves the weights to the DNA
-
-                }
-            }
-        }
-
-        DNAByte = floatArrayToByteArray(DNAFloat);
-
-        return DNAByte;
+       construct();
     }
 
     /**
-     * This sets the DNA of this neural net equal to that of the DNA being passed in
-     * @param inputDNA The new DNA values for this neural net NOTE: the new DNA <b>MUST</>
-     *            have come from a neural net with identical layer configuration
+     * Reforms the network based on the current DNA (neuronCfg, weights, and baises)
+     * and updates all of the neurons weights and baises based on that DNA
      */
-    public void setDNA(byte[] inputDNA)
+    private void construct()
     {
-        float[] DNA = floatArrayFromByteArray(inputDNA);
+        formNetwork();
 
-        int DNACounter = 0;
-
-        for(int i = 0; i < NN.length; i++)//layers in NN
+        for(int i = 0; i < baises.length - 1; i++)
         {
-            for(int j = 0; j < NN[i].getNeurons().length; j++)//Neurons in layer
-            {
-                NN[i].getNeuron(j).bais = DNA[DNACounter];
-                DNACounter++;
-
-                for (int k = 0; k < NN[i].getNeuronWeights(j).length; k++)//weights in neurons
-                {
-                    NN[i].getNeuronWeights(j)[k] = DNA[DNACounter];
-                    DNACounter++;
-                }
-            }
+            NN[i].baises = baises[i];
+            NN[i].weights = weights[i];
+            NN[i].setNeuronWeightsAndBaises();
         }
     }
 
     /**
-     * @return The configuration of the neurons in the network where index 0 is the input layer and the last index is the output layer, the value at each index is the number of
-     *                neurons in that layer
+     * Creates the structure of a network based on current DNA but does not update values
      */
+    private void formNetwork()
+    {
+        NN = new Layer[neuronCfg.length - 1];
+
+        for(int i = 0; i < NN.length; i++)
+        {
+            NN[i] = new Layer(neuronCfg[i + 1], neuronCfg[i]);
+        }
+    }
+
     public int[] getNeuronCfg()
     {
         return neuronCfg;
     }
 
+    public  float[][][] getWeights()
+    {
+        return  weights;
+    }
 
-
+    public float[][] getBaises()
+    {
+        return baises;
+    }
 }
