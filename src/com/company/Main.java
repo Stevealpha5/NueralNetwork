@@ -71,7 +71,9 @@ public class Main
 
 
 
-       GANeuralNetwork nn = new GANeuralNetwork(5, 2);
+       GANeuralNetwork nn = new GANeuralNetwork(2, 1);
+
+       nn.printRawDNA();
     }
 
     private static void sim()
