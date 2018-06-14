@@ -1,5 +1,6 @@
 package com.company.GeneticAlgorithm;
 
+import com.company.GANeuralNetwork.GANeuralNetwork;
 import com.company.NuralNetwork.NeuralNetwork;
 
 import java.util.ArrayList;
@@ -55,6 +56,53 @@ public class Mating
 
         child.setDNA(childDNA);
         return child;
+    }
+
+    public static GANeuralNetwork simpleGANNMate(GANeuralNetwork NN1, GANeuralNetwork NN2)
+    {
+        int[] neuronCfg1;
+        float[][][] weights1;
+        float[][] baises1;
+
+        int[] neuronCfg2;
+        float[][][] weights2;
+        float[][] baises2;
+
+        int[] neuronCfgChild;
+        float[][][] weightsChild;
+        float[][] baisesChild;
+
+        return null;
+    }
+
+    private static byte[] simpleMateArray(byte[] array1, byte[] array2)
+    {
+
+        byte[] childArray = new byte[array1.length];
+        byte[] randomByte = new byte[1];
+
+        for (int i = 0; i < array1.length; i++)
+        {
+            if(random.nextBoolean())
+            {
+                childArray[i] = array1[i];
+            }else{
+                childArray[i] = array2[i];
+            }
+
+            if(random.nextFloat() < MUTATION_CHANCE)
+            {
+                random.nextBytes(randomByte);
+                if(random.nextBoolean())
+                {
+                    childArray[i] += randomByte[0];
+                }else{
+                    childArray[i] -= randomByte[0];
+                }
+            }
+        }
+
+        return childArray;
     }
 
 }

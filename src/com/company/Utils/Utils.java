@@ -13,9 +13,24 @@ public class Utils
      * @param values the values that need to be converted to a byte array
      * @return the byte array that came from the passed array list
      */
-    public static byte[] floatArrayToByteArray(ArrayList<Float> values)
+    public static byte[] floatArrayListToByteArray(ArrayList<Float> values)
     {
         ByteBuffer buffer = ByteBuffer.allocate(4 * values.size());
+
+        for (float value : values){
+            buffer.putFloat(value);
+        }
+
+        return buffer.array();
+    }
+
+    /**
+     * @param values the values that need to be converted to a byte array
+     * @return the byte array that came from the passed array
+     */
+    public static byte[] floatArrayToByteArray(float[] values)
+    {
+        ByteBuffer buffer = ByteBuffer.allocate(4 * values.length);
 
         for (float value : values){
             buffer.putFloat(value);
@@ -42,6 +57,32 @@ public class Utils
             {
                 e.printStackTrace();
             }
+        }
+
+        return  floatArray;
+    }
+
+    public static float[] floatArrayFromByteArray(byte[] buffer, int outPutArraySize)
+    {
+        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(buffer);
+        DataInputStream dataInputStream = new DataInputStream(byteArrayInputStream);
+        float[] floatArray = new float[outPutArraySize];  // 4 bytes per float
+        int finalFloatVal = 0;
+        for (int i = 0; i < floatArray.length; i++)
+        {
+            try
+            {
+                floatArray[i] = dataInputStream.readFloat();
+            } catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+            finalFloatVal = i;
+        }
+
+        for(int i = finalFloatVal; i < floatArray.length; i++)
+        {
+            floatArray[i] = -1;
         }
 
         return  floatArray;

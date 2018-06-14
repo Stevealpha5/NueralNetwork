@@ -81,12 +81,13 @@ public class Main
        GANeuralNetwork nn = new GANeuralNetwork(2, 1);
        nn.printFormattedDNA();
 
+
         System.out.println("\n\n\n\n" + "NN2" + "\n");
        GANeuralNetwork nn2 = new GANeuralNetwork(1, 2);
        nn2.printFormattedDNA();
 
         System.out.println("\n\n\n\n" + "NN2a" + "\n");
-       nn2.setDNA(nn.getNeuronCfg(), nn.getWeights(), nn.getBaises());
+       nn2.setDNAByte(nn.getNeuronCfgByte(), nn.getWeightsByte(), nn.getBaisesBytes());
        nn2.printFormattedDNA();
 
     }

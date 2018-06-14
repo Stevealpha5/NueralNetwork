@@ -2,10 +2,6 @@ package com.company.NuralNetwork;
 
 import com.company.Utils.Utils;
 
-import java.io.ByteArrayInputStream;
-import java.io.DataInputStream;
-import java.io.IOException;
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -83,7 +79,7 @@ public class NeuralNetwork
             }
         }
 
-        DNAByte = Utils.floatArrayToByteArray(DNAFloat);
+        DNAByte = Utils.floatArrayListToByteArray(DNAFloat);
 
         return DNAByte;
     }
