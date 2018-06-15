@@ -258,6 +258,12 @@ public class GANeuralNetwork
        construct();
     }
 
+    /**
+     * Sets the DNA from byte arrays
+     * @param neuronCfg neuron Cfg in byte form
+     * @param weights weights in byte form
+     * @param baises baises in byte form
+     */
     public void setDNAByte(byte[] neuronCfg, byte[][][] weights, byte[][] baises)
     {
         setNeuronCfgByte(neuronCfg);
@@ -293,6 +299,9 @@ public class GANeuralNetwork
         }
     }
 
+    /**
+     * Makes sure that the weight and bais arrays match the neuronCfg template
+     */
     private void matchDNA()
     {
         //weights
@@ -345,6 +354,22 @@ public class GANeuralNetwork
         }
     }
 
+    /**
+     * Prints out the neuron configuration from the currently constructed network instead of returning the neuronCfg array
+     */
+    public void printNeuronCfgFromNN()
+    {
+        formNetwork();
+
+        for (Layer aNN : NN)
+        {
+            System.out.print(aNN.layer.length);
+        }
+    }
+
+    /**
+     * All of the functions after this point should be self explanatory
+     */
     public int[] getNeuronCfg()
     {
         return neuronCfg;
@@ -449,13 +474,5 @@ public class GANeuralNetwork
         this.baises = baisesFloat;
     }
 
-    public void printNeuronCfgFromNN()
-    {
-        formNetwork();
 
-        for (Layer aNN : NN)
-        {
-            System.out.print(aNN.layer.length);
-        }
-    }
 }
