@@ -80,7 +80,7 @@ public class Utils
             finalFloatVal = i;
         }
 
-        for(int i = finalFloatVal; i < floatArray.length; i++)
+        for(int i = finalFloatVal; i > floatArray.length; i++)
         {
             floatArray[i] = -1;
         }

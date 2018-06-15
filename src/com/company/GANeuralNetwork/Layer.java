@@ -18,7 +18,7 @@ class Layer
     float[] baises;
 
     private float[] dataOut;
-    private Neuron[] layer;
+    public Neuron[] layer;
     private int numberOfNuerons;
 
     /**

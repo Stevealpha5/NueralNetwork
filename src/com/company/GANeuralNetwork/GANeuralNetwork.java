@@ -277,7 +277,7 @@ public class GANeuralNetwork
         formNetwork();
 
         for(int i = 0; i < baises.length - 1; i++)
-        {
+        {/*
             for(int x: neuronCfg)
                 System.out.print("," + x);
 
@@ -285,7 +285,7 @@ public class GANeuralNetwork
             {
                 System.out.println("Baises:" + baises[j].length);
                 System.out.println("Weights:" + weights[j].length);
-            }
+            }*/
 
             NN[i].baises = baises[i];
             NN[i].weights = weights[i];
@@ -331,11 +331,17 @@ public class GANeuralNetwork
      */
     private void formNetwork()
     {
-        NN = new Layer[neuronCfg.length - 1];
+        NN = new Layer[neuronCfg.length];
 
         for(int i = 0; i < NN.length; i++)
         {
-            NN[i] = new Layer(neuronCfg[i + 1], neuronCfg[i]);
+            if(i == 0)
+            {
+                NN[i] = new Layer(neuronCfg[i], neuronCfg[i]);
+            }else
+            {
+                NN[i] = new Layer(neuronCfg[i], neuronCfg[i - 1]);
+            }
         }
     }
 
@@ -441,5 +447,15 @@ public class GANeuralNetwork
         }
 
         this.baises = baisesFloat;
+    }
+
+    public void printNeuronCfgFromNN()
+    {
+        formNetwork();
+
+        for (Layer aNN : NN)
+        {
+            System.out.print(aNN.layer.length);
+        }
     }
 }

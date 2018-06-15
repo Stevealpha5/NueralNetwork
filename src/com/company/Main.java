@@ -19,77 +19,18 @@ public class Main
     }
 
     private static void testGANN()
-    {/*
-        int[] array = {1,2,3,4,5};
-        int[] tempArray;
-
-        int zerosRemoved = 0;
-
-        for(int i = 1; i < array.length - 1; i++)
-        {
-
-            if(array[i] == 0)
-            {
-                System.arraycopy(array, i + 1, array, i, array.length - 1 - i);
-                i--;
-                zerosRemoved++;
-            }
-        }
-
-        if(zerosRemoved > 0)
-        {
-            tempArray = new int[array.length - zerosRemoved];
-
-            System.arraycopy(array, 0, tempArray, 0, array.length - zerosRemoved);
-
-            array = tempArray;
-        }
-
-        for(int x: array)
-        {
-            System.out.println(x);
-        }
-
-        System.out.println("_____________________________________________________");
-        tempArray = array;
-        for(int x: tempArray)
-        {
-            System.out.println(x);
-        }*/
-
-        /*
-        int[] array = {1,2,3,4,5};
-
-        int targetIndex = 0;
-        for( int sourceIndex = 0;  sourceIndex < array.length;  sourceIndex++ )
-        {
-            if( array[sourceIndex] != 0 )
-                array[targetIndex++] = array[sourceIndex];
-        }
-        int[] newArray = new int[targetIndex];
-        System.arraycopy( array, 0, newArray, 0, targetIndex );*/
-
-
-
-        float[] in = {2, 1};
-
-        float[] out1;
-        float[] out2;
-        float[] out3;
-
+    {
         System.out.println("\n\n\n\n" + "NN" + "\n");
-       GANeuralNetwork nn = new GANeuralNetwork(2, 1);
-       nn.printFormattedDNA();
-
+        GANeuralNetwork nn = new GANeuralNetwork(2, 1);
+        nn.printFormattedDNA();
 
         System.out.println("\n\n\n\n" + "NN2" + "\n");
-       GANeuralNetwork nn2 = new GANeuralNetwork(1, 2);
-       nn2.printFormattedDNA();
+        GANeuralNetwork nn2 = new GANeuralNetwork(5, 1);
+        nn2.printFormattedDNA();
 
         System.out.println("\n\n\n\n" + "NN2a" + "\n");
-       nn2.setDNAByte(nn.getNeuronCfgByte(), nn.getWeightsByte(), nn.getBaisesBytes());
-       nn2.printFormattedDNA();
-
+        nn2.setDNAByte(nn.getNeuronCfgByte(), nn.getWeightsByte(), nn.getBaisesBytes());
+        nn2.printFormattedDNA();
     }
 
     private static void sim()
@@ -129,5 +70,46 @@ public class Main
             System.out.println("\n________________________________________________________");
         }
     }
+
+    private static void printFormattedDNAByte(byte[] neuronCfg, byte[][][] weights, byte[][] baises)
+    {
+        System.out.print("Neuron Config: ");
+
+        for (int x : neuronCfg)
+            System.out.print(x + " ");
+
+        System.out.println('\n' + "_____________________________________________________" + '\n');
+
+        for (int i = 0; i < weights.length; i++)
+        {
+            for (int j = 0; j < weights[i].length; j++)
+            {
+                System.out.print("Weights of neuron " + j + " in layer " + i + ": ");
+
+                for (int k = 0; k < weights[i][j].length; k++)
+                {
+                    System.out.print(weights[i][j][k] + ", ");
+                }
+
+                System.out.print('\n');
+            }
+        }
+
+        System.out.println('\n' + "_____________________________________________________" + '\n');
+
+        for(int i = 0; i < baises.length; i++)
+        {
+
+            for(int j = 0; j < baises[i].length; j++)
+            {
+                System.out.print("Bais of neuron " + j + " in layer " + i + ": " + baises[i][j] + '\n');
+
+            }
+
+        }
+
+
+    }
+
 
 }
