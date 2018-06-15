@@ -28,66 +28,124 @@ public class Mating
     {
         byte[] DNA1 = NN1.getDNA();
         byte[] DNA2 = NN2.getDNA();
-        byte[] childDNA = new byte[DNA1.length];
-        byte[] randomByte = new byte[1];
 
         NeuralNetwork child = new NeuralNetwork(NN1.getNeuronCfg());
 
-        for (int i = 0; i < DNA1.length; i++)
-        {
-            if(random.nextBoolean())
-            {
-                childDNA[i] = DNA1[i];
-            }else{
-                childDNA[i] = DNA2[i];
-            }
-
-            if(random.nextFloat() < MUTATION_CHANCE)
-            {
-                random.nextBytes(randomByte);
-                if(random.nextBoolean())
-                {
-                    childDNA[i] += randomByte[0];
-                }else{
-                    childDNA[i] -= randomByte[0];
-                }
-            }
-        }
-
-        child.setDNA(childDNA);
+        child.setDNA(simpleMateArray(DNA1, DNA2, DNA1.length));
         return child;
     }
 
     public static GANeuralNetwork simpleGANNMate(GANeuralNetwork NN1, GANeuralNetwork NN2)
     {
-        int[] neuronCfg1;
-        float[][][] weights1;
-        float[][] baises1;
+        boolean fitNetworkIsNN1 = NN1.fitness > NN2.fitness;
 
-        int[] neuronCfg2;
-        float[][][] weights2;
-        float[][] baises2;
+        GANeuralNetwork child = new GANeuralNetwork();
 
-        int[] neuronCfgChild;
-        float[][][] weightsChild;
-        float[][] baisesChild;
+        int[] childCfg;
 
-        return null;
+        byte[] neuronCfg1 = NN1.getNeuronCfgByte();
+        byte[][][] weights1 = NN1.getWeightsByte();
+        byte[][] baises1 = NN1.getBaisesBytes();
+
+        byte[] neuronCfg2 = NN2.getNeuronCfgByte();
+        byte[][][] weights2 = NN2.getWeightsByte();
+        byte[][] baises2 = NN2.getBaisesBytes();
+
+        byte[] neuronCfgChild;
+        byte[][][] weightsChild;
+        byte[][] baisesChild;
+
+
+        //NeuronCfg
+        if(fitNetworkIsNN1)
+        {
+            neuronCfgChild = new byte[neuronCfg1.length];
+        }else
+        {
+            neuronCfgChild = new byte[neuronCfg2.length];
+        }
+
+        neuronCfgChild = simpleMateArray(neuronCfg1, neuronCfg2, neuronCfgChild.length);
+
+
+        child.setNeuronCfgByte(neuronCfgChild, NN1.getNeuronCfg()[0], NN1.getNeuronCfg()[NN1.getNeuronCfg().length - 1]);
+
+        childCfg = child.getNeuronCfg();
+
+        System.out.print("Child CFG: ");
+        for(int x: childCfg)
+            System.out.print(x + ", ");
+
+
+        //weights
+        weightsChild = new byte[childCfg.length * 4][][];
+
+        for(int i = 0; i < weightsChild.length; i++)
+        {
+            weightsChild[i] = new byte[childCfg[i/4] * 4][];
+
+            for(int j = 0; j < weightsChild[i].length; j++)
+            {
+                int arraySize;
+
+                if(i == 0)
+                {
+                    arraySize = childCfg[i/4] * childCfg[i/4];
+                }else
+                {
+                    arraySize = childCfg[(i - 1) / 4] * childCfg[i/4];
+                }
+
+                try
+                {
+                    weightsChild[i][j] = simpleMateArray(weights1[i][j], weights2[i][j], arraySize * 4);
+                }catch (Exception e)
+                {
+                    weightsChild[i][j] = new byte[arraySize * 4];
+                    random.nextBytes(weightsChild[i][j]);
+                }
+            }
+        }
+
+        child.setWeightsByte(weightsChild);
+
+        //Baises
+
+        baisesChild = new byte[childCfg.length * 4][];
+
+        for(int i = 0; i < baisesChild.length; i++)
+        {
+            try
+            {
+                baisesChild[i] = simpleMateArray(baises1[i], baises2[i], childCfg[i/4] * 4);
+            }catch(Exception e)
+            {
+                baisesChild[i] = new byte[childCfg[i/4] * 4];
+                random.nextBytes(baisesChild[i/4]);
+            }
+        }
+
+        child.setBaisesBytes(baisesChild);
+
+        return child;
     }
 
-    private static byte[] simpleMateArray(byte[] array1, byte[] array2)
+    private static byte[] simpleMateArray(byte[] array1, byte[] array2, int arraySize)
     {
 
-        byte[] childArray = new byte[array1.length];
+        byte[] childArray = new byte[arraySize];
         byte[] randomByte = new byte[1];
 
-        for (int i = 0; i < array1.length; i++)
+        for (int i = 0; i < childArray.length; i++)
         {
             if(random.nextBoolean())
             {
-                childArray[i] = array1[i];
+                if(i < array1.length)
+                    childArray[i] = array1[i];
+
             }else{
-                childArray[i] = array2[i];
+                if(i < array2.length)
+                    childArray[i] = array2[i];
             }
 
             if(random.nextFloat() < MUTATION_CHANCE)

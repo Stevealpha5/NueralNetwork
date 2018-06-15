@@ -1,6 +1,7 @@
 package com.company;
 
 import com.company.GANeuralNetwork.GANeuralNetwork;
+import com.company.GeneticAlgorithm.Mating;
 import com.company.GeneticAlgorithm.Simulations.MultiplicationSim;
 import com.company.NuralNetwork.NeuralNetwork;
 
@@ -25,12 +26,12 @@ public class Main
         nn.printFormattedDNA();
 
         System.out.println("\n\n\n\n" + "NN2" + "\n");
-        GANeuralNetwork nn2 = new GANeuralNetwork(5, 1);
+        GANeuralNetwork nn2 = new GANeuralNetwork(2, 1);
         nn2.printFormattedDNA();
 
-        System.out.println("\n\n\n\n" + "NN2a" + "\n");
-        nn2.setDNAByte(nn.getNeuronCfgByte(), nn.getWeightsByte(), nn.getBaisesBytes());
-        nn2.printFormattedDNA();
+        System.out.println("\n\n\n\n" + "NN3" + "\n");
+        GANeuralNetwork nn3 = Mating.simpleGANNMate(nn, nn2);
+        nn3.printFormattedDNA();
     }
 
     private static void sim()
