@@ -67,22 +67,20 @@ public class Mating
 
         neuronCfgChild = simpleMateArray(neuronCfg1, neuronCfg2, neuronCfgChild.length);
 
-
-        child.setNeuronCfgByte(neuronCfgChild, NN1.getNeuronCfg()[0], NN1.getNeuronCfg()[NN1.getNeuronCfg().length - 1]);
+        child.setNeuronCfgByte(neuronCfgChild, NN1.inputLayer, NN2.outputLayer);
 
         childCfg = child.getNeuronCfg();
 
-        System.out.print("Child CFG: ");
-        for(int x: childCfg)
-            System.out.print(x + ", ");
+        System.out.print("\n");
+
 
 
         //weights
-        weightsChild = new byte[childCfg.length * 4][][];
+        weightsChild = new byte[childCfg.length][][];
 
         for(int i = 0; i < weightsChild.length; i++)
         {
-            weightsChild[i] = new byte[childCfg[i/4] * 4][];
+            weightsChild[i] = new byte[childCfg[i]][];
 
             for(int j = 0; j < weightsChild[i].length; j++)
             {
@@ -90,10 +88,10 @@ public class Mating
 
                 if(i == 0)
                 {
-                    arraySize = childCfg[i/4] * childCfg[i/4];
+                    arraySize = childCfg[i] * childCfg[i];
                 }else
                 {
-                    arraySize = childCfg[(i - 1) / 4] * childCfg[i/4];
+                    arraySize = childCfg[i - 1] * childCfg[i];
                 }
 
                 try
@@ -107,25 +105,23 @@ public class Mating
             }
         }
 
-        child.setWeightsByte(weightsChild);
-
         //Baises
 
-        baisesChild = new byte[childCfg.length * 4][];
+        baisesChild = new byte[childCfg.length ][];
 
         for(int i = 0; i < baisesChild.length; i++)
         {
             try
             {
-                baisesChild[i] = simpleMateArray(baises1[i], baises2[i], childCfg[i/4] * 4);
+                baisesChild[i] = simpleMateArray(baises1[i], baises2[i], childCfg[i] * 4);
             }catch(Exception e)
             {
-                baisesChild[i] = new byte[childCfg[i/4] * 4];
-                random.nextBytes(baisesChild[i/4]);
+                baisesChild[i] = new byte[childCfg[i] * 4];
+                random.nextBytes(baisesChild[i]);
             }
         }
 
-        child.setBaisesBytes(baisesChild);
+        child.setDNAByte(neuronCfgChild, weightsChild,baisesChild);
 
         return child;
     }

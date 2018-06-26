@@ -17,7 +17,7 @@ class Neuron
     private float valueOut;
     float bais = (float) Math.random();
     float[] weightIndex;
-    private float[] wightedInput;
+    float[] wightedInput;
 
     /**
      * @param numberIn the number of neurons this neuron will be accepting inputs fro
@@ -25,8 +25,8 @@ class Neuron
      */
     Neuron(int numberIn)
     {
-        wightedInput = new float[numberIn];
         weightIndex = new float[numberIn];
+        wightedInput = new float[numberIn];
 
         for(int i = 0; i < weightIndex.length; i++)
         {
@@ -40,11 +40,23 @@ class Neuron
      */
     float fire(float[] dataIn)
     {
+        wightedInput = new float[weightIndex.length];//TODO put this in a better location that actually makes sense
+
         float sum = 0;
 
         for(int i = 0; i < dataIn.length; i++)
         {
-            wightedInput[i] = dataIn[i] * weightIndex[i];
+            try
+            {
+                wightedInput[i] = dataIn[i] * weightIndex[i];
+            }catch (Exception e)
+            {
+                System.out.println("WeightedIndexLengths: " + weightIndex.length);
+                System.out.println("WightedInPutLength: " + wightedInput.length);
+                System.out.println("DataInLength: " + dataIn.length);
+                e.printStackTrace();
+            }
+
         }
 
         for (float i : wightedInput)

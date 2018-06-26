@@ -56,11 +56,10 @@ class Layer
     void setNeuronWeightsAndBaises()
     {
 
-        int test = weights.length;
-        int y = baises.length;
         for(int i = 0; i < layer.length; i++)
         {
             layer[i].weightIndex = weights[i];
+            layer[i].wightedInput = new float[weights.length];
             layer[i].bais = baises[i];
         }
     }

@@ -21,14 +21,17 @@ public class GANeuralNetwork
      */
     private Random r = new Random();
 
-    private int neuronLimit = 5;
-    private int depthLimit = 5;
+    private int neuronLimit = 10;
+    private int depthLimit = 10;
 
     private Layer[] NN;
     private int[] neuronCfg;
     private float[][][] weights;
     private float[][] baises;
     public int fitness;
+    public int inputLayer;
+    public int outputLayer;
+
 
 
     /**
@@ -42,10 +45,12 @@ public class GANeuralNetwork
         if (inputLayer <= 0 || outputLayer <= 0)
             System.out.println("You stupid");
 
+        this.inputLayer = inputLayer;
+        this.outputLayer = outputLayer;
         initNeuronCFG(inputLayer, outputLayer);
         initWeights();
         intiBaises();
-
+        construct();
     }
 
     /**
@@ -141,6 +146,10 @@ public class GANeuralNetwork
 
         for (int x : neuronCfg)
             System.out.print(x + " ");
+
+        System.out.print("\nNeuron Config From Network: ");
+        printNeuronCfgFromNN();
+        System.out.print("\n");
 
         System.out.println('\n' + "_____________________________________________________" + '\n');
 
@@ -289,7 +298,6 @@ public class GANeuralNetwork
         setNeuronCfgByte(neuronCfg);
         setWeightsByte(weights);
         setBaisesBytes(baises);
-
         construct();
     }
 
@@ -299,20 +307,12 @@ public class GANeuralNetwork
      */
     private void construct()
     {
+        fixNeuronCfg();
         matchDNA();
         formNetwork();
 
         for(int i = 0; i < baises.length - 1; i++)
-        {/*
-            for(int x: neuronCfg)
-                System.out.print("," + x);
-
-            for(int j = 0; j < baises[j].length; j++)
-            {
-                System.out.println("Baises:" + baises[j].length);
-                System.out.println("Weights:" + weights[j].length);
-            }*/
-
+        {
             NN[i].baises = baises[i];
             NN[i].weights = weights[i];
             NN[i].setNeuronWeightsAndBaises();
@@ -324,6 +324,8 @@ public class GANeuralNetwork
      */
     private void matchDNA()
     {
+
+
         //weights
         for(int i = 0; i < weights.length; i++)
         {
@@ -379,12 +381,32 @@ public class GANeuralNetwork
      */
     public void printNeuronCfgFromNN()
     {
-        formNetwork();
-
         for (Layer aNN : NN)
         {
-            System.out.print(aNN.layer.length);
+            System.out.print(aNN.layer.length + " ");
         }
+    }
+
+    private void fixNeuronCfg()
+    {
+       for(int i = 0; i < neuronCfg.length; i++)
+       {
+           if(neuronCfg[i] > neuronLimit)
+           {
+               neuronCfg[i] = neuronLimit;
+           }
+
+           if(neuronCfg[i] < 0)
+           {
+               neuronCfg[i] = r.nextInt(neuronLimit);
+           }
+       }
+
+        neuronCfg = Utils.removeZeros(neuronCfg);
+
+       neuronCfg[0] = inputLayer;
+       neuronCfg[neuronCfg.length - 1] = outputLayer;
+
     }
 
     /**
@@ -392,6 +414,7 @@ public class GANeuralNetwork
      */
     public int[] getNeuronCfg()
     {
+        //fixNeuronCfg();
         return neuronCfg;
     }
 
@@ -445,7 +468,7 @@ public class GANeuralNetwork
         return baisesBytes;
     }
 
-    public void setNeuronCfgByte(byte[] neuronCfgByte)
+    private void setNeuronCfgByte(byte[] neuronCfgByte)
     {
         float[] neuronCfgFloat = Utils.floatArrayFromByteArray(neuronCfgByte);
         int[] neuronCfgInt = new int[neuronCfgByte.length];
@@ -469,9 +492,11 @@ public class GANeuralNetwork
         neuronCfgInt[neuronCfgInt.length - 1] = outputLayer;
 
         this.neuronCfg = Utils.removeZeros(neuronCfgInt);
+
+        fixNeuronCfg();
     }
 
-    public void setWeightsByte(byte[][][] weightsByte)
+    private void setWeightsByte(byte[][][] weightsByte)
     {
         float[][][] weightsFloat = new float[weightsByte.length][][];
 
@@ -484,10 +509,10 @@ public class GANeuralNetwork
 
                 if(i == 0)
                 {
-                    weightsFloat[i][j] = Utils.floatArrayFromByteArray(weightsByte[i][j], (neuronCfg[i/4] * neuronCfg[i/4]));
+                    weightsFloat[i][j] = Utils.floatArrayFromByteArray(weightsByte[i][j], (neuronCfg[i] * neuronCfg[i]));
                 }else
                 {
-                    weightsFloat[i][j] = Utils.floatArrayFromByteArray(weightsByte[i][j], (neuronCfg[i/4] * neuronCfg[(i - 1)/4]));
+                    weightsFloat[i][j] = Utils.floatArrayFromByteArray(weightsByte[i][j], (neuronCfg[i] * neuronCfg[i - 1]));
                 }
 
             }
@@ -496,13 +521,13 @@ public class GANeuralNetwork
         this.weights = weightsFloat;
     }
 
-    public void setBaisesBytes(byte[][] baisesBytes)
+    private void setBaisesBytes(byte[][] baisesBytes)
     {
         float[][] baisesFloat = new float[neuronCfg.length][];
 
         for(int i = 0; i < (baisesFloat.length); i++)
         {
-            baisesFloat[i] = Utils.floatArrayFromByteArray(baisesBytes[i], neuronCfg[i/4]);
+            baisesFloat[i] = Utils.floatArrayFromByteArray(baisesBytes[i], neuronCfg[i]);
         }
 
         this.baises = baisesFloat;

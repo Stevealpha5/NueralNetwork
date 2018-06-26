@@ -3,14 +3,22 @@ package com.company;
 import com.company.GANeuralNetwork.GANeuralNetwork;
 import com.company.GeneticAlgorithm.Mating;
 import com.company.GeneticAlgorithm.Simulations.MultiplicationSim;
+import com.company.GeneticAlgorithm.Simulations.MultiplicationSimGANN;
 import com.company.NuralNetwork.NeuralNetwork;
+import com.company.Utils.Utils;
+
+import java.util.Random;
 
 
 public class Main
 {
-
+    static Random r = new Random();
     public static void main(String[] args)
     {
+        //fixTest();
+
+        //GANNSim();
+
         testGANN();
 
         //test();
@@ -19,8 +27,19 @@ public class Main
 
     }
 
+    private static void GANNSim()
+    {
+        MultiplicationSimGANN sim = new MultiplicationSimGANN(1000,4,4);
+        sim.run(500);
+    }
+
     private static void testGANN()
     {
+        float in[] = {1,0,1,0};
+        float out[];
+        float out2[];
+        float out3[];
+
         System.out.println("\n\n\n\n" + "NN" + "\n");
         GANeuralNetwork nn = new GANeuralNetwork(2, 1);
         nn.printFormattedDNA();
@@ -32,6 +51,19 @@ public class Main
         System.out.println("\n\n\n\n" + "NN3" + "\n");
         GANeuralNetwork nn3 = Mating.simpleGANNMate(nn, nn2);
         nn3.printFormattedDNA();
+
+        out = nn.fire(in);
+        out2 = nn2.fire(in);
+        out3 = nn3.fire(in);
+
+        System.out.print("NN: ");
+        printArray(out);
+
+        System.out.print("NN2: ");
+        printArray(out2);
+
+        System.out.print("NN3: ");
+        printArray(out3);
     }
 
     private static void sim()
@@ -110,6 +142,51 @@ public class Main
         }
 
 
+    }
+
+    private static void fixTest()
+    {
+        int[] cfg = {1,2,-22,400000};
+
+        cfg = fixNeuronCfg(cfg, 10,2,4);
+
+        for(int x: cfg)
+        {
+            System.out.print(x + " ");
+        }
+    }
+
+    private static void printArray(float[] in)
+    {
+        for(float x: in)
+        {
+            System.out.print(x + " ");
+        }
+
+        System.out.print("\n");
+    }
+
+    private static int[] fixNeuronCfg(int[] neuronCfg, int neuronLimit, int inputLayer, int outputLayer)
+    {
+        for(int i = 0; i < neuronCfg.length; i++)
+        {
+            if(neuronCfg[i] > neuronLimit)
+            {
+                neuronCfg[i] = neuronLimit;
+            }
+
+            if(neuronCfg[i] < 0)
+            {
+                neuronCfg[i] = r.nextInt(neuronLimit);
+            }
+        }
+
+        neuronCfg = Utils.removeZeros(neuronCfg);
+
+        neuronCfg[0] = inputLayer;
+        neuronCfg[neuronCfg.length - 1] = outputLayer;
+
+        return neuronCfg;
     }
 
 
