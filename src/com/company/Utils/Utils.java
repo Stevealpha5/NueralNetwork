@@ -66,7 +66,7 @@ public class Utils
     {
         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(buffer);
         DataInputStream dataInputStream = new DataInputStream(byteArrayInputStream);
-        float[] floatArray = new float[outPutArraySize];  // 4 bytes per float
+        float[] floatArray = new float[outPutArraySize];
 
         for (int i = 0; i < floatArray.length; i++)
         {
@@ -75,7 +75,7 @@ public class Utils
                 floatArray[i] = dataInputStream.readFloat();
             } catch (IOException e)
             {
-                e.printStackTrace();
+                floatArray[i] = -1;
             }
         }
 

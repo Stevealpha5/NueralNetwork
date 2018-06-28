@@ -2,6 +2,7 @@ package com.company.GeneticAlgorithm;
 
 import com.company.GANeuralNetwork.GANeuralNetwork;
 import com.company.NuralNetwork.NeuralNetwork;
+import com.company.Utils.DNAManager;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -15,6 +16,7 @@ public class Mating
      */
     private static float MUTATION_CHANCE = 0.05f;
     private static Random random = new Random();
+    private static int maxDepth = 6;
 
     /**
      * <b>NOTE:</> the parents must have the same neuron configuration
@@ -43,13 +45,13 @@ public class Mating
 
         int[] childCfg;
 
-        byte[] neuronCfg1 = NN1.getNeuronCfgByte();
-        byte[][][] weights1 = NN1.getWeightsByte();
-        byte[][] baises1 = NN1.getBaisesBytes();
+        byte[] neuronCfg1 = DNAManager.getNeuronCfgByte(NN1.getNeuronCfg());
+        byte[][][] weights1 = DNAManager.getWeightsByte(NN1.getWeights());
+        byte[][] baises1 = DNAManager.getBaisesBytes(NN1.getBaises());
 
-        byte[] neuronCfg2 = NN2.getNeuronCfgByte();
-        byte[][][] weights2 = NN2.getWeightsByte();
-        byte[][] baises2 = NN2.getBaisesBytes();
+        byte[] neuronCfg2 = DNAManager.getNeuronCfgByte(NN2.getNeuronCfg());
+        byte[][][] weights2 = DNAManager.getWeightsByte(NN2.getWeights());
+        byte[][] baises2 = DNAManager.getBaisesBytes(NN2.getBaises());
 
         byte[] neuronCfgChild;
         byte[][][] weightsChild;
@@ -67,7 +69,7 @@ public class Mating
 
         neuronCfgChild = simpleMateArray(neuronCfg1, neuronCfg2, neuronCfgChild.length);
 
-        child.setNeuronCfgByte(neuronCfgChild, NN1.inputLayer, NN2.outputLayer);
+        child.setNeuronCfg(DNAManager.getNeuronCfgClean(neuronCfgChild, NN1.inputLayer, NN2.outputLayer, maxDepth));
 
         childCfg = child.getNeuronCfg();
 
