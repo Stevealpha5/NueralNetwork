@@ -82,6 +82,26 @@ public class Utils
         return  floatArray;
     }
 
+    public static float[] floatArrayFromByteArray(byte[] buffer, int outPutArraySize, float defualtVal)
+    {
+        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(buffer);
+        DataInputStream dataInputStream = new DataInputStream(byteArrayInputStream);
+        float[] floatArray = new float[outPutArraySize];
+
+        for (int i = 0; i < floatArray.length; i++)
+        {
+            try
+            {
+                floatArray[i] = dataInputStream.readFloat();
+            } catch (IOException e)
+            {
+                floatArray[i] = defualtVal;
+            }
+        }
+
+        return  floatArray;
+    }
+
     public static float[] generateFloatArray(int length, float values)
     {
         float[] array = new float[length];

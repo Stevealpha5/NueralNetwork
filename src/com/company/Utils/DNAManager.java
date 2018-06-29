@@ -111,10 +111,10 @@ public class DNAManager
                 {
                     if (i == 0)
                     {
-                        weightsFloat[i][j] = Utils.floatArrayFromByteArray(weightsByte[i][j], (neuronCfg[i]));
+                        weightsFloat[i][j] = Utils.floatArrayFromByteArray(weightsByte[i][j], neuronCfg[i], defaultWeight);
                     } else
                     {
-                        weightsFloat[i][j] = Utils.floatArrayFromByteArray(weightsByte[i][j], (neuronCfg[i - 1]));
+                        weightsFloat[i][j] = Utils.floatArrayFromByteArray(weightsByte[i][j], neuronCfg[i - 1], defaultWeight);
                     }
                 } catch (Exception e)
                 {
@@ -125,5 +125,25 @@ public class DNAManager
 
         return weightsFloat;
 
+    }
+
+    public static float[][] getBaises(byte[][] baisesBytes, int[] neuronCfg)
+    {
+        float defaultBais = 1.0f;
+
+        float[][] baisesFloat = new float[neuronCfg.length][];
+
+        for(int i = 0; i < (baisesFloat.length); i++)
+        {
+            try
+            {
+                baisesFloat[i] = Utils.floatArrayFromByteArray(baisesBytes[i], neuronCfg[i], defaultBais);
+            } catch (Exception e)
+            {
+                baisesFloat[i] = Utils.generateFloatArray(neuronCfg[i], defaultBais);
+            }
+        }
+
+        return baisesFloat;
     }
 }

@@ -3,13 +3,13 @@ package com.company;
 import com.company.GANeuralNetwork.GANeuralNetwork;
 import com.company.GeneticAlgorithm.Mating;
 import com.company.GeneticAlgorithm.Simulations.MultiplicationSim;
-import com.company.GeneticAlgorithm.Simulations.MultiplicationSimGANN;
 import com.company.NuralNetwork.NeuralNetwork;
-import com.company.Utils.DNAManager;
-import com.company.Utils.InvalidNeuronConfigurationExeption;
 import com.company.Utils.Utils;
 
 import java.util.Random;
+
+import static com.company.Utils.ArrayPrinter.*;
+import static com.company.Utils.DNAManager.*;
 
 
 public class Main
@@ -33,18 +33,31 @@ public class Main
     private static void GANNSim()
     {
         int[] neuronCfg = {1, 1};
+        float[][] baises = {{1.0f},{1.0f, 1.0f},{1.0f}};
 
+        print2dArray(baises);
+
+        byte[][] BB = getBaisesBytes(baises);
+
+       // print2dArray(BB);
+
+        baises = getBaises(BB, neuronCfg);
+
+        print2dArray(baises);
+
+
+/*
         float[][][] weights = {{{2.0f}}, {{1.0f}, {1.5f}}, {{3.0f, 3.0f}}};
 
         print3dArray(weights);
 
-        byte[][][] WB = DNAManager.getWeightsByte(weights);
+        byte[][][] WB = getWeightsByte(weights);
 
         print3dArray(WB);
 
-        weights = DNAManager.getWeights(WB, neuronCfg);
+        weights = getWeights(WB, neuronCfg);
 
-        print3dArray(weights);
+        print3dArray(weights);*/
 
 
     }
@@ -172,77 +185,6 @@ public class Main
         }
     }
 
-    private static void printArray(float[] in)
-    {
-        for (float x : in)
-        {
-            System.out.print(x + " ");
-        }
-
-        System.out.print("\n");
-    }
-
-    private static void printArray(byte[] in)
-    {
-        for (float x : in)
-        {
-            System.out.print(x + " ");
-        }
-
-        System.out.print("\n");
-    }
-
-    private static void printArray(int[] in)
-    {
-        for (float x : in)
-        {
-            System.out.print(x + " ");
-        }
-
-        System.out.print("\n");
-    }
-
-    private static void print3dArray(float[][][] weights)
-    {
-        for (int i = 0; i < weights.length; i++)
-        {
-            for (int j = 0; j < weights[i].length; j++)
-            {
-                System.out.print("Weights of neuron " + j + " in layer " + i + ": ");
-
-                for (int k = 0; k < weights[i][j].length; k++)
-                {
-                    System.out.print(weights[i][j][k] + ", ");
-                }
-
-                System.out.print('\n');
-            }
-        }
-
-        System.out.println('\n' + "_____________________________________________________" + '\n');
-
-    }
-
-    private static void print3dArray(byte[][][] weights)
-    {
-        for (int i = 0; i < weights.length; i++)
-        {
-            for (int j = 0; j < weights[i].length; j++)
-            {
-                System.out.print("Weights of neuron " + j + " in layer " + i + ": ");
-
-                for (int k = 0; k < weights[i][j].length; k++)
-                {
-                    System.out.print(weights[i][j][k] + ", ");
-                }
-
-                System.out.print('\n');
-            }
-        }
-
-        System.out.println('\n' + "_____________________________________________________" + '\n');
-
-    }
 
     private static int[] fixNeuronCfg(int[] neuronCfg, int neuronLimit, int inputLayer, int outputLayer)
     {

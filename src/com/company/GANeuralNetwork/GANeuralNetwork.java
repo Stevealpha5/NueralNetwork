@@ -296,7 +296,6 @@ public class GANeuralNetwork
      */
     public void setDNAByte(byte[] neuronCfg, byte[][][] weights, byte[][] baises)
     {
-        setBaisesBytes(baises);
         construct();
     }
 
@@ -407,18 +406,5 @@ public class GANeuralNetwork
     {
         return baises;
     }
-
-    private void setBaisesBytes(byte[][] baisesBytes)
-    {
-        float[][] baisesFloat = new float[neuronCfg.length][];
-
-        for(int i = 0; i < (baisesFloat.length); i++)
-        {
-            baisesFloat[i] = Utils.floatArrayFromByteArray(baisesBytes[i], neuronCfg[i]);
-        }
-
-        this.baises = baisesFloat;
-    }
-
 
 }
