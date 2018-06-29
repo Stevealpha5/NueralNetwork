@@ -32,7 +32,7 @@ public class Main
 
     private static void GANNSim()
     {
-        int[] neuronCfg = {1, 2, 3, 1};
+        int[] neuronCfg = {1, 1};
 
         float[][][] weights = {{{2.0f}}, {{1.0f}, {1.5f}}, {{3.0f, 3.0f}}};
 

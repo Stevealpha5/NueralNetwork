@@ -82,6 +82,17 @@ public class Utils
         return  floatArray;
     }
 
+    public static float[] generateFloatArray(int length, float values)
+    {
+        float[] array = new float[length];
+
+        for(int i = 0; i < array.length; i++)
+            array[i] = values;
+
+
+        return array;
+    }
+
     /***
      * Converts an int to binary in form of a byte array
      * @param value input value to be converted to binary
