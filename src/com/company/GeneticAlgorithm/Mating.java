@@ -37,7 +37,7 @@ public class Mating
         return child;
     }
 
-    public static GANeuralNetwork simpleGANNMate(GANeuralNetwork NN1, GANeuralNetwork NN2)
+    public static GANeuralNetwork simpleGANNMate(GANeuralNetwork NN1, GANeuralNetwork NN2, int inputLayer, int outputLayer)
     {
         boolean fitNetworkIsNN1 = NN1.fitness > NN2.fitness;
 
@@ -69,11 +69,10 @@ public class Mating
 
         neuronCfgChild = simpleMateArray(neuronCfg1, neuronCfg2, neuronCfgChild.length);
 
-        child.setNeuronCfg(DNAManager.getNeuronCfgClean(neuronCfgChild, NN1.inputLayer, NN2.outputLayer, maxDepth));
+        child.setNeuronCfg(DNAManager.getNeuronCfgClean(neuronCfgChild, inputLayer, outputLayer, maxDepth));
 
         childCfg = child.getNeuronCfg();
 
-        System.out.print("\n");
 
 
 
@@ -123,7 +122,7 @@ public class Mating
             }
         }
 
-        child.setDNAByte(neuronCfgChild, weightsChild,baisesChild);
+        child.setDNA(childCfg, DNAManager.getWeights(weightsChild, childCfg),DNAManager.getBaises(baisesChild, childCfg));
 
         return child;
     }

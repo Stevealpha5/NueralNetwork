@@ -5,6 +5,8 @@ import com.company.GeneticAlgorithm.Arena;
 import com.company.GeneticAlgorithm.ArenaGANN;
 import com.company.NuralNetwork.NeuralNetwork;
 
+import java.util.Random;
+
 public class MultiplicationSimGANN
 {
     /**
@@ -40,7 +42,7 @@ public class MultiplicationSimGANN
             population[i] = new GANeuralNetwork(inputLayer, outputLayer);
         }
 
-        arena = new ArenaGANN(population, 0.5f);
+        arena = new ArenaGANN(population, 0.25f, inputLayer, outputLayer);
     }
 
     /**
@@ -49,18 +51,20 @@ public class MultiplicationSimGANN
      */
     public void run(int numberOfGenerations)
     {
+
         for(int i = 0; i < numberOfGenerations; i++)
         {
             assingeFitness();
             arena.evolve();
 
-           // if(i % 10 == 0)
-           // {
+            if(i % 10 == 0)
+           {
                 System.out.println("_____________________________________________________________________________________");
                 System.out.println("Generation: " + i);
                 arena.printBestStats();
-           // }
+           }
         }
+
 
     }
 
@@ -86,9 +90,22 @@ public class MultiplicationSimGANN
                 arena.printBestStats();
             }
 
-
         }
 
+        System.out.println("_____________________________________________________________________________________");
+        System.out.println("Generation: " + generation);
+        arena.printBestStats();
+
+    }
+
+    private void psudoAddingeFitness()
+    {
+        Random r = new Random();
+
+        for(int i = 0; i < population.length; i++)
+        {
+            population[i].fitness = r.nextInt(population.length);
+        }
     }
 
     /**
@@ -101,8 +118,7 @@ public class MultiplicationSimGANN
 
         for(int i = 0; i < population.length; i++)
         {
-            int fitnessDeducted = 0;
-            population[i].fitness = defualtFitness;
+            population[i].fitness = 0;
 
 
             int numberRight = 0;
@@ -121,30 +137,39 @@ public class MultiplicationSimGANN
                 }
 
 
-                int numRight = 0;
+
                 for(int k = 0; k < output.length; k++)
                 {
 
                     if((int)(output[k] + .5) == (int)expectedOutput[j][k])
                     {
-                        numRight++;
                         numberRight++;
-                    }else
+                    }
+
+                    if(expectedOutput[j][k] == 1 && output[k] < 0.5)
                     {
-                        fitnessDeducted += 200;
+                        population[i].fitness -= (0.5 - output[k]) * 100;
+                    }else if(expectedOutput[j][k] == 0 && output[k] >= 0.5)
+                    {
+                        population[i].fitness -= (output[k] - 0.51) * 100;
                     }
 
                     if(Float.isNaN(output[k]))
-                        fitnessDeducted += 25000;
+                        population[i].fitness -= 25000;
 
                 }
-
-                fitnessDeducted -= Math.pow(10, numRight);
-
-                population[i].fitness -= fitnessDeducted;
             }
 
+            population[i].fitness += (numberRight) * 15;
+            population[i].percentRight = numberRight / 24;
+
+            //System.out.println("Individual: " + i + " Fitness: " + population[i].fitness);
+
+
+
         }
+
+        //System.out.println("-------------------------------------");
 
     }
 

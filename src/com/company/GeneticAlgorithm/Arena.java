@@ -8,9 +8,9 @@ public class Arena
 {
     /**
      * population = all of the neural nets to be killed and breaded
-     *
+     * <p>
      * survivalPercent = the percent of the population that will survive (default = 25%)
-     *
+     * <p>
      * deathPercent = the percent of the population that will die
      */
 
@@ -20,7 +20,7 @@ public class Arena
     private Random random = new Random();
 
     /**
-     * @param population the neural nets that will go though the arena
+     * @param population      the neural nets that will go though the arena
      * @param survivalPercent the percent of the population that will survive
      */
     public Arena(NeuralNetwork[] population, float survivalPercent)
@@ -55,9 +55,9 @@ public class Arena
      */
     private void arrangeByFitness()
     {
-        boolean isSorted = false;
+        int sortedIndicies = 0;
 
-        while (!isSorted)
+        while (sortedIndicies < population.length)
         {
             for (int i = 0; i < population.length - 1; i++)
             {
@@ -72,16 +72,18 @@ public class Arena
             }
 
             //loops through the population and checks to see if it is completely sorted
+
             for (int i = 0; i < population.length - 1; i++)
             {
-                if(population[i].fitness < population[i + 1].fitness)
+                if (population[i].fitness < population[i + 1].fitness)
                 {
                     break;
-                }else
+                } else
                 {
-                    isSorted = true;
+                    sortedIndicies++;
                 }
             }
+
         }
     }
 
@@ -93,7 +95,7 @@ public class Arena
         int killCounter = 0;
 
         //checks to make sure that the kills are equal to the desired about (to integer precision)
-        while (killCounter < (int)(deathPercent * population.length))
+        while (killCounter < (int) (deathPercent * population.length))
         {
             for (int i = 0; i < population.length; i++)
             {
@@ -118,9 +120,9 @@ public class Arena
     private void repopulate()
     {
 
-        for(int i = 0; i < population.length; i++)
+        for (int i = 0; i < population.length; i++)
         {
-            if(population[i] == null)
+            if (population[i] == null)
             {
                 int parent1Pos = random.nextInt(population.length);
                 int parent2pos = random.nextInt(population.length);
@@ -152,7 +154,7 @@ public class Arena
     public void printBestStats()
     {
         System.out.print("DNA: " + '{');
-        for(byte x: population[0].getDNA())
+        for (byte x : population[0].getDNA())
         {
             System.out.print(x);
             System.out.print(',');

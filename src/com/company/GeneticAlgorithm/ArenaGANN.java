@@ -19,13 +19,17 @@ public class ArenaGANN
     private float survivalPercent = 0.25f;
     private float deathPercent;
     private Random random = new Random();
+    private int inputLayer;
+    private int outputlayer;
 
     /**
      * @param population the neural nets that will go though the arena
      * @param survivalPercent the percent of the population that will survive
      */
-    public ArenaGANN(GANeuralNetwork[] population, float survivalPercent)
+    public ArenaGANN(GANeuralNetwork[] population, float survivalPercent, int inputLayer, int outputLayer)
     {
+        this.inputLayer = inputLayer;
+        this.outputlayer = outputLayer;
         this.population = population;
         this.survivalPercent = survivalPercent;
         deathPercent = 1.0f - survivalPercent;
@@ -49,6 +53,8 @@ public class ArenaGANN
         arrangeByFitness();
         kill();
         repopulate();
+
+
     }
 
     /**
@@ -56,9 +62,9 @@ public class ArenaGANN
      */
     private void arrangeByFitness()
     {
-        boolean isSorted = false;
+        int sortedIndicies = 0;
 
-        while (!isSorted)
+        while (sortedIndicies < population.length)
         {
             for (int i = 0; i < population.length - 1; i++)
             {
@@ -80,7 +86,7 @@ public class ArenaGANN
                     break;
                 }else
                 {
-                    isSorted = true;
+                    sortedIndicies++;
                 }
             }
         }
@@ -101,7 +107,7 @@ public class ArenaGANN
                 float r = random.nextFloat();
 
                 //adjusts the chances of survival based on fitness NOTE: the population must be sorted by fitness
-                if (r * ((float) population.length / (float) (i + 1)) < deathPercent)
+                if (r  * ((float) population.length / (float) (i + 1)) < deathPercent)
                 {
                     population[i] = null;
                     killCounter++;
@@ -111,6 +117,8 @@ public class ArenaGANN
                     return;
             }
         }
+
+        System.out.println(killCounter);
     }
 
     /**
@@ -133,7 +141,7 @@ public class ArenaGANN
                     parent2pos = random.nextInt(population.length);
                 }
 
-                population[i] = Mating.simpleGANNMate(population[parent1Pos], population[parent2pos]);
+                population[i] = Mating.simpleGANNMate(population[parent1Pos], population[parent2pos], inputLayer, outputlayer);
             }
         }
 
@@ -155,6 +163,7 @@ public class ArenaGANN
         System.out.print("\n\n\n");
         population[0].printRawDNA();
         System.out.println("\nFitness: " + population[0].fitness);
+        System.out.println("% Right: " + population[0].percentRight);
 
     }
 

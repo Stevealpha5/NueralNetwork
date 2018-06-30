@@ -43,7 +43,7 @@ public class DNAManager
         return baisesBytes;
     }
 
-    public static int[] getNeuronCfg(byte[] neuronCfgByte)
+    private static int[] getNeuronCfg(byte[] neuronCfgByte)
     {
         float[] neuronCfgFloat = Utils.floatArrayFromByteArray(neuronCfgByte);
         int[] neuronCfgInt = new int[neuronCfgByte.length];
@@ -83,7 +83,11 @@ public class DNAManager
 
         int[] neuronCfg = getNeuronCfg(neuronCfgByte);
 
+        if(neuronCfg.length <= 2)
+            neuronCfg = new int[2];
+
         neuronCfg[0] = inputLayer;
+
         neuronCfg[neuronCfg.length - 1] = outputLayer;
 
         for (int i = 0; i < neuronCfg.length; i++)
