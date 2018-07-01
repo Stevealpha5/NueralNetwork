@@ -27,4 +27,15 @@ public class ActivationFunctions
             return 1.0f;
         }
     }
+
+    public static float ReLU(float x)
+    {
+        if(x < 0)
+        {
+            return 0;
+        }else
+        {
+            return x;
+        }
+    }
 }

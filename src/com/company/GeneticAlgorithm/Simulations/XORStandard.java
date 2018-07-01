@@ -117,7 +117,7 @@ public class XORStandard
 
                 for (int k = 0; k < output.length; k++)
                 {
-                    if ((int) (output[j] + .5) == (int) expectedOutput[j])
+                    if ((int) (output[k] + .5) == (int) expectedOutput[j])
                     {
                         numberRight++;
                     }

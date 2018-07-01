@@ -7,90 +7,140 @@ import java.util.Random;
 
 public class XORGANN
 {
-    private GANeuralNetwork[] population;
-    private float[][] input = {{0, 0}, {0, 1}, {1, 0}, {1, 1}};
-    private float[] expectedOutput = {0, 1, 1, 0};
-    private ArenaGANN arena;
+    private int popSize;
+    private int inputLayer;
+    private int outputLayer;
+    private GANeuralNetwork[][] population = new GANeuralNetwork[10][];
+    private float[][] input = {{0, 0}, {0, 1}, {1, 0}};
+    private float[] expectedOutput = {0, 1, 1};
+
+    private Random r = new Random();
+
 
     /**
      * @param popSize the size of the population
      */
     public XORGANN(int popSize, int inputLayer, int outputLayer)
     {
-
-        population = new GANeuralNetwork[popSize];
+        this.popSize = popSize;
+        this.inputLayer = inputLayer;
+        this.outputLayer = outputLayer;
 
         for (int i = 0; i < population.length; i++)
         {
-            population[i] = new GANeuralNetwork(inputLayer, outputLayer);
-        }
+            population[i] = new GANeuralNetwork[popSize];
 
-        arena = new ArenaGANN(population, 0.25f, inputLayer, outputLayer);
-    }
-
-    /**
-     * Runs the simulation for a set number of generations
-     *
-     * @param numberOfGenerations the number of generations the simulation will run for
-     */
-    public void run(int numberOfGenerations)
-    {
-
-        for (int i = 0; i < numberOfGenerations; i++)
-        {
-            assingeFitness();
-            arena.evolve();
-
-            if (i % 10 == 0)
+            for (int j = 0; j < popSize; j++)
             {
-                System.out.println("_____________________________________________________________________________________");
-                System.out.println("Generation: " + i);
-                arena.printBestStats();
+                population[i][j] = new GANeuralNetwork(inputLayer, outputLayer);
             }
-        }
 
+        }
 
     }
 
-    /**
-     * Runs the simulation until the most fit network is equal to or grater than the target fitness
-     *
-     * @param targetFitness ...it's the target fitness...
-     */
-    public void runUntil(int targetFitness)
-    {
-        int generation = 0;
 
-        while (arena.getHighestFitness() <= targetFitness)
+    public void run()
+    {
+        for(int f = 0; f < 20; f++)
+        {
+            Thread t1 = new Thread(new Biome(population[0], input, expectedOutput, inputLayer, outputLayer));
+            Thread t2 = new Thread(new Biome(population[1], input, expectedOutput, inputLayer, outputLayer));
+            Thread t3 = new Thread(new Biome(population[2], input, expectedOutput, inputLayer, outputLayer));
+            Thread t4 = new Thread(new Biome(population[3], input, expectedOutput, inputLayer, outputLayer));
+            Thread t5 = new Thread(new Biome(population[4], input, expectedOutput, inputLayer, outputLayer));
+            Thread t6 = new Thread(new Biome(population[5], input, expectedOutput, inputLayer, outputLayer));
+            Thread t7 = new Thread(new Biome(population[6], input, expectedOutput, inputLayer, outputLayer));
+            Thread t8 = new Thread(new Biome(population[7], input, expectedOutput, inputLayer, outputLayer));
+            Thread t9 = new Thread(new Biome(population[8], input, expectedOutput, inputLayer, outputLayer));
+            Thread t10 = new Thread(new Biome(population[9], input, expectedOutput, inputLayer, outputLayer));
+
+            t1.start();
+            t2.start();
+            t3.start();
+            t4.start();
+            t5.start();
+            t6.start();
+            t7.start();
+            t8.start();
+            t9.start();
+            t10.start();
+
+
+            try
+            {
+                t1.join();
+                t2.join();
+                t3.join();
+                t4.join();
+                t5.join();
+                t6.join();
+                t7.join();
+                t8.join();
+                t9.join();
+                t10.join();
+
+            } catch (InterruptedException e)
+            {
+                e.printStackTrace();
+            }
+
+            for (int i = 0; i < popSize * (population.length / 2); i++)
+            {
+                int populationIndex1 = r.nextInt(10);
+                int populationIndex2 = r.nextInt(10);
+
+                int indiviualIndex = r.nextInt(popSize);
+
+                while (populationIndex1 == populationIndex2)
+                {
+                    populationIndex1 = r.nextInt(10);
+                }
+
+                GANeuralNetwork temp0 = population[populationIndex1][indiviualIndex];
+                GANeuralNetwork temp1 = population[populationIndex2][indiviualIndex];
+
+                population[populationIndex2][indiviualIndex] = temp0;
+                population[populationIndex1][indiviualIndex] = temp1;
+
+            }
+
+            System.out.println("___________________________________________________________________");
+            System.out.println("Biome collision: " + f);
+            System.out.println("___________________________________________________________________");
+        }
+
+
+    }
+
+}
+
+class Biome implements Runnable
+{
+    float[][] input;
+    float[] expectedOutput;
+    private GANeuralNetwork[] population;
+    private ArenaGANN arena;
+
+    Biome(GANeuralNetwork[] population, float[][] input, float[] expectedOutput, int inputLayer, int outputLayer)
+    {
+        this.input = input;
+        this.expectedOutput = expectedOutput;
+        this.population = population;
+        arena  = new ArenaGANN(population, 0.25f, inputLayer, outputLayer);
+    }
+
+    @Override
+    public void run()
+    {
+        for(int i = 0; i < 250; i++)
         {
             assingeFitness();
             arena.evolve();
-
-            generation++;
-
-            if (generation % 10 == 0)
-            {
-                System.out.println("_____________________________________________________________________________________");
-                System.out.println("Generation: " + generation);
-                arena.printBestStats();
-            }
-
         }
 
         System.out.println("_____________________________________________________________________________________");
-        System.out.println("Generation: " + generation);
         arena.printBestStats();
-
-    }
-
-    private void psudoAddingeFitness()
-    {
-        Random r = new Random();
-
-        for (int i = 0; i < population.length; i++)
-        {
-            population[i].fitness = r.nextInt(population.length);
-        }
     }
 
     /**
@@ -99,6 +149,10 @@ public class XORGANN
     private void assingeFitness()
     {
         float[] output;
+        float numberRight;
+        long startTime;
+        long endTime;
+        long timeDiff;
 
 
         for (int i = 0; i < population.length; i++)
@@ -106,24 +160,22 @@ public class XORGANN
             population[i].fitness = 0;
 
 
-            int numberRight = 0;
 
+            numberRight = 0;
             for (int j = 0; j < input.length; j++)
             {
-                try
-                {
-                    output = population[i].fire(input[j]);
-                } catch (Exception e)
-                {
-                    population[i].printFormattedDNA();
-                    System.out.println("\ni: " + i);
-                    output = null;
-                    e.printStackTrace();
-                }
 
-                for(int k = 0; k < output.length; k++)
+               // startTime = System.currentTimeMillis();
+
+                output = population[i].fire(input[j]);
+
+                //endTime = System.currentTimeMillis();
+                //timeDiff = startTime - endTime;
+
+
+                for (int k = 0; k < output.length; k++)
                 {
-                    if ((int) (output[j] + .5) == (int) expectedOutput[j])
+                    if ((int) (output[k] + .5) == (int) expectedOutput[j])
                     {
                         numberRight++;
                     }
@@ -137,22 +189,17 @@ public class XORGANN
                     }
 
                     if (Float.isNaN(output[k]))
-                        population[i].fitness -= 25000;
+                        population[i].fitness -= 250000;
                 }
 
 
             }
 
-            population[i].fitness += (numberRight) * 15;
-            population[i].percentRight = numberRight / 24;
-
-            //System.out.println("Individual: " + i + " Fitness: " + population[i].fitness);
+            population[i].fitness += (numberRight) * 150;
+            population[i].percentRight = numberRight / expectedOutput.length;
 
 
         }
 
-        //System.out.println("-------------------------------------");
-
     }
-
 }

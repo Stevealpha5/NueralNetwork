@@ -12,7 +12,7 @@ public class GANeuralNetwork
      * r = you know what this does
      *
      * neuronLimit = the maximum amount of neurons per layer that will be randomly generated
-     * depthLimit = the maximum amount of layers that will be randomly generated
+     * hiddenLayerLimit = the maximum amount of layers that will be randomly generated
      *
      * NN = an array of Layers that make up the neural network itself
      * neuronDfg = the layout of the network, the number of indexes is i=the number of layers and the number in each index is the number of neurons for that layer
@@ -23,7 +23,7 @@ public class GANeuralNetwork
     private Random r = new Random();
 
     private int neuronLimit = 4;
-    private int depthLimit = 5;
+    private int hiddenLayerLimit = 0;
 
     private Layer[] NN;
     private int[] neuronCfg;
@@ -78,7 +78,13 @@ public class GANeuralNetwork
      */
     private void initNeuronCFG(int inputLayer, int outputLayer)
     {
-        neuronCfg = new int[r.nextInt(depthLimit) + 2];
+        if(hiddenLayerLimit > 0)
+        {
+            neuronCfg = new int[r.nextInt(hiddenLayerLimit) + 2];
+        }else
+        {
+            neuronCfg = new int[2];
+        }
 
         for (int i = 0; i < neuronCfg.length; i++)
             neuronCfg[i] = r.nextInt(neuronLimit);

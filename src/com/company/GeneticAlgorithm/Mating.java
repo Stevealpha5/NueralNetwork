@@ -59,12 +59,18 @@ public class Mating
 
 
         //NeuronCfg
-        if(fitNetworkIsNN1)
+        if(random.nextFloat() < MUTATION_CHANCE)
         {
-            neuronCfgChild = new byte[neuronCfg1.length];
+            neuronCfgChild = new byte[neuronCfg1.length + 1];
         }else
         {
-            neuronCfgChild = new byte[neuronCfg2.length];
+            if (fitNetworkIsNN1)
+            {
+                neuronCfgChild = new byte[neuronCfg1.length];
+            } else
+            {
+                neuronCfgChild = new byte[neuronCfg2.length];
+            }
         }
 
         neuronCfgChild = simpleMateArray(neuronCfg1, neuronCfg2, neuronCfgChild.length);
@@ -89,10 +95,10 @@ public class Mating
 
                 if(i == 0)
                 {
-                    arraySize = childCfg[i] * childCfg[i];
+                    arraySize = childCfg[i];
                 }else
                 {
-                    arraySize = childCfg[i - 1] * childCfg[i];
+                    arraySize = childCfg[i - 1];
                 }
 
                 try

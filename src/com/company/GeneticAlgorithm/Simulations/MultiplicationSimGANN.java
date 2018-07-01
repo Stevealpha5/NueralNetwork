@@ -148,19 +148,19 @@ public class MultiplicationSimGANN
 
                     if(expectedOutput[j][k] == 1 && output[k] < 0.5)
                     {
-                        population[i].fitness -= (0.5 - output[k]) * 100;
+                        population[i].fitness -= (0.5 - output[k]) * 1000;
                     }else if(expectedOutput[j][k] == 0 && output[k] >= 0.5)
                     {
-                        population[i].fitness -= (output[k] - 0.51) * 100;
+                        population[i].fitness -= (output[k] - 0.51) * 1000;
                     }
 
                     if(Float.isNaN(output[k]))
-                        population[i].fitness -= 25000;
+                        population[i].fitness -= 2500000;
 
                 }
             }
 
-            population[i].fitness += (numberRight) * 15;
+            population[i].fitness += (numberRight) * 150;
             population[i].percentRight = numberRight / 24;
 
             //System.out.println("Individual: " + i + " Fitness: " + population[i].fitness);
