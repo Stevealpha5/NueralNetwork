@@ -30,18 +30,34 @@ public class Main
 
     private static void GANNSim()
     {
-        MultiplicationSimGANN sime = new MultiplicationSimGANN(5000, 4, 4);
-        sime.runUntil(360);
+        XORGANN sime = new XORGANN(5000, 4, 4);
+        sime.run();
     }
 
     private static void XORSim()
     {
-        XORGANN sime = new XORGANN(5000, 2, 1);
-        sime.run();
+        /*
+        XORGANN sim = new XORGANN(5000, 2, 1);
+        sim.run();*/
+
+/*
+        XORStandard sim = new XORStandard(5000, 2,4,1);
+        sim.runUntil(60);*/
 
 
-        /*XORStandard sim = new XORStandard(5000, 2,1);
-        sim.runUntil(45);*/
+        byte[] DNA = {-119,-64,27,54,-11,50,95,-54,115,116,-93,-76,-34,-101,53,16,-51,9,-54,-11,34,22,-117,115,-26,18,27,110,-28,-106,90,-6,-65,-37,-7,-23,-84,65,-118,-90,-47,-51,-25,4,87,-78,-109,-123};
+        float[][] dataIn = {{0,0},{0,1},{1,0},{1,1}};
+        float[] dataOut;
+        NeuralNetwork test = new NeuralNetwork(2,4,1);
+        test.setDNA(DNA);
+
+        for(int i = 0; i < dataIn.length; i++)
+        {
+            dataOut = test.fire(dataIn[i]);
+
+            System.out.println(dataOut[0]);
+        }
+
     }
 
     private static void MatingTest()
@@ -104,8 +120,10 @@ public class Main
 
     private static void test()
     {
-        byte[] DNA = {5, -52, 54, 8, -15, 42, -54, -38, -28, -102, -60, -5};
+        //Perfect XOR//byte[] DNA = {-126,-25,-45,65,-55,-93,62,-80,97,122,-77,-94,-61,-70,44,-106,-24,-95,-7,-117,69,108,91,-47,-113,-42,-48,-11,-45,-8,43,-10,-81,118,93,-59,62,70,-7,69,-52,44,-103,123,98,109,-122,-100,-107,-93,-120,7,-124,126,7,-121,-36,65,89,115};
 
+        byte[] DNA = {-116,-36,24,111,-54,-55,-102,56,122,74,60,-120,-103,108,-34,-6,103,-12,13,118,-55,63,100,-66,-101,3,72,45,-78,-76,22,33,-47,7,34,102,62,-35,122,-39,-14,-41,-38,-51,63,122,101,91,-84,-104,-28,68,-50,41,90,-49,-65,-105,-19,24};
+//{63,-128,0,0,79,-19,-126,-55,63,112,24,-28,62,-31,-7,47,62,-73,-22,56,63,-128,0,0,61,119,99,121,-35,111,4,-52,63,2,52,-34,-15,83,38,-94,63,-128,0,0,-50,-59,-56,75,-128,-55,-116,-125,-85,-4,-46,-22,-75,47,48,-84,63,-128,0,0,-89,-88,91,47,-15,-32,-7,-97,62,-74,58,77,-87,126,-40,-53,63,-128,0,0,-7,-56,42,3,-90,66,-32,16,61,46,-109,61,-62,-68,-110,-117,63,-128,0,0,54,-38,37,83,62,-69,37,-27,-38,3,84,-47,63,-127,116,-35,63,-128,0,0,63,64,91,-28,34,96,-27,112,-62,-43,7,50,63,50,-32,122,63,-128,0,0,-91,-75,-109,73,63,94,99,-110,62,-16,-126,106,-13,118,-65,48,}
         float[][] input = {{0, 0}, {0, 1}, {1, 0}, {1, 1}};
         float[] expectedOutput = {1, 0, 0, 1};
         float[] out;
@@ -115,15 +133,15 @@ public class Main
         float[] out;*/
 
 
-        NeuralNetwork NN = new NeuralNetwork(2, 1);
+        NeuralNetwork NN = new NeuralNetwork(2, 2, 2, 1);
         NN.setDNA(DNA);
+
 
         for (int i = 0; i < input.length; i++)
         {
-
-
-            System.out.println("out: " + NN.fire(input[i])[0]);
-            System.out.println("Expected out: " + expectedOutput[i]);
+            out = NN.fire(input[i]);
+            System.out.println("out: " + out[0]);
+            System.out.println("Expected out: " + expectedOutput[i] + "\n_____________________________");
         }
 /*
         for (int i = 0; i < input.length; i++)

@@ -10,8 +10,8 @@ import java.util.Random;
 public class XORStandard
 {
     private NeuralNetwork[] population;
-    private float[][] input = {{0, 0}, {0, 1}, {1, 0}};
-    private float[] expectedOutput = {1, 0, 0};
+    private float[][] input = {{0, 0}, {0, 1}, {1, 0}, {1, 1}};
+    private float[] expectedOutput = {1, 0, 0, 1};
     private Arena arena;
 
     /**
@@ -62,7 +62,7 @@ public class XORStandard
     {
         int generation = 0;
 
-        while (arena.getHighestFitness() <= targetFitness)
+        while (arena.getHighestFitness() < targetFitness)
         {
             assingeFitness();
             arena.evolve();
@@ -100,14 +100,12 @@ public class XORStandard
     private void assingeFitness()
     {
         float[] output;
+        float numberRight = 0;
 
 
         for (int i = 0; i < population.length; i++)
         {
             population[i].fitness = 0;
-
-
-            int numberRight = 0;
 
             for (int j = 0; j < input.length; j++)
             {
@@ -138,7 +136,8 @@ public class XORStandard
             }
 
             population[i].fitness += (numberRight) * 15;
-            population[i].percentRight = numberRight / 24;
+            population[i].percentRight = numberRight / expectedOutput.length;
+            numberRight = 0;
 
             //System.out.println("Individual: " + i + " Fitness: " + population[i].fitness);
 

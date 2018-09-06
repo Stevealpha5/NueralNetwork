@@ -70,7 +70,7 @@ public class NeuralNetwork
         {
             for(int j = 0; j < NN[i].getNeurons().length; j++)//Neurons in layer
             {
-                DNAFloat.add(NN[i].getNeuron(j).bais); //saves the bais value
+
                 for (int k = 0; k < NN[i].getNeuronWeights(j).length; k++)//weights in neurons
                 {
                     DNAFloat.add(NN[i].getNeuronWeights(j)[k]);//saves the weights to the DNA
@@ -99,9 +99,6 @@ public class NeuralNetwork
         {
             for(int j = 0; j < NN[i].getNeurons().length; j++)//Neurons in layer
             {
-                NN[i].getNeuron(j).bais = DNA[DNACounter];
-                DNACounter++;
-
                 for (int k = 0; k < NN[i].getNeuronWeights(j).length; k++)//weights in neurons
                 {
                     NN[i].getNeuronWeights(j)[k] = DNA[DNACounter];

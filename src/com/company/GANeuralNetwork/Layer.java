@@ -60,7 +60,7 @@ class Layer
         {
             layer[i].weightIndex = weights[i];
             layer[i].wightedInput = new float[weights.length];
-            layer[i].bais = baises[i];
+            //layer[i].bais = baises[i];
         }
     }
 

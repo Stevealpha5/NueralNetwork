@@ -15,7 +15,7 @@ class Neuron
      */
 
     private float valueOut;
-    float bais = (float) Math.random();
+    private float bais = 1;
     float[] weightIndex;
     private float[] wightedInput;
 

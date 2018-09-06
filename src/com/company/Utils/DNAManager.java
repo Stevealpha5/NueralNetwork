@@ -139,13 +139,16 @@ public class DNAManager
 
         for(int i = 0; i < (baisesFloat.length); i++)
         {
+
+            baisesFloat[i] = Utils.generateFloatArray(neuronCfg[i], defaultBais);
+            /*
             try
             {
                 baisesFloat[i] = Utils.floatArrayFromByteArray(baisesBytes[i], neuronCfg[i], defaultBais);
             } catch (Exception e)
             {
                 baisesFloat[i] = Utils.generateFloatArray(neuronCfg[i], defaultBais);
-            }
+            }*/
         }
 
         return baisesFloat;

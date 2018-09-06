@@ -44,15 +44,15 @@ public class XORGANN
     {
         for(int f = 0; f < 20; f++)
         {
-            Thread t1 = new Thread(new Biome(population[0], input, expectedOutput, inputLayer, outputLayer));
-            Thread t2 = new Thread(new Biome(population[1], input, expectedOutput, inputLayer, outputLayer));
-            Thread t3 = new Thread(new Biome(population[2], input, expectedOutput, inputLayer, outputLayer));
-            Thread t4 = new Thread(new Biome(population[3], input, expectedOutput, inputLayer, outputLayer));
-            Thread t5 = new Thread(new Biome(population[4], input, expectedOutput, inputLayer, outputLayer));
-            Thread t6 = new Thread(new Biome(population[5], input, expectedOutput, inputLayer, outputLayer));
-            Thread t7 = new Thread(new Biome(population[6], input, expectedOutput, inputLayer, outputLayer));
-            Thread t8 = new Thread(new Biome(population[7], input, expectedOutput, inputLayer, outputLayer));
-            Thread t9 = new Thread(new Biome(population[8], input, expectedOutput, inputLayer, outputLayer));
+            Thread t1  = new Thread(new Biome(population[0], input, expectedOutput, inputLayer, outputLayer));
+            Thread t2  = new Thread(new Biome(population[1], input, expectedOutput, inputLayer, outputLayer));
+            Thread t3  = new Thread(new Biome(population[2], input, expectedOutput, inputLayer, outputLayer));
+            Thread t4  = new Thread(new Biome(population[3], input, expectedOutput, inputLayer, outputLayer));
+            Thread t5  = new Thread(new Biome(population[4], input, expectedOutput, inputLayer, outputLayer));
+            Thread t6  = new Thread(new Biome(population[5], input, expectedOutput, inputLayer, outputLayer));
+            Thread t7  = new Thread(new Biome(population[6], input, expectedOutput, inputLayer, outputLayer));
+            Thread t8  = new Thread(new Biome(population[7], input, expectedOutput, inputLayer, outputLayer));
+            Thread t9  = new Thread(new Biome(population[8], input, expectedOutput, inputLayer, outputLayer));
             Thread t10 = new Thread(new Biome(population[9], input, expectedOutput, inputLayer, outputLayer));
 
             t1.start();
@@ -90,18 +90,18 @@ public class XORGANN
                 int populationIndex1 = r.nextInt(10);
                 int populationIndex2 = r.nextInt(10);
 
-                int indiviualIndex = r.nextInt(popSize);
+                int individualIndex = r.nextInt(popSize);
 
                 while (populationIndex1 == populationIndex2)
                 {
                     populationIndex1 = r.nextInt(10);
                 }
 
-                GANeuralNetwork temp0 = population[populationIndex1][indiviualIndex];
-                GANeuralNetwork temp1 = population[populationIndex2][indiviualIndex];
+                GANeuralNetwork temp0 = population[populationIndex1][individualIndex];
+                GANeuralNetwork temp1 = population[populationIndex2][individualIndex];
 
-                population[populationIndex2][indiviualIndex] = temp0;
-                population[populationIndex1][indiviualIndex] = temp1;
+                population[populationIndex2][individualIndex] = temp0;
+                population[populationIndex1][individualIndex] = temp1;
 
             }
 
@@ -191,14 +191,10 @@ class Biome implements Runnable
                     if (Float.isNaN(output[k]))
                         population[i].fitness -= 250000;
                 }
-
-
             }
 
             population[i].fitness += (numberRight) * 150;
             population[i].percentRight = numberRight / expectedOutput.length;
-
-
         }
 
     }

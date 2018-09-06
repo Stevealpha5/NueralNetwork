@@ -304,7 +304,7 @@ public class GANeuralNetwork
 
         for (int i = 0; i < baises.length - 1; i++)
         {
-            NN[i].baises = baises[i];
+            //NN[i].baises = baises[i];
             NN[i].weights = weights[i];
             NN[i].setNeuronWeightsAndBaises();
         }
