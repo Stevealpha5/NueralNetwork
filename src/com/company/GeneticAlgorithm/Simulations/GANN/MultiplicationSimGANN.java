@@ -1,4 +1,4 @@
-package com.company.GeneticAlgorithm.Simulations;
+package com.company.GeneticAlgorithm.Simulations.GANN;
 
 import com.company.GANeuralNetwork.GANeuralNetwork;
 import com.company.GeneticAlgorithm.Arena;

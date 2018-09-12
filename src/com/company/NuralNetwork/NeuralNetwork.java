@@ -5,7 +5,7 @@ import com.company.Utils.Utils;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class NeuralNetwork
+public class NeuralNetwork implements Comparable<NeuralNetwork>
 {
     /**
      * NN (Neural Network) = the array of layers that make up the neural network
@@ -19,7 +19,7 @@ public class NeuralNetwork
     // the fitness for arena testing
     private Layer[] NN;
     private int[] neuronCfg;
-    public int fitness;// = r.nextInt(13);
+    public int fitness = -1;
     public float percentRight = 0;
 
     /**
@@ -84,6 +84,23 @@ public class NeuralNetwork
         return DNAByte;
     }
 
+    public void printWeights()
+    {
+        for(int i = 0; i < NN.length; i++)//layers in NN
+        {
+            for(int j = 0; j < NN[i].getNeurons().length; j++)//Neurons in layer
+            {
+
+                for (int k = 0; k < NN[i].getNeuronWeights(j).length; k++)//weights in neurons
+                {
+                   System.out.print(NN[i].getNeuronWeights(j)[k] + "      ");//saves the weights to the DNA
+
+                }
+            }
+        }
+
+    }
+
     /**
      * This sets the DNA of this neural net equal to that of the DNA being passed in
      * @param inputDNA The new DNA values for this neural net NOTE: the new DNA <b>MUST</>
@@ -118,4 +135,22 @@ public class NeuralNetwork
     }
 
 
+
+    public int compareTo(NeuralNetwork o)
+    {
+
+        if(Float.isNaN(fitness))
+            return -1;
+
+        if(this.fitness > o.fitness)
+        {
+            return -1;
+        }else if(this.fitness < o.fitness)
+        {
+            return 1;
+        }else
+        {
+            return 0;
+        }
+    }
 }

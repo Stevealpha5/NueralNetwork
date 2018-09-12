@@ -2,23 +2,21 @@ package com.company;
 
 import com.company.GANeuralNetwork.GANeuralNetwork;
 import com.company.GeneticAlgorithm.Mating;
-import com.company.GeneticAlgorithm.Simulations.MultiplicationSim;
-import com.company.GeneticAlgorithm.Simulations.MultiplicationSimGANN;
-import com.company.GeneticAlgorithm.Simulations.XORGANN;
-import com.company.GeneticAlgorithm.Simulations.XORStandard;
+import com.company.GeneticAlgorithm.Simulations.Standard.MostInputted;
+import com.company.GeneticAlgorithm.Simulations.Standard.MultiplicationSim;
+import com.company.GeneticAlgorithm.Simulations.GANN.XORGANN;
+import com.company.GeneticAlgorithm.Simulations.Standard.XORStandard;
 import com.company.NuralNetwork.NeuralNetwork;
-import com.company.Utils.Utils;
+import com.company.Utils.XMLLogger;
 
-import java.util.Random;
-
-import static com.company.Utils.ArrayPrinter.*;
-import static com.company.Utils.DNAManager.*;
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.IOException;
 
 
 public class Main
 {
 
-    public static void main(String[] args)
+    public static void main(String[] args) throws ParserConfigurationException, InterruptedException
     {
         //MatingTest();
         XORSim();
@@ -26,6 +24,7 @@ public class Main
         //testGANN();
         //sim();
         //GANNSim();
+        //MostInputted();
     }
 
     private static void GANNSim()
@@ -34,17 +33,24 @@ public class Main
         sime.run();
     }
 
+    private static  void MostInputted()
+    {
+        MostInputted MI = new MostInputted(1000, 11, 11, 1);
+
+        MI.runUntil(95);
+    }
+
     private static void XORSim()
     {
         /*
         XORGANN sim = new XORGANN(5000, 2, 1);
         sim.run();*/
 
-/*
+
         XORStandard sim = new XORStandard(5000, 2,4,1);
-        sim.runUntil(60);*/
+        sim.runUntil(60);
 
-
+/*
         byte[] DNA = {-119,-64,27,54,-11,50,95,-54,115,116,-93,-76,-34,-101,53,16,-51,9,-54,-11,34,22,-117,115,-26,18,27,110,-28,-106,90,-6,-65,-37,-7,-23,-84,65,-118,-90,-47,-51,-25,4,87,-78,-109,-123};
         float[][] dataIn = {{0,0},{0,1},{1,0},{1,1}};
         float[] dataOut;
@@ -56,7 +62,7 @@ public class Main
             dataOut = test.fire(dataIn[i]);
 
             System.out.println(dataOut[0]);
-        }
+        }*/
 
     }
 

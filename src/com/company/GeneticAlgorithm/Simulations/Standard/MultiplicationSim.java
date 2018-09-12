@@ -1,7 +1,9 @@
-package com.company.GeneticAlgorithm.Simulations;
+package com.company.GeneticAlgorithm.Simulations.Standard;
 
 import com.company.GeneticAlgorithm.Arena;
 import com.company.NuralNetwork.NeuralNetwork;
+
+import java.util.ArrayList;
 
 public class MultiplicationSim
 {
@@ -19,7 +21,7 @@ public class MultiplicationSim
      * neuronCFG =  the configuration of the neurons
      */
     private int defualtFitness = 100000;
-    private NeuralNetwork[] population;
+    private ArrayList<NeuralNetwork> population;
     private float[][] input = {{0, 0, 1, 1}, {0, 1, 0, 1}, {1, 0, 0, 1}, {1, 0, 1, 1}, {1, 0, 1, 0}, {1, 1, 1, 0}};
     private float[][] expectedOutput = {{0, 0, 0, 0}, {0, 0, 0, 1}, {0, 0, 1, 0}, {0, 1, 1, 0}, {0, 1, 0, 0}, {0, 1, 1, 0}};
     private Arena arena;
@@ -32,11 +34,10 @@ public class MultiplicationSim
     public MultiplicationSim(int popSize, int... neuronCFG)
     {
         this.neuronCFG = neuronCFG;
-        population = new NeuralNetwork[popSize];
 
-        for (int i = 0; i < population.length; i++)
+        for (int i = 0; i < popSize; i++)
         {
-            population[i] = new NeuralNetwork(neuronCFG);
+            population.add(new NeuralNetwork(neuronCFG));
         }
 
         arena = new Arena(population, 0.5f);
@@ -106,17 +107,17 @@ public class MultiplicationSim
         float[] output;
 
 
-        for (int i = 0; i < population.length; i++)
+        for (int i = 0; i < population.size(); i++)
         {
             int fitnessDeducted = 0;
-            population[i].fitness = defualtFitness;
+            population.get(i).fitness = defualtFitness;
 
 
             int numberRight = 0;
 
             for (int j = 0; j < input.length; j++)
             {
-                output = population[i].fire(input[j]);
+                output = population.get(i).fire(input[j]);
 
                 int numRight = 0;
                 for (int k = 0; k < output.length; k++)
@@ -138,12 +139,12 @@ public class MultiplicationSim
 
                 fitnessDeducted -= Math.pow(10, numRight);
 
-                population[i].fitness -= fitnessDeducted;
+                population.get(i).fitness -= fitnessDeducted;
             }
 
             //population[i].fitness = (int)((float) numberRight / (4.0f * (float) input.length) * 10000);
 
-            population[i].percentRight = (float) numberRight / (4.0f * (float) input.length);
+            population.get(i).percentRight = (float) numberRight / (4.0f * (float) input.length);
 
         }
 

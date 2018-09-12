@@ -1,5 +1,6 @@
 package com.company.Utils;
 
+
 public class ActivationFunctions
 {
     public static float sigmoid(float x)

@@ -2,6 +2,8 @@ package com.company.GeneticAlgorithm;
 
 import com.company.NuralNetwork.NeuralNetwork;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
 
 public class Arena
@@ -14,16 +16,17 @@ public class Arena
      * deathPercent = the percent of the population that will die
      */
 
-    private NeuralNetwork[] population;
+    private ArrayList<NeuralNetwork>  population;
     private float survivalPercent = 0.25f;
     private float deathPercent;
     private Random random = new Random();
+    private int killCounter;
 
     /**
      * @param population      the neural nets that will go though the arena
      * @param survivalPercent the percent of the population that will survive
      */
-    public Arena(NeuralNetwork[] population, float survivalPercent)
+    public Arena(ArrayList<NeuralNetwork> population, float survivalPercent)
     {
         this.population = population;
         this.survivalPercent = survivalPercent;
@@ -33,7 +36,7 @@ public class Arena
     /**
      * @param population the neural nets that will go though the arena
      */
-    public Arena(NeuralNetwork[] population)
+    public Arena(ArrayList<NeuralNetwork> population)
     {
         this.population = population;
         deathPercent = 1.0f - survivalPercent;
@@ -45,70 +48,34 @@ public class Arena
      */
     public void evolve()
     {
-        arrangeByFitness();
+        Collections.sort(population);
         kill();
         repopulate();
     }
 
-    /**
-     * sorts the population by fitness from greatest to least
-     */
-    private void arrangeByFitness()
-    {
-        int sortedIndicies = 0;
-
-        while (sortedIndicies < population.length)
-        {
-            for (int i = 0; i < population.length - 1; i++)
-            {
-                NeuralNetwork NN1 = population[i + 1];
-                NeuralNetwork NN2 = population[i];
-
-                if (population[i + 1].fitness > population[i].fitness)
-                {
-                    population[i] = NN1;
-                    population[i + 1] = NN2;
-                }
-            }
-
-            //loops through the population and checks to see if it is completely sorted
-
-            for (int i = 0; i < population.length - 1; i++)
-            {
-                if (population[i].fitness < population[i + 1].fitness)
-                {
-                    break;
-                } else
-                {
-                    sortedIndicies++;
-                }
-            }
-
-        }
-    }
 
     /**
      * Randomly kills the percentage of the population defined by survivalPercent and deathPercent
      */
     private void kill()
     {
-        int killCounter = 0;
+        killCounter = 0;
 
         //checks to make sure that the kills are equal to the desired about (to integer precision)
-        while (killCounter < (int) (deathPercent * population.length))
+        while (killCounter < (int) (deathPercent * population.size()))
         {
-            for (int i = 0; i < population.length; i++)
+            for (int i = 1; i < population.size(); i++)
             {
                 float r = random.nextFloat();
 
                 //adjusts the chances of survival based on fitness NOTE: the population must be sorted by fitness
-                if (r * ((float) population.length / (float) (i + 1)) < deathPercent)
+                if (r * ((float) population.size() / (float) ((population.size() * 0.1 * i) + 1)) < deathPercent)
                 {
-                    population[i] = null;
+                    population.remove(i);
                     killCounter++;
                 }
 
-                if (killCounter >= (int) (deathPercent * population.length))
+                if (killCounter >= (int) (deathPercent * population.size()))
                     return;
             }
         }
@@ -120,22 +87,20 @@ public class Arena
     private void repopulate()
     {
 
-        for (int i = 0; i < population.length; i++)
+        for (int i = 0; i < killCounter; i++)
         {
-            if (population[i] == null)
+            int parent1Pos = random.nextInt(population.size());
+            int parent2pos = random.nextInt(population.size());
+
+            //makes sure the selected parents are not the same or equal to null
+            while (parent1Pos == parent2pos)
             {
-                int parent1Pos = random.nextInt(population.length);
-                int parent2pos = random.nextInt(population.length);
-
-                //makes sure the selected parents are not the same or equal to null
-                while (parent1Pos == parent2pos || population[parent1Pos] == null || population[parent2pos] == null)
-                {
-                    parent1Pos = random.nextInt(population.length);
-                    parent2pos = random.nextInt(population.length);
-                }
-
-                population[i] = Mating.simpleMate(population[parent1Pos], population[parent2pos]);
+                parent1Pos = random.nextInt(population.size());
+                parent2pos = random.nextInt(population.size());
             }
+
+            population.add(Mating.simpleMate(population.get(parent1Pos), population.get(parent2pos)));
+
         }
 
     }
@@ -150,25 +115,38 @@ public class Arena
             System.out.println(individual.fitness);
         }
     }
+    /**
+     * Prints the sorted fitness of each individual in the population
+     */
+    public void printSorttedFitness()
+    {
+        Collections.sort(population);
+
+        for (NeuralNetwork individual : population)
+        {
+            System.out.println(individual.fitness);
+        }
+    }
 
     public void printBestStats()
     {
         System.out.print("DNA: " + '{');
-        for (byte x : population[0].getDNA())
+        for (byte x : population.get(0).getDNA())
         {
             System.out.print(x);
             System.out.print(',');
         }
 
         System.out.println('}');
-        System.out.println("Fitness: " + population[0].fitness);
-        System.out.println("% Accuracy: " + population[0].percentRight);
+        System.out.println("Fitness: " + population.get(0).fitness);
+        System.out.println("% Accuracy: " + population.get(0).percentRight);
     }
 
     public int getHighestFitness()
     {
-        return population[0].fitness;
+        return population.get(0).fitness;
     }
 
+    public ArrayList<NeuralNetwork> getPopulation(){return population;}
 
 }

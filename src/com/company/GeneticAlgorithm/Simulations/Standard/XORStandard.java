@@ -1,29 +1,28 @@
-package com.company.GeneticAlgorithm.Simulations;
+package com.company.GeneticAlgorithm.Simulations.Standard;
 
-import com.company.GANeuralNetwork.GANeuralNetwork;
 import com.company.GeneticAlgorithm.Arena;
-import com.company.GeneticAlgorithm.ArenaGANN;
 import com.company.NuralNetwork.NeuralNetwork;
+import com.company.Utils.XMLLogger;
 
-import java.util.Random;
+import javax.xml.parsers.ParserConfigurationException;
+import java.util.ArrayList;
 
 public class XORStandard
 {
-    private NeuralNetwork[] population;
+    private ArrayList<NeuralNetwork> population = new ArrayList<>();
     private float[][] input = {{0, 0}, {0, 1}, {1, 0}, {1, 1}};
     private float[] expectedOutput = {1, 0, 0, 1};
     private Arena arena;
+    private XMLLogger logger = new XMLLogger();
 
     /**
      * @param popSize the size of the population
      */
     public XORStandard(int popSize, int... neuronCFG)
     {
-        population = new NeuralNetwork[popSize];
-
-        for (int i = 0; i < population.length; i++)
+        for (int i = 0; i < popSize; i++)
         {
-            population[i] = new NeuralNetwork(neuronCFG);
+            population.add(new NeuralNetwork(neuronCFG));
         }
 
         arena = new Arena(population, 0.5f);
@@ -36,10 +35,18 @@ public class XORStandard
      */
     public void run(int numberOfGenerations)
     {
+        try
+        {
+            logger.start();
+        } catch (ParserConfigurationException e)
+        {
+            e.printStackTrace();
+        }
 
         for (int i = 0; i < numberOfGenerations; i++)
         {
-            assingeFitness();
+            assignFitness();
+            logger.logToXML(i, arena.getPopulation());
             arena.evolve();
 
             if (i % 10 == 0)
@@ -49,6 +56,8 @@ public class XORStandard
                 arena.printBestStats();
             }
         }
+
+        logger.close();
 
 
     }
@@ -62,9 +71,18 @@ public class XORStandard
     {
         int generation = 0;
 
+        try
+        {
+            logger.start();
+        } catch (ParserConfigurationException e)
+        {
+            e.printStackTrace();
+        }
+
         while (arena.getHighestFitness() < targetFitness)
         {
-            assingeFitness();
+            assignFitness();
+            logger.logToXML(generation, arena.getPopulation());
             arena.evolve();
 
             generation++;
@@ -78,39 +96,31 @@ public class XORStandard
 
         }
 
+        logger.close();
+
         System.out.println("_____________________________________________________________________________________");
         System.out.println("Generation: " + generation);
         arena.printBestStats();
 
     }
 
-    private void psudoAddingeFitness()
-    {
-        Random r = new Random();
-
-        for (int i = 0; i < population.length; i++)
-        {
-            population[i].fitness = r.nextInt(population.length);
-        }
-    }
-
     /**
      * Runs the simulation and assigned a fitness based on the networks performance
      */
-    private void assingeFitness()
+    private void assignFitness()
     {
         float[] output;
         float numberRight = 0;
 
 
-        for (int i = 0; i < population.length; i++)
+        for (int i = 0; i < population.size(); i++)
         {
-            population[i].fitness = 0;
+            population.get(i).fitness = 0;
 
             for (int j = 0; j < input.length; j++)
             {
 
-                output = population[i].fire(input[j]);
+                output = population.get(i).fire(input[j]);
 
 
                 for (int k = 0; k < output.length; k++)
@@ -122,21 +132,29 @@ public class XORStandard
 
                     if (expectedOutput[j] == 1 && output[k] < 0.5)
                     {
-                        population[i].fitness -= (0.5 - output[k]) * 100;
+                        population.get(i).fitness -= (0.5 - output[k]) * 100;
                     } else if (expectedOutput[j] == 0 && output[k] >= 0.5)
                     {
-                        population[i].fitness -= (output[k] - 0.51) * 100;
+                        population.get(i).fitness -= (output[k] - 0.51) * 100;
                     }
 
                     if (Float.isNaN(output[k]))
-                        population[i].fitness -= 25000;
+                    {
+                        population.get(i).fitness = -1000;
+                        population.get(i).printWeights();
+                        System.out.println();
+                        break;
+                    }
                 }
+
+                if( population.get(i).fitness == -1000)
+                    break;
 
 
             }
 
-            population[i].fitness += (numberRight) * 15;
-            population[i].percentRight = numberRight / expectedOutput.length;
+            population.get(i).fitness += (numberRight) * 15;
+            population.get(i).percentRight = numberRight / expectedOutput.length;
             numberRight = 0;
 
             //System.out.println("Individual: " + i + " Fitness: " + population[i].fitness);
