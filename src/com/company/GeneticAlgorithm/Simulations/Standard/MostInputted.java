@@ -111,7 +111,7 @@ public class MostInputted
 
     private void assignFitness()
     {
-        int numberOfTests = 256;
+        int numberOfTests = 1024;
         float[] output = {-1};
         float percentageRight;
         int numberRight;

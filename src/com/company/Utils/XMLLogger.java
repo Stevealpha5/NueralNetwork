@@ -54,6 +54,7 @@ public class XMLLogger
         }
 
         rootElement.appendChild(generation);
+        close();
 
     }
 

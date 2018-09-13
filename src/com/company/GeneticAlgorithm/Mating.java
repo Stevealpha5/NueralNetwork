@@ -3,6 +3,7 @@ package com.company.GeneticAlgorithm;
 import com.company.GANeuralNetwork.GANeuralNetwork;
 import com.company.NuralNetwork.NeuralNetwork;
 import com.company.Utils.DNAManager;
+import com.company.Utils.Utils;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -14,6 +15,8 @@ public class Mating
      *
      * random = you should know what this is
      */
+    private static float MAX_VAL = 10;
+    private static float MIN_VAL = -10;
     private static float MUTATION_CHANCE = 0.05f;
     private static Random random = new Random();
     private static int maxDepth = 6;
@@ -33,7 +36,7 @@ public class Mating
 
         NeuralNetwork child = new NeuralNetwork(NN1.getNeuronCfg());
 
-        child.setDNA(simpleMateArray(DNA1, DNA2, DNA1.length));
+        child.setDNA(Utils.capValues(simpleMateArray(DNA1, DNA2, DNA1.length), MAX_VAL, MIN_VAL));
         return child;
     }
 
@@ -165,5 +168,6 @@ public class Mating
 
         return childArray;
     }
+
 
 }

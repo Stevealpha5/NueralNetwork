@@ -19,12 +19,12 @@ public class Main
     public static void main(String[] args) throws ParserConfigurationException, InterruptedException
     {
         //MatingTest();
-        XORSim();
+        //XORSim();
         //test();
         //testGANN();
         //sim();
         //GANNSim();
-        //MostInputted();
+        MostInputted();
     }
 
     private static void GANNSim()
@@ -37,7 +37,7 @@ public class Main
     {
         MostInputted MI = new MostInputted(1000, 11, 11, 1);
 
-        MI.runUntil(95);
+        MI.runUntil(90);
     }
 
     private static void XORSim()
@@ -121,7 +121,7 @@ public class Main
     private static void sim()
     {
         MultiplicationSim sim = new MultiplicationSim(10000, 4, 4, 4);//50000
-        sim.runUntil(250000);
+        sim.run(100);
     }
 
     private static void test()

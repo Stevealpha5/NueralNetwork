@@ -194,5 +194,24 @@ public class Utils
         return res;
     }
 
+    public static byte[] capValues(byte[] input, float max, float min)
+    {
+        float[] fInputs = floatArrayFromByteArray(input);
+
+        for(int i = 0; i < fInputs.length; i++)
+        {
+            if(fInputs[i] > max)
+                fInputs[i] = max;
+
+            if(fInputs[i] < min)
+                fInputs[i] = min;
+
+            if(Float.isNaN(fInputs[i]))
+                fInputs[i] = 0;
+        }
+
+        return floatArrayToByteArray(fInputs);
+    }
+
 
 }

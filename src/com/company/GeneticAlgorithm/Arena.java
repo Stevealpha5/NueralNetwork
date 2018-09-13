@@ -59,23 +59,24 @@ public class Arena
      */
     private void kill()
     {
+        float popSize = population.size();
         killCounter = 0;
 
         //checks to make sure that the kills are equal to the desired about (to integer precision)
-        while (killCounter < (int) (deathPercent * population.size()))
+        while (killCounter < (int) (deathPercent * popSize))
         {
-            for (int i = 1; i < population.size(); i++)
+            for (int i = (int)popSize - 1; i > 0; i--)
             {
                 float r = random.nextFloat();
 
                 //adjusts the chances of survival based on fitness NOTE: the population must be sorted by fitness
-                if (r * ((float) population.size() / (float) ((population.size() * 0.1 * i) + 1)) < deathPercent)
+                if (r * (population.size() / (float) ((population.size() * 0.1 * i) + 1)) < deathPercent)
                 {
                     population.remove(i);
                     killCounter++;
                 }
 
-                if (killCounter >= (int) (deathPercent * population.size()))
+                if (killCounter >= (int) (deathPercent * popSize))
                     return;
             }
         }

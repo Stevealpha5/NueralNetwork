@@ -2,7 +2,9 @@ package com.company.GeneticAlgorithm.Simulations.Standard;
 
 import com.company.GeneticAlgorithm.Arena;
 import com.company.NuralNetwork.NeuralNetwork;
+import com.company.Utils.XMLLogger;
 
+import javax.xml.parsers.ParserConfigurationException;
 import java.util.ArrayList;
 
 public class MultiplicationSim
@@ -21,11 +23,12 @@ public class MultiplicationSim
      * neuronCFG =  the configuration of the neurons
      */
     private int defualtFitness = 100000;
-    private ArrayList<NeuralNetwork> population;
+    private ArrayList<NeuralNetwork> population = new ArrayList<>();
     private float[][] input = {{0, 0, 1, 1}, {0, 1, 0, 1}, {1, 0, 0, 1}, {1, 0, 1, 1}, {1, 0, 1, 0}, {1, 1, 1, 0}};
     private float[][] expectedOutput = {{0, 0, 0, 0}, {0, 0, 0, 1}, {0, 0, 1, 0}, {0, 1, 1, 0}, {0, 1, 0, 0}, {0, 1, 1, 0}};
     private Arena arena;
     private int[] neuronCFG;
+    private XMLLogger logger = new XMLLogger();
 
     /**
      * @param popSize   the size of the population
@@ -50,9 +53,18 @@ public class MultiplicationSim
      */
     public void run(int numberOfGenerations)
     {
+        try
+        {
+            logger.start();
+        } catch (ParserConfigurationException e)
+        {
+            e.printStackTrace();
+        }
+
         for (int i = 0; i < numberOfGenerations; i++)
         {
             assingeFitness();
+            logger.logToXML(i, population);
             arena.evolve();
 
             if (i % 10 == 0)
@@ -62,6 +74,8 @@ public class MultiplicationSim
                 arena.printBestStats();
             }
         }
+
+        logger.close();
 
     }
 
@@ -133,7 +147,13 @@ public class MultiplicationSim
                     }
 
                     if (Float.isNaN(output[k]))
-                        fitnessDeducted += 25000;
+                    {
+                        fitnessDeducted += -1000;
+                        break;
+                    }
+
+                    if(population.get(i).fitness == -1000)
+                        break;
 
                 }
 
