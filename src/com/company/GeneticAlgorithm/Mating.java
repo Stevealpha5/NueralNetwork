@@ -30,14 +30,24 @@ public class Mating
      */
     //TODO add check to make sure the parents have the same neuron configuration
     public static NeuralNetwork simpleMate(NeuralNetwork NN1, NeuralNetwork NN2)
+{
+    byte[] DNA1 = NN1.getDNA();
+    byte[] DNA2 = NN2.getDNA();
+
+    NeuralNetwork child = new NeuralNetwork(NN1.getNeuronCfg());
+
+    child.setDNA(Utils.capValues(simpleMateArray(DNA1, DNA2, DNA1.length), MAX_VAL, MIN_VAL));
+    return child;
+}
+
+    public static byte[] simpleDNA(NeuralNetwork NN1, NeuralNetwork NN2)
     {
         byte[] DNA1 = NN1.getDNA();
         byte[] DNA2 = NN2.getDNA();
 
         NeuralNetwork child = new NeuralNetwork(NN1.getNeuronCfg());
 
-        child.setDNA(Utils.capValues(simpleMateArray(DNA1, DNA2, DNA1.length), MAX_VAL, MIN_VAL));
-        return child;
+        return Utils.capValues(simpleMateArray(DNA1, DNA2, DNA1.length), MAX_VAL, MIN_VAL);
     }
 
     public static GANeuralNetwork simpleGANNMate(GANeuralNetwork NN1, GANeuralNetwork NN2, int inputLayer, int outputLayer)

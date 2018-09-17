@@ -21,6 +21,7 @@ public class NeuralNetwork implements Comparable<NeuralNetwork>
     private int[] neuronCfg;
     public int fitness = -1;
     public float percentRight = 0;
+    public boolean toBeReplaced = false;
 
     /**
      * @param neurons saves the input into the array 'neurons' where index 0 is the input layer and the last index is the output layer, the value at each index is the number of

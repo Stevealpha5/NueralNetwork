@@ -19,8 +19,11 @@ lowestFittness = []
 tree = ET.parse('C:\\Users\\Christopher\\projects\\NueralNetwork\\Log.xml')
 root = tree.getroot()
 
+
+population = []
+
 def populateData():
-	population = []
+	
 
 	for generation in root:
 		individuals = []
@@ -47,6 +50,11 @@ def drawGraph():
 	style.use('fivethirtyeight')
 	fig = plt.figure()
 
+	# bins = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
+
+	# bargraph = plt.subplot2grid((1,2), (0,0), rowspan=1, colspan=1)
+	# bargraph.hist(population[33], bins, histtype='bar', rwidth=0.8)
+
 	fittnessPlt = plt.subplot2grid((1,1), (0,0), rowspan=1, colspan=1)
 
 	fittnessPlt.clear()
@@ -61,7 +69,7 @@ def drawGraph():
 	fittnessPlt.set_title('Fittness')
 	fittnessPlt.set_xlabel('Generation Number')
 	fittnessPlt.set_ylabel('Fittness')
-	fittnessPlt.legend()
+	#fittnessPlt.legend()
 
 	plt.show()
 
