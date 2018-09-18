@@ -20,10 +20,11 @@ public class XMLLogger
 {
     Document XMLDoc;
     Element rootElement;
+    String docName;
 
-    public XMLLogger()
+    public XMLLogger(String docName)
     {
-
+        this.docName = docName;
     }
 
     public void start() throws ParserConfigurationException
@@ -63,7 +64,7 @@ public class XMLLogger
         OutputFormat outFormat = new OutputFormat(XMLDoc);
         outFormat.setIndenting(true);
 
-        File XMLFile = new File("Log.xml");
+        File XMLFile = new File(docName);
         FileOutputStream outStream = null;
 
         try

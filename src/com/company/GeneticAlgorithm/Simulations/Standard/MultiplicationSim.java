@@ -28,7 +28,7 @@ public class MultiplicationSim
     private float[][] expectedOutput = {{0, 0, 0, 0}, {0, 0, 0, 1}, {0, 0, 1, 0}, {0, 1, 1, 0}, {0, 1, 0, 0}, {0, 1, 1, 0}};
     private Arena arena;
     private int[] neuronCFG;
-    private XMLLogger logger = new XMLLogger();
+    private XMLLogger logger = new XMLLogger("log.xml");
 
     /**
      * @param popSize   the size of the population

@@ -150,4 +150,10 @@ public class Arena
 
     public ArrayList<NeuralNetwork> getPopulation(){return population;}
 
+    public ArrayList<NeuralNetwork> getSortedPopulation()
+    {
+        Collections.sort(population);
+        return population;
+    }
+
 }

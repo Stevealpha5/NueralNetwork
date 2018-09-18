@@ -10,25 +10,29 @@ import java.util.Random;
 
 public class TicTacToeMisere
 {
-    private ArrayList<NeuralNetwork> population = new ArrayList<>();
-    private Arena arena;
-    private XMLLogger logger = new XMLLogger();
+    private ArrayList<NeuralNetwork> populationP1 = new ArrayList<>();
+    private ArrayList<NeuralNetwork> populationP2 = new ArrayList<>();
+    private Arena arenaP1;
+    private Arena arenaP2;
+    private XMLLogger logger1 = new XMLLogger("P1.xml");
+    private XMLLogger logger2 = new XMLLogger("P2.xml");
     private TicTacToeMisereGame game = new TicTacToeMisereGame();
     private Random r = new Random();
     private float[] dataIn = new float[9];
-    private float[] dataOut = new float[9];
 
     /**
-     * @param popSize the size of the population
+     * @param popSize the size of the populationP1
      */
     public TicTacToeMisere(int popSize, int... neuronCFG)
     {
         for (int i = 0; i < popSize; i++)
         {
-            population.add(new NeuralNetwork(neuronCFG));
+            populationP1.add(new NeuralNetwork(neuronCFG));
+            populationP2.add(new NeuralNetwork(neuronCFG));
         }
 
-        arena = new Arena(population, 0.25f);
+        arenaP1 = new Arena(populationP1, 0.25f);
+        arenaP2 = new Arena(populationP2, 0.25f);
     }
 
     /**
@@ -40,7 +44,8 @@ public class TicTacToeMisere
     {
         try
         {
-            logger.start();
+            logger1.start();
+            logger2.start();
 
         } catch (ParserConfigurationException e)
         {
@@ -50,17 +55,26 @@ public class TicTacToeMisere
         for (int i = 0; i < numberOfGenerations; i++)
         {
             assignFitness();
-            logger.logToXML(i, arena.getPopulation());
-            arena.evolve();
+
+            logger1.logToXML(i, arenaP1.getPopulation());
+            logger2.logToXML(i, arenaP2.getPopulation());
+
+            arenaP1.evolve();
+            arenaP2.evolve();
 
 
-            System.out.println("_____________________________________________________________________________________");
+            System.out.println("P1________________________________________________________________________________");
             System.out.println("Generation: " + i);
-            arena.printBestStats();
+            arenaP1.printBestStats();
+
+            System.out.println("P2________________________________________________________________________________");
+            System.out.println("Generation: " + i);
+            arenaP2.printBestStats();
 
         }
 
-        logger.close();
+        logger1.close();
+        logger2.close();
 
 
     }
@@ -76,34 +90,47 @@ public class TicTacToeMisere
 
         try
         {
-            logger.start();
+            logger1.start();
+            logger2.start();
         } catch (ParserConfigurationException e)
         {
             e.printStackTrace();
         }
 
-        while (arena.getHighestFitness() < targetFitness)
+        while (arenaP1.getHighestFitness() < targetFitness)
         {
             assignFitness();
-            logger.logToXML(generation, arena.getPopulation());
-            arena.evolve();
+
+            logger1.logToXML(generation, arenaP1.getPopulation());
+            logger2.logToXML(generation, arenaP2.getPopulation());
+
+            arenaP1.evolve();
+            arenaP2.evolve();
+
+
+            System.out.println("P1________________________________________________________________________________");
+            System.out.println("Generation: " + generation);
+            arenaP1.printBestStats();
+
+            System.out.println("P2________________________________________________________________________________");
+            System.out.println("Generation: " + generation);
+            arenaP2.printBestStats();
 
             generation++;
 
-            if (generation % 10 == 0)
-            {
-                System.out.println("_____________________________________________________________________________________");
-                System.out.println("Generation: " + generation);
-                arena.printBestStats();
-            }
 
         }
 
-        logger.close();
+        logger1.close();
+        logger2.close();
 
-        System.out.println("_____________________________________________________________________________________");
+        System.out.println("P1________________________________________________________________________________");
         System.out.println("Generation: " + generation);
-        arena.printBestStats();
+        arenaP1.printBestStats();
+
+        System.out.println("P2________________________________________________________________________________");
+        System.out.println("Generation: " + generation);
+       arenaP2.printBestStats();
 
     }
 
@@ -112,51 +139,80 @@ public class TicTacToeMisere
      */
     private void assignFitness()
     {
-        int numberOfOpponents = (int)(population.size() * 0.1);
-        int p2;
+        int numberOfOpponents = (int)(populationP2.size() * 50);
+        int p2 = r.nextInt(populationP2.size());
+        int p1;
         int p1Win = 0;
         int p2Win = 0;
+        int counter;
+        float multFactor = 1000;
 
 
 
-        for (int i = 0; i < population.size(); i++)
+
+        for (int i = 0; i < /*populationP1.size()*/ numberOfOpponents; i++)
         {
-            for(int k = 0; k <  numberOfOpponents; k++)
-            {
-                p2 = r.nextInt(population.size());
+            p1 = r.nextInt(populationP1.size());
+            /*for(int k = 0; k <  numberOfOpponents; k++)
+            {*/
+                p2 = r.nextInt(populationP2.size());
+                /*counter = 0;
+
+                while (populationP2.get(k).fitness > populationP1.get(i).fitness + 100 || populationP2.get(k).fitness <  populationP1.get(i).fitness - 100 )
+                {
+                    p2 = r.nextInt(populationP2.size());
+
+                    if (counter > populationP2.size())
+                    {
+                        //System.out.println("No Match Found");
+                        break;
+                    }
+
+                    counter++;
+                }*/
+
+
+                //System.out.println("P1: " + populationP1.get(i).fitness);
+                //System.out.println("P2: " + populationP2.get(p2).fitness);
 
                 while (game.getWinner() == TicTacToeMisereGame.Player.NONE)
                 {
                     flatten(game.getBoard());
 
-                    game.turnP1NN(population.get(i).fire(dataIn));
+                    game.turnP1NN(populationP1.get(p1).fire(dataIn));
 
                     if (game.getWinner() != TicTacToeMisereGame.Player.NONE)
                         break;
 
                     flatten(game.getBoard());
 
-                    game.turnP2NN(population.get(p2).fire(dataIn));
+                    game.turnP2NN(populationP2.get(p2).fire(dataIn));
 
                 }
+
+                //System.out.println("Winner: " + game.getWinner());
 
                 if (game.getWinner() == TicTacToeMisereGame.Player.PLAYER1)
                     p1Win++;
                 else
                     p2Win++;
 
+                //System.out.println("P1: " + p1Win + " P2 " + p2Win);
+
                 game.resetBoard();
 
 
-                population.get(p2).fitness = (int)(((((float)p2Win / numberOfOpponents) * 10000) + population.get(p2).fitness) / 2);
+                populationP2.get(p2).fitness = (int)((((((float)p2Win) * multFactor) + (float) populationP2.get(p2).fitness) / 2.0));
                 p2Win = 0;
 
-                population.get(i).fitness = (int)(((((float)p1Win) * 10000) + population.get(i).fitness) / 2);
+                populationP1.get(p1).fitness = (int)((((((float)p1Win) * multFactor) + (float)populationP1.get(p1).fitness) / 2.0));
                 p1Win = 0;
 
-                System.out.println("P2: " + p2 + " Fitness: " + population.get(p2).fitness );
-                System.out.println("P1: " + i + " Fitness: " + population.get(i).fitness );
-            }
+               // System.out.println("P2: " + p2 + " Fitness: " + populationP2.get(p2).fitness + " Scalar: " + scaler);
+                //System.out.println("P1: " + i + " Fitness: " + populationP1.get(i).fitness );
+            //}
+
+
 
         }
     }

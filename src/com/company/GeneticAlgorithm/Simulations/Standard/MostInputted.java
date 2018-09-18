@@ -16,7 +16,7 @@ public class MostInputted
     private float expectedOut;
     private ArrayList<NeuralNetwork> population = new ArrayList<>();
     private Arena arena;
-    private XMLLogger logger = new XMLLogger();
+    private XMLLogger logger = new XMLLogger("log.xml");
 
     public MostInputted(int popSize, int... neuronCFG)
     {

@@ -16,7 +16,7 @@ topFittness = []
 lowestFittness = []
 
 #Extracting XML
-tree = ET.parse('C:\\Users\\Christopher\\projects\\NueralNetwork\\Log.xml')
+tree = ET.parse('C:\\Users\\Christopher\\projects\\NueralNetwork\\P1.xml')
 root = tree.getroot()
 
 

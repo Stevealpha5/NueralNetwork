@@ -13,7 +13,7 @@ public class XORStandard
     private float[][] input = {{0, 0}, {0, 1}, {1, 0}, {1, 1}};
     private float[] expectedOutput = {1, 0, 0, 1};
     private Arena arena;
-    private XMLLogger logger = new XMLLogger();
+    private XMLLogger logger = new XMLLogger("log.xml");
 
     /**
      * @param popSize the size of the population

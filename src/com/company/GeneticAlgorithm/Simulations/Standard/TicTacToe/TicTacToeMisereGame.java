@@ -145,7 +145,7 @@ public class TicTacToeMisereGame
         return board;
     }
 
-    public void manVMachine(byte[] DNA, int... neuronCFG)
+    public void manVMachine(byte[] DNA, boolean botIsP1, int... neuronCFG)
     {
         Scanner scanner = new Scanner(System.in);
         NeuralNetwork bot = new NeuralNetwork(neuronCFG);
@@ -153,29 +153,58 @@ public class TicTacToeMisereGame
 
         printBoard();
 
-        while (winner == Player.NONE)
+        if(botIsP1)
         {
-            System.out.println("----Player 1----");
-
-            turnP1NN(bot.fire(flatten(getBoard())));
-
-            printBoard();
-            System.out.println("----------------\n\n");
-
-            if(winner != Player.NONE)
-                break;
-
-            System.out.println("----Player 2----");
-            try
+            while (winner == Player.NONE)
             {
-                turnP2(scanner.nextInt());
-            } catch (Exception e)
-            {
-                System.out.println("Player 2 skipped their turn");
+                System.out.println("----Player 1----");
+
+                turnP1NN(bot.fire(flatten(getBoard())));
+
+                printBoard();
+                System.out.println("----------------\n\n");
+
+                if (winner != Player.NONE)
+                    break;
+
+                System.out.println("----Player 2----");
+                try
+                {
+                    turnP2(scanner.nextInt());
+                } catch (Exception e)
+                {
+                    System.out.println("Player 2 skipped their turn");
+                }
+                printBoard();
+                System.out.println("----------------\n\n");
+
             }
-            printBoard();
-            System.out.println("----------------\n\n");
+        }else
+        {
+            while (winner == Player.NONE)
+            {
+                System.out.println("----Player 1----");
+                try
+                {
+                    turnP1(scanner.nextInt());
+                } catch (Exception e)
+                {
+                    System.out.println("Player 2 skipped their turn");
+                }
 
+                printBoard();
+                System.out.println("----------------\n\n");
+
+                if (winner != Player.NONE)
+                    break;
+
+                System.out.println("----Player 2----");
+
+                turnP2NN(bot.fire(flatten(getBoard())));
+
+                printBoard();
+                System.out.println("----------------\n\n");
+            }
         }
 
         if(winner == Player.PLAYER1)
