@@ -156,13 +156,9 @@ public class TicTacToeMisereGame
         while (winner == Player.NONE)
         {
             System.out.println("----Player 1----");
-            try
-            {
-                turnP1(numFromOut(bot.fire(flatten(getBoard()))));
-            } catch (Exception e)
-            {
-                System.out.println("Player 1 skipped their turn");
-            }
+
+            turnP1NN(bot.fire(flatten(getBoard())));
+
             printBoard();
             System.out.println("----------------\n\n");
 
@@ -190,6 +186,44 @@ public class TicTacToeMisereGame
         resetBoard();
     }
 
+
+    public void machineVMachine(byte[] DNA, byte[] DNA2, int... neuronCFG)
+    {
+        NeuralNetwork bot1 = new NeuralNetwork(neuronCFG);
+        NeuralNetwork bot2 = new NeuralNetwork(neuronCFG);
+
+        bot2.setDNA(DNA2);
+        bot1.setDNA(DNA);
+
+
+        while (winner == Player.NONE)
+        {
+            System.out.println("----Player 1----");
+
+            turnP1NN(bot1.fire(flatten(getBoard())));
+
+            printBoard();
+            System.out.println("----------------\n\n");
+
+            if(winner != Player.NONE)
+                break;
+
+            System.out.println("----Player 2----");
+            turnP2NN(bot1.fire(flatten(getBoard())));
+            printBoard();
+            System.out.println("----------------\n\n");
+
+        }
+
+        if(winner == Player.PLAYER1)
+            System.out.println("Player 1 Won!!!!!");
+        else
+            System.out.println("Player 2 Won!!!!!");
+
+        resetBoard();
+    }
+
+
     private float[] flatten(int[][] in)
     {
         float[] dataIn = new float[9];
@@ -200,23 +234,6 @@ public class TicTacToeMisereGame
         }
 
         return dataIn;
-    }
-
-    private int numFromOut(float[] out)
-    {
-        int biggestLoc = -1;
-        float maxNum = -21;
-
-        for(int i = 0; i < out.length; i++)
-        {
-            if(out[i] > maxNum)
-            {
-                maxNum = out[i];
-                biggestLoc = i;
-            }
-        }
-
-        return biggestLoc;
     }
 
     public void setWinner(Player winner)
@@ -236,18 +253,25 @@ public class TicTacToeMisereGame
             {
                 if (in[i] > maxNum)
                 {
+
                     maxNum = in[i];
                     biggestLocation = i;
                 }
             }
 
-            isLegal = checkLegalMove(biggestLocation);
+            isLegal = isLegalMove(biggestLocation);
+
+            if(!isLegal)
+            {
+                in[biggestLocation] = -10f;
+                maxNum = -10f;
+            }
         }
 
         return biggestLocation;
     }
 
-    private boolean checkLegalMove(int boardPos)
+    private boolean isLegalMove(int boardPos)
     {
         return board[boardPos / 3][boardPos % 3] == 0;
     }

@@ -69,7 +69,7 @@ def drawGraph():
 	fittnessPlt.set_title('Fittness')
 	fittnessPlt.set_xlabel('Generation Number')
 	fittnessPlt.set_ylabel('Fittness')
-	#fittnessPlt.legend()
+	fittnessPlt.legend()
 
 	plt.show()
 

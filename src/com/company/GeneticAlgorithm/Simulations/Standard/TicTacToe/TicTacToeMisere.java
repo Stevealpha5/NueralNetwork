@@ -112,8 +112,7 @@ public class TicTacToeMisere
      */
     private void assignFitness()
     {
-        int numberOfGames = 5;
-        int numberOfOpponents = 100;
+        int numberOfOpponents = (int)(population.size() * 0.1);
         int p2;
         int p1Win = 0;
         int p2Win = 0;
@@ -125,73 +124,41 @@ public class TicTacToeMisere
             for(int k = 0; k <  numberOfOpponents; k++)
             {
                 p2 = r.nextInt(population.size());
-                for (int j = 0; j < numberOfGames; j++)
+
+                while (game.getWinner() == TicTacToeMisereGame.Player.NONE)
                 {
-                    while (game.getWinner() == TicTacToeMisereGame.Player.NONE)
-                    {
-                        flatten(game.getBoard());
+                    flatten(game.getBoard());
 
-                        try
-                        {
-                            game.turnP1(numFromNNOut(population.get(i).fire(dataIn)));
-                        } catch (IllegalStateException e)
-                        {
-                            population.get(i).fitness -= 100;
-                            game.setWinner(TicTacToeMisereGame.Player.PLAYER2);
-                            break;
-                        }
+                    game.turnP1NN(population.get(i).fire(dataIn));
 
-                        if (game.getWinner() != TicTacToeMisereGame.Player.NONE)
-                            break;
+                    if (game.getWinner() != TicTacToeMisereGame.Player.NONE)
+                        break;
 
-                        flatten(game.getBoard());
+                    flatten(game.getBoard());
 
+                    game.turnP2NN(population.get(p2).fire(dataIn));
 
-                        try
-                        {
-                            game.turnP2(numFromNNOut(population.get(p2).fire(dataIn)));
-                        } catch (IllegalStateException e)
-                        {
-                            population.get(k).fitness -= 100;
-                            game.setWinner(TicTacToeMisereGame.Player.PLAYER1);
-                            break;
-                        }
-                    }
-
-                    if (game.getWinner() == TicTacToeMisereGame.Player.PLAYER1)
-                        p1Win++;
-                    else
-                        p2Win++;
-
-                    game.resetBoard();
                 }
 
-                population.get(k).fitness = (int)(((((float)p2Win / (float)numberOfGames) * 100) + population.get(p2).fitness) / 2);
+                if (game.getWinner() == TicTacToeMisereGame.Player.PLAYER1)
+                    p1Win++;
+                else
+                    p2Win++;
+
+                game.resetBoard();
+
+
+                population.get(p2).fitness = (int)(((((float)p2Win / numberOfOpponents) * 10000) + population.get(p2).fitness) / 2);
                 p2Win = 0;
 
-                population.get(i).fitness = (int)(((((float)p1Win / (float)numberOfGames) * 100) + population.get(i).fitness) / 2);
+                population.get(i).fitness = (int)(((((float)p1Win) * 10000) + population.get(i).fitness) / 2);
                 p1Win = 0;
+
+                System.out.println("P2: " + p2 + " Fitness: " + population.get(p2).fitness );
+                System.out.println("P1: " + i + " Fitness: " + population.get(i).fitness );
             }
 
         }
-    }
-
-    private int numFromNNOut(float[] rawOut)
-    {
-
-        int biggestLoc = -1;
-        float maxNum = -21;
-
-        for(int i = 0; i < rawOut.length; i++)
-        {
-            if(rawOut[i] > maxNum)
-            {
-                maxNum = rawOut[i];
-                biggestLoc = i;
-            }
-        }
-
-        return biggestLoc;
     }
 
     private void flatten(int[][] in)
