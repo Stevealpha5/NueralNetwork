@@ -145,36 +145,17 @@ public class TicTacToeMisere
         int p1Win = 0;
         int p2Win = 0;
         int counter;
-        float multFactor = 1000;
+        float multFactor = 10000000;
 
 
 
 
-        for (int i = 0; i < /*populationP1.size()*/ numberOfOpponents; i++)
+        for (int i = 0; i < populationP1.size(); i++)
         {
-            p1 = r.nextInt(populationP1.size());
-            /*for(int k = 0; k <  numberOfOpponents; k++)
-            {*/
-                p2 = r.nextInt(populationP2.size());
-                /*counter = 0;
-
-                while (populationP2.get(k).fitness > populationP1.get(i).fitness + 100 || populationP2.get(k).fitness <  populationP1.get(i).fitness - 100 )
-                {
-                    p2 = r.nextInt(populationP2.size());
-
-                    if (counter > populationP2.size())
-                    {
-                        //System.out.println("No Match Found");
-                        break;
-                    }
-
-                    counter++;
-                }*/
-
-
-                //System.out.println("P1: " + populationP1.get(i).fitness);
-                //System.out.println("P2: " + populationP2.get(p2).fitness);
-
+          p1 = i;
+            for(int k = 0; k <  populationP2.size(); k++)
+            {
+                p2 = k;
                 while (game.getWinner() == TicTacToeMisereGame.Player.NONE)
                 {
                     flatten(game.getBoard());
@@ -208,9 +189,9 @@ public class TicTacToeMisere
                 populationP1.get(p1).fitness = (int)((((((float)p1Win) * multFactor) + (float)populationP1.get(p1).fitness) / 2.0));
                 p1Win = 0;
 
-               // System.out.println("P2: " + p2 + " Fitness: " + populationP2.get(p2).fitness + " Scalar: " + scaler);
+                //System.out.println("P2: " + p2 + " Fitness: " + populationP2.get(p2).fitness + " Scalar: " + scaler);
                 //System.out.println("P1: " + i + " Fitness: " + populationP1.get(i).fitness );
-            //}
+            }
 
 
 

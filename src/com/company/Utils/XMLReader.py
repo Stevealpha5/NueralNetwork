@@ -16,7 +16,7 @@ topFittness = []
 lowestFittness = []
 
 #Extracting XML
-tree = ET.parse('C:\\Users\\Christopher\\projects\\NueralNetwork\\P1.xml')
+tree = ET.parse('C:\\Users\\Christopher\\projects\\NueralNetwork\\P2.xml')
 root = tree.getroot()
 
 
@@ -59,10 +59,10 @@ def drawGraph():
 
 	fittnessPlt.clear()
 
-	fittnessPlt.plot(gen, meanFittness, label='Mean Fittness')
-	fittnessPlt.plot(gen, medianFittness,  label='Median Fittness')
+	#fittnessPlt.plot(gen, meanFittness, label='Mean Fittness')
+	# fittnessPlt.plot(gen, medianFittness,  label='Median Fittness')
 	fittnessPlt.plot(gen, topFittness,  label='Top Fittness')
-	fittnessPlt.plot(gen, q1,  label='Q1')
+	# fittnessPlt.plot(gen, q1,  label='Q1')
 	fittnessPlt.plot(gen, q3,  label='Q3')
 	fittnessPlt.plot(gen, lowestFittness, label='Lowest Fittness')
 
