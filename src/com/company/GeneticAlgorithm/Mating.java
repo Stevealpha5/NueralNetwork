@@ -30,15 +30,65 @@ public class Mating
      */
     //TODO add check to make sure the parents have the same neuron configuration
     public static NeuralNetwork simpleMate(NeuralNetwork NN1, NeuralNetwork NN2)
-{
-    byte[] DNA1 = NN1.getDNA();
-    byte[] DNA2 = NN2.getDNA();
+    {
+        byte[] DNA1 = NN1.getDNA();
+        byte[] DNA2 = NN2.getDNA();
 
-    NeuralNetwork child = new NeuralNetwork(NN1.getNeuronCfg());
+        NeuralNetwork child = new NeuralNetwork(NN1.getNeuronCfg());
 
-    child.setDNA(Utils.capValues(simpleMateArray(DNA1, DNA2, DNA1.length), MAX_VAL, MIN_VAL));
-    return child;
-}
+        child.setDNA(Utils.capValues(simpleMateArray(DNA1, DNA2, DNA1.length), MAX_VAL, MIN_VAL));
+        return child;
+    }
+
+    //TODO autogen counterpoints
+    public static NeuralNetwork fivePointCrossover(NeuralNetwork NN1, NeuralNetwork NN2)
+    {
+        int[] crossoverPoints = {NN1.getDNA().length / 6, (NN1.getDNA().length / 6) * 2, (NN1.getDNA().length / 6) * 3, (NN1.getDNA().length / 6) * 4, (NN1.getDNA().length / 6) * 5};
+
+        boolean isNN1DNA = true;
+        int crossoverCounter = 0;
+        byte[] randomByte = new byte[1];
+
+        byte[] DNA1 = NN1.getDNA();
+        byte[] DNA2 = NN2.getDNA();
+
+
+        NeuralNetwork child = new NeuralNetwork(NN1.getNeuronCfg());
+        byte[] childDNA = new byte[NN1.getDNA().length];
+
+        for(int i = 0; i < NN1.getDNA().length; i++)
+        {
+            if(crossoverCounter < crossoverPoints.length && i == crossoverPoints[crossoverCounter])
+            {
+                isNN1DNA = !isNN1DNA;
+                crossoverCounter++;
+            }
+
+            if(isNN1DNA)
+            {
+                childDNA[i] = DNA1[i];
+            }else
+            {
+                childDNA[i] = DNA1[i];
+            }
+
+            if(random.nextFloat() < MUTATION_CHANCE)
+            {
+                random.nextBytes(randomByte);
+                if(random.nextBoolean())
+                {
+                    childDNA[i] += randomByte[0];
+                }else{
+                    childDNA[i] -= randomByte[0];
+                }
+            }
+
+        }
+
+        child.setDNA(Utils.capValues(simpleMateArray(DNA1, DNA2, DNA1.length), MAX_VAL, MIN_VAL));
+
+        return child;
+    }
 
     public static byte[] simpleDNA(NeuralNetwork NN1, NeuralNetwork NN2)
     {

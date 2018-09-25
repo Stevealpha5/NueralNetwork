@@ -59,6 +59,7 @@ public class TicTacToeMisere
             logger1.logToXML(i, arenaP1.getPopulation());
             logger2.logToXML(i, arenaP2.getPopulation());
 
+
             arenaP1.evolve();
             arenaP2.evolve();
 
@@ -139,13 +140,13 @@ public class TicTacToeMisere
      */
     private void assignFitness()
     {
-        int numberOfOpponents = (int)(populationP2.size() * 50);
+
         int p2 = r.nextInt(populationP2.size());
         int p1;
         int p1Win = 0;
         int p2Win = 0;
         int counter;
-        float multFactor = 10000000;
+        float multFactor = 100;
 
 
 

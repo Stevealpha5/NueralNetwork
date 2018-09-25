@@ -1,36 +1,49 @@
 package com.company;
 
-import com.company.GANeuralNetwork.GANeuralNetwork;
-import com.company.GeneticAlgorithm.Mating;
 import com.company.GeneticAlgorithm.Simulations.Standard.MostInputted;
 import com.company.GeneticAlgorithm.Simulations.Standard.MultiplicationSim;
-import com.company.GeneticAlgorithm.Simulations.GANN.XORGANN;
 import com.company.GeneticAlgorithm.Simulations.Standard.TicTacToe.TicTacToeMisere;
 import com.company.GeneticAlgorithm.Simulations.Standard.TicTacToe.TicTacToeMisereGame;
 import com.company.GeneticAlgorithm.Simulations.Standard.XORStandard;
-import com.company.NuralNetwork.NeuralNetwork;
-import com.company.Utils.XMLLogger;
 
-import javax.xml.parsers.ParserConfigurationException;
-import java.io.IOException;
+import java.util.ArrayList;
 
 
 public class Main
 {
 
-    public static void main(String[] args) throws ParserConfigurationException, InterruptedException
+    static ArrayList<Integer> list = new ArrayList<>();
+
+    public static void main(String[] args)
     {
+
         //XORSim();
         //sim();
         //MostInputted();
+        long start = System.currentTimeMillis();
         TicTacToe();
+        long end = System.currentTimeMillis();
+
+        System.out.println(end - start);
         ///MVM();
+
+
+        int var = 0;
+
+        for(int i = 0; i < list.size(); i++)
+        {
+            var += list.get(i);
+        }
+
+        var /= 100;
+
+        System.out.println(var);
 
     }
 
     private static void TicTacToe()
     {
-        TicTacToeMisere g = new TicTacToeMisere(250, 9, 9, 9, 9);
+        TicTacToeMisere g = new TicTacToeMisere(250, 9, 9,  9);
         g.run(3000);
     }
 
@@ -75,7 +88,7 @@ public class Main
 
 
         XORStandard sim = new XORStandard(5000, 2,4,1);
-        sim.runUntil(60);
+        list.add(sim.runUntil(60));
 
 /*
         byte[] DNA = {-119,-64,27,54,-11,50,95,-54,115,116,-93,-76,-34,-101,53,16,-51,9,-54,-11,34,22,-117,115,-26,18,27,110,-28,-106,90,-6,-65,-37,-7,-23,-84,65,-118,-90,-47,-51,-25,4,87,-78,-109,-123};

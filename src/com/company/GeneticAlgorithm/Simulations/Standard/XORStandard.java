@@ -67,7 +67,7 @@ public class XORStandard
      *
      * @param targetFitness ...it's the target fitness...
      */
-    public void runUntil(int targetFitness)
+    public int runUntil(int targetFitness)
     {
         int generation = 0;
 
@@ -89,18 +89,20 @@ public class XORStandard
 
             if (generation % 10 == 0)
             {
-                System.out.println("_____________________________________________________________________________________");
+                /*System.out.println("_____________________________________________________________________________________");
                 System.out.println("Generation: " + generation);
-                arena.printBestStats();
+                arena.printBestStats();*/
             }
 
         }
 
         logger.close();
 
-        System.out.println("_____________________________________________________________________________________");
+       /* System.out.println("_____________________________________________________________________________________");
         System.out.println("Generation: " + generation);
-        arena.printBestStats();
+        arena.printBestStats();*/
+
+        return generation;
 
     }
 

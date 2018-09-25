@@ -72,7 +72,8 @@ public class Arena
                 //adjusts the chances of survival based on fitness NOTE: the population must be sorted by fitness
                 if (r * (population.size() / (float) ((population.size() * 0.1 * i) + 1)) < deathPercent)
                 {
-                    population.remove(i);
+                    //population.remove(i);
+                    population.get(i).toBeReplaced = true;
                     killCounter++;
                 }
 
@@ -93,14 +94,14 @@ public class Arena
             int parent1Pos = random.nextInt(population.size());
             int parent2pos = random.nextInt(population.size());
 
-            //makes sure the selected parents are not the same or equal to null
-            while (parent1Pos == parent2pos)
+            while (parent1Pos == parent2pos  || !population.get(parent1Pos).toBeReplaced || !population.get(parent2pos).toBeReplaced)
             {
                 parent1Pos = random.nextInt(population.size());
                 parent2pos = random.nextInt(population.size());
             }
 
-            population.add(Mating.simpleMate(population.get(parent1Pos), population.get(parent2pos)));
+            population.get(i).setDNA(Mating.simpleDNA(population.get(parent1Pos),population.get(parent2pos)));
+            //population.add(Mating.simpleMate(population.get(parent1Pos), population.get(parent2pos)));
 
         }
 

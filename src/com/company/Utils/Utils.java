@@ -123,6 +123,7 @@ public class Utils
         String tmp = Integer.toBinaryString(value);
         int len = tmp.length();
         int change = 8 - (len % 8);
+
         if(change != 0) len += change;
 
         byte[] res = new byte[len];
