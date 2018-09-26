@@ -95,8 +95,6 @@ public class Mating
         byte[] DNA1 = NN1.getDNA();
         byte[] DNA2 = NN2.getDNA();
 
-        NeuralNetwork child = new NeuralNetwork(NN1.getNeuronCfg());
-
         return Utils.capValues(simpleMateArray(DNA1, DNA2, DNA1.length), MAX_VAL, MIN_VAL);
     }
 
@@ -198,7 +196,6 @@ public class Mating
 
     private static byte[] simpleMateArray(byte[] array1, byte[] array2, int arraySize)
     {
-
         byte[] childArray = new byte[arraySize];
         byte[] randomByte = new byte[1];
 
@@ -225,9 +222,6 @@ public class Mating
                 }
             }
         }
-
         return childArray;
     }
-
-
 }

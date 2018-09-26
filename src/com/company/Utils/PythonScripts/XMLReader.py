@@ -51,6 +51,7 @@ def populateData():
 		population.append(individuals)
 
 	counter = 0
+	
 	for individual in population:
 		gen.append(counter)
 		temp = np.array(individual).astype(np.float)

@@ -12,8 +12,6 @@ import java.util.ArrayList;
 public class Main
 {
 
-    static ArrayList<Integer> list = new ArrayList<>();
-
     public static void main(String[] args)
     {
 
@@ -26,25 +24,12 @@ public class Main
 
         System.out.println(end - start);
         ///MVM();
-
-
-        int var = 0;
-
-        for(int i = 0; i < list.size(); i++)
-        {
-            var += list.get(i);
-        }
-
-        var /= 100;
-
-        System.out.println(var);
-
     }
 
     private static void TicTacToe()
     {
-        TicTacToeMisere g = new TicTacToeMisere(250, 9, 9,  9);
-        g.run(3000);
+        TicTacToeMisere g = new TicTacToeMisere(250, 9, 9, 9);
+        g.run(100);
     }
 
     private static void MVM()
@@ -88,7 +73,7 @@ public class Main
 
 
         XORStandard sim = new XORStandard(5000, 2,4,1);
-        list.add(sim.runUntil(60));
+        sim.runUntil(60);
 
 /*
         byte[] DNA = {-119,-64,27,54,-11,50,95,-54,115,116,-93,-76,-34,-101,53,16,-51,9,-54,-11,34,22,-117,115,-26,18,27,110,-28,-106,90,-6,-65,-37,-7,-23,-84,65,-118,-90,-47,-51,-25,4,87,-78,-109,-123};

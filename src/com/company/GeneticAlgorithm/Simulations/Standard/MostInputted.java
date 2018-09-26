@@ -27,14 +27,6 @@ public class MostInputted
         }
 
         arena = new Arena(population, 0.25f);
-
-        try
-        {
-            logger.start();
-        } catch (ParserConfigurationException e)
-        {
-            e.printStackTrace();
-        }
     }
 
     public void runUntil(int targetFitness)
@@ -64,7 +56,6 @@ public class MostInputted
         System.out.println("_____________________________________________________________________________________");
         System.out.println("Generation: " + generation);
         arena.printBestStats();
-        logger.close();
 
     }
 

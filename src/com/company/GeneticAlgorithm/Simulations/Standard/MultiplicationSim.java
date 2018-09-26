@@ -53,14 +53,6 @@ public class MultiplicationSim
      */
     public void run(int numberOfGenerations)
     {
-        try
-        {
-            logger.start();
-        } catch (ParserConfigurationException e)
-        {
-            e.printStackTrace();
-        }
-
         for (int i = 0; i < numberOfGenerations; i++)
         {
             assingeFitness();
@@ -74,8 +66,6 @@ public class MultiplicationSim
                 arena.printBestStats();
             }
         }
-
-        logger.close();
 
     }
 

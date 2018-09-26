@@ -35,13 +35,6 @@ public class XORStandard
      */
     public void run(int numberOfGenerations)
     {
-        try
-        {
-            logger.start();
-        } catch (ParserConfigurationException e)
-        {
-            e.printStackTrace();
-        }
 
         for (int i = 0; i < numberOfGenerations; i++)
         {
@@ -56,10 +49,6 @@ public class XORStandard
                 arena.printBestStats();
             }
         }
-
-        logger.close();
-
-
     }
 
     /**
@@ -70,14 +59,6 @@ public class XORStandard
     public int runUntil(int targetFitness)
     {
         int generation = 0;
-
-        try
-        {
-            logger.start();
-        } catch (ParserConfigurationException e)
-        {
-            e.printStackTrace();
-        }
 
         while (arena.getHighestFitness() < targetFitness)
         {
@@ -95,8 +76,6 @@ public class XORStandard
             }
 
         }
-
-        logger.close();
 
        /* System.out.println("_____________________________________________________________________________________");
         System.out.println("Generation: " + generation);

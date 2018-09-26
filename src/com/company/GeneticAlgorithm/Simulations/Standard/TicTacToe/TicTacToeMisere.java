@@ -2,6 +2,7 @@ package com.company.GeneticAlgorithm.Simulations.Standard.TicTacToe;
 
 import com.company.GeneticAlgorithm.Arena;
 import com.company.NuralNetwork.NeuralNetwork;
+import com.company.Utils.CustomCSVLogger;
 import com.company.Utils.XMLLogger;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -14,10 +15,9 @@ public class TicTacToeMisere
     private ArrayList<NeuralNetwork> populationP2 = new ArrayList<>();
     private Arena arenaP1;
     private Arena arenaP2;
-    private XMLLogger logger1 = new XMLLogger("P1.xml");
-    private XMLLogger logger2 = new XMLLogger("P2.xml");
+    private CustomCSVLogger logger1;
+    private CustomCSVLogger logger2;
     private TicTacToeMisereGame game = new TicTacToeMisereGame();
-    private Random r = new Random();
     private float[] dataIn = new float[9];
 
     /**
@@ -33,6 +33,10 @@ public class TicTacToeMisere
 
         arenaP1 = new Arena(populationP1, 0.25f);
         arenaP2 = new Arena(populationP2, 0.25f);
+
+        logger1 = new CustomCSVLogger(populationP1, "P1");
+        logger2 = new CustomCSVLogger(populationP2, "P2");
+
     }
 
     /**
@@ -42,41 +46,31 @@ public class TicTacToeMisere
      */
     public void run(int numberOfGenerations)
     {
-        try
-        {
-            logger1.start();
-            logger2.start();
-
-        } catch (ParserConfigurationException e)
-        {
-            e.printStackTrace();
-        }
-
         for (int i = 0; i < numberOfGenerations; i++)
         {
             assignFitness();
 
-            logger1.logToXML(i, arenaP1.getPopulation());
-            logger2.logToXML(i, arenaP2.getPopulation());
-
-
             arenaP1.evolve();
             arenaP2.evolve();
 
+            logger1.log();
+            logger2.log();
 
+            System.out.println(i);
+
+/*
             System.out.println("P1________________________________________________________________________________");
             System.out.println("Generation: " + i);
             arenaP1.printBestStats();
 
             System.out.println("P2________________________________________________________________________________");
             System.out.println("Generation: " + i);
-            arenaP2.printBestStats();
+            arenaP2.printBestStats();*/
 
         }
 
         logger1.close();
         logger2.close();
-
 
     }
 
@@ -89,21 +83,9 @@ public class TicTacToeMisere
     {
         int generation = 0;
 
-        try
-        {
-            logger1.start();
-            logger2.start();
-        } catch (ParserConfigurationException e)
-        {
-            e.printStackTrace();
-        }
-
         while (arenaP1.getHighestFitness() < targetFitness)
         {
             assignFitness();
-
-            logger1.logToXML(generation, arenaP1.getPopulation());
-            logger2.logToXML(generation, arenaP2.getPopulation());
 
             arenaP1.evolve();
             arenaP2.evolve();
@@ -118,12 +100,7 @@ public class TicTacToeMisere
             arenaP2.printBestStats();
 
             generation++;
-
-
         }
-
-        logger1.close();
-        logger2.close();
 
         System.out.println("P1________________________________________________________________________________");
         System.out.println("Generation: " + generation);
@@ -140,62 +117,40 @@ public class TicTacToeMisere
      */
     private void assignFitness()
     {
-
-        int p2 = r.nextInt(populationP2.size());
-        int p1;
         int p1Win = 0;
         int p2Win = 0;
-        int counter;
         float multFactor = 100;
 
-
-
-
-        for (int i = 0; i < populationP1.size(); i++)
+        for (NeuralNetwork p1: populationP1)
         {
-          p1 = i;
-            for(int k = 0; k <  populationP2.size(); k++)
+            for(NeuralNetwork p2: populationP2)
             {
-                p2 = k;
                 while (game.getWinner() == TicTacToeMisereGame.Player.NONE)
                 {
                     flatten(game.getBoard());
 
-                    game.turnP1NN(populationP1.get(p1).fire(dataIn));
+                    game.turnP1NN(p1.fire(dataIn));
 
                     if (game.getWinner() != TicTacToeMisereGame.Player.NONE)
                         break;
 
                     flatten(game.getBoard());
-
-                    game.turnP2NN(populationP2.get(p2).fire(dataIn));
-
+                    game.turnP2NN(p2.fire(dataIn));
                 }
-
-                //System.out.println("Winner: " + game.getWinner());
 
                 if (game.getWinner() == TicTacToeMisereGame.Player.PLAYER1)
                     p1Win++;
                 else
                     p2Win++;
 
-                //System.out.println("P1: " + p1Win + " P2 " + p2Win);
-
                 game.resetBoard();
 
-
-                populationP2.get(p2).fitness = (int)((((((float)p2Win) * multFactor) + (float) populationP2.get(p2).fitness) / 2.0));
+                p2.fitness = (int)((((((float)p2Win) * multFactor) + (float)p2.fitness) / 2.0));
                 p2Win = 0;
 
-                populationP1.get(p1).fitness = (int)((((((float)p1Win) * multFactor) + (float)populationP1.get(p1).fitness) / 2.0));
+                p1.fitness = (int)((((((float)p1Win) * multFactor) + (float)p1.fitness) / 2.0));
                 p1Win = 0;
-
-                //System.out.println("P2: " + p2 + " Fitness: " + populationP2.get(p2).fitness + " Scalar: " + scaler);
-                //System.out.println("P1: " + i + " Fitness: " + populationP1.get(i).fitness );
             }
-
-
-
         }
     }
 
