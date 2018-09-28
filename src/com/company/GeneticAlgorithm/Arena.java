@@ -152,4 +152,12 @@ public class Arena
         return population;
     }
 
+    public void zeroFitness()
+    {
+        for(NeuralNetwork net: population)
+        {
+            net.fitness = 0;
+        }
+    }
+
 }

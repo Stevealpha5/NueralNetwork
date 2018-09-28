@@ -3,11 +3,7 @@ package com.company.GeneticAlgorithm.Simulations.Standard.TicTacToe;
 import com.company.GeneticAlgorithm.Arena;
 import com.company.NuralNetwork.NeuralNetwork;
 import com.company.Utils.CustomCSVLogger;
-import com.company.Utils.XMLLogger;
-
-import javax.xml.parsers.ParserConfigurationException;
 import java.util.ArrayList;
-import java.util.Random;
 
 public class TicTacToeMisere
 {
@@ -19,6 +15,8 @@ public class TicTacToeMisere
     private CustomCSVLogger logger2;
     private TicTacToeMisereGame game = new TicTacToeMisereGame();
     private float[] dataIn = new float[9];
+
+    private int numberOfRounds;
 
     /**
      * @param popSize the size of the populationP1
@@ -37,6 +35,8 @@ public class TicTacToeMisere
         logger1 = new CustomCSVLogger(populationP1, "P1");
         logger2 = new CustomCSVLogger(populationP2, "P2");
 
+        numberOfRounds = (int)(Math.log(popSize) / Math.log(2));
+
     }
 
     /**
@@ -48,13 +48,18 @@ public class TicTacToeMisere
     {
         for (int i = 0; i < numberOfGenerations; i++)
         {
-            assignFitness();
+            //assignFitness();
 
-            arenaP1.evolve();
-            arenaP2.evolve();
+            assignFitnessTournament();
 
             logger1.log();
             logger2.log();
+
+            arenaP1.evolve();
+            //arenaP2.evolve();
+            arenaP1.zeroFitness();
+
+
 
             System.out.println(i);
 
@@ -89,7 +94,6 @@ public class TicTacToeMisere
 
             arenaP1.evolve();
             arenaP2.evolve();
-
 
             System.out.println("P1________________________________________________________________________________");
             System.out.println("Generation: " + generation);
@@ -145,11 +149,68 @@ public class TicTacToeMisere
 
                 game.resetBoard();
 
+                //System.out.println("p1: " + p1.fitness);
+                //System.out.println("p2: " + p2.fitness);
                 p2.fitness = (int)((((((float)p2Win) * multFactor) + (float)p2.fitness) / 2.0));
                 p2Win = 0;
 
                 p1.fitness = (int)((((((float)p1Win) * multFactor) + (float)p1.fitness) / 2.0));
                 p1Win = 0;
+
+                //System.out.println("p1: " + p1.fitness);
+                //System.out.println("p2: " + p2.fitness);
+                //System.out.println("-------------------------------------");
+            }
+        }
+    }
+
+    //TODO throw an error if the number is not a power of 2
+    private void assignFitnessTournament()
+    {
+        int p1Pos;
+        int p2Pos;
+        int counter;
+
+        for(int i = 0; i < numberOfRounds - 1; i++)
+        {
+            for(int j = 0; j < populationP1.size() - 1; j++)
+            {
+                if(populationP1.get(j).fitness != i - 1)
+                    continue;
+
+                p1Pos = j;
+
+                counter = j + 1;
+
+                while (counter < populationP1.size() - 1 && populationP1.get(counter).fitness != populationP1.get(p1Pos).fitness)
+                    counter++;
+
+
+                p2Pos = counter;
+
+                if(populationP1.get(p1Pos).fitness != populationP1.get(p2Pos).fitness)
+                    break;
+
+                while (game.getWinner() == TicTacToeMisereGame.Player.NONE)
+                {
+
+                    flatten(game.getBoard());
+
+                    game.turnP1NN(populationP1.get(p1Pos).fire(dataIn));
+
+                    if (game.getWinner() != TicTacToeMisereGame.Player.NONE)
+                        break;
+
+                    flatten(game.getBoard());
+                    game.turnP2NN(populationP1.get(p2Pos).fire(dataIn));
+                }
+
+                if (game.getWinner() == TicTacToeMisereGame.Player.PLAYER1)
+                    populationP1.get(p1Pos).fitness = i;
+                else
+                    populationP1.get(p2Pos).fitness = i;
+
+                game.resetBoard();
             }
         }
     }

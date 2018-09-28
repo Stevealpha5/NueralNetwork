@@ -35,9 +35,9 @@ def drawGraph():
 	fittnessPlt.clear()
 
 	fittnessPlt.plot(gen, meanFittness, label='Mean Fittness')
-	# fittnessPlt.plot(gen, medianFittness,  label='Median Fittness')
+	#fittnessPlt.plot(gen, medianFittness,  label='Median Fittness')
 	#fittnessPlt.plot(gen, topFittness,  label='Top Fittness')
-	# fittnessPlt.plot(gen, q1,  label='Q1')
+	#fittnessPlt.plot(gen, q1,  label='Q1')
 	#fittnessPlt.scatter(gen, medianFittness,  label='Q3')
 	#fittnessPlt.plot(gen, lowestFittness, label='Lowest Fittness')
 
@@ -50,7 +50,7 @@ def drawGraph():
 
 
 def animate(i):
-	raw_data = open('C:\\Users\\Christopher\\JavaProjects\\MachineLearning\\P2', 'r').read()
+	raw_data = open('C:\\Users\\Christopher\\JavaProjects\\MachineLearning\\P1', 'r').read()
 	generations = raw_data.split('\n')
 
 	gen = []
@@ -73,7 +73,6 @@ def animate(i):
 			for individual in individuals:
 				if individual != "":
 					temp.append(float(individual))
-
 
 			meanFittness.append(np.mean(temp))
 			medianFittness.append(np.median(temp))
@@ -104,7 +103,7 @@ def animate(i):
 
 
 
-ani = animation.FuncAnimation(fig, animate)
+ani = animation.FuncAnimation(fig, animate, interval = 30000)
 plt.show()
 
 

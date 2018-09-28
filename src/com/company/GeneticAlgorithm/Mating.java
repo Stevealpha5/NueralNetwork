@@ -5,7 +5,6 @@ import com.company.NuralNetwork.NeuralNetwork;
 import com.company.Utils.DNAManager;
 import com.company.Utils.Utils;
 
-import java.util.ArrayList;
 import java.util.Random;
 
 public class Mating

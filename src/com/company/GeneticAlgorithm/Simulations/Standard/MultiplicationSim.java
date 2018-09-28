@@ -4,7 +4,6 @@ import com.company.GeneticAlgorithm.Arena;
 import com.company.NuralNetwork.NeuralNetwork;
 import com.company.Utils.XMLLogger;
 
-import javax.xml.parsers.ParserConfigurationException;
 import java.util.ArrayList;
 
 public class MultiplicationSim
