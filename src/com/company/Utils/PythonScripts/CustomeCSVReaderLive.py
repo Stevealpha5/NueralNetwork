@@ -27,31 +27,10 @@ def best_fit(X, Y, printFormaula=False):
 
     return slope, intercept
 
-def drawGraph():
-
-
-	fittnessPlt = plt.subplot2grid((1,1), (0,0), rowspan=1, colspan=1)
-
-	fittnessPlt.clear()
-
-	fittnessPlt.plot(gen, meanFittness, label='Mean Fittness')
-	#fittnessPlt.plot(gen, medianFittness,  label='Median Fittness')
-	#fittnessPlt.plot(gen, topFittness,  label='Top Fittness')
-	#fittnessPlt.plot(gen, q1,  label='Q1')
-	#fittnessPlt.scatter(gen, medianFittness,  label='Q3')
-	#fittnessPlt.plot(gen, lowestFittness, label='Lowest Fittness')
-
-	#best_fit(gen, medianFittness, True)
-
-	fittnessPlt.set_title('Fittness')
-	fittnessPlt.set_xlabel('Generation Number')
-	fittnessPlt.set_ylabel('Fittness')
-	fittnessPlt.legend()
-
 
 def animate(i):
-	raw_data = open('C:\\Users\\Christopher\\JavaProjects\\MachineLearning\\P1', 'r').read()
-	generations = raw_data.split('\n')
+	raw_data_Fitness = open('C:\\Users\\Christopher\\JavaProjects\\MachineLearning\\P1Fitness', 'r').read()
+	generations = raw_data_Fitness.split('\n')
 
 	gen = []
 	meanFittness = []
@@ -81,15 +60,15 @@ def animate(i):
 			topFittness.append(np.max(temp))
 			lowestFittness.append(np.min(temp))
 
-	fittnessPlt = plt.subplot2grid((1,1), (0,0), rowspan=1, colspan=1)
+	fittnessPlt = plt.subplot2grid((2,2), (0,0), rowspan=1, colspan=2)
 
 	fittnessPlt.clear()
 
 	fittnessPlt.plot(gen, meanFittness, label='Mean Fittness')
 	fittnessPlt.plot(gen, medianFittness,  label='Median Fittness')
 	fittnessPlt.plot(gen, topFittness,  label='Top Fittness')
-	fittnessPlt.plot(gen, q1,  label='Q1')
-	fittnessPlt.plot(gen, medianFittness,  label='Q3')
+	# fittnessPlt.plot(gen, q1,  label='Q1')
+	# fittnessPlt.plot(gen, medianFittness,  label='Q3')
 	fittnessPlt.plot(gen, lowestFittness, label='Lowest Fittness')
 
 	best_fit(gen, medianFittness, True)
@@ -99,11 +78,39 @@ def animate(i):
 	fittnessPlt.set_ylabel('Fittness')
 	fittnessPlt.legend()
 
+	raw_data_Age = open('C:\\Users\\Christopher\\JavaProjects\\MachineLearning\\P1Age', 'r').read()
+	generations = raw_data_Age.split('\n')
+
+	gen2 = []
+	topAge = []
+	counter2 = 0
+
+	for genration in generations:
+		if len(genration) > 1:
+			individuals = genration.split(',')
+			gen2.append(counter2)
+			counter2 += 1
+
+			
+			temp = []
+			for individual in individuals:
+				if individual != "":
+					temp.append(float(individual))
+
+			topAge.append(np.max(temp))
+			
+	age = plt.subplot2grid((2,2), (1,0), rowspan=1, colspan=2)
+	age.plot(gen2, topAge)
+	age.set_title('Age')
+	age.set_xlabel('Generation Number')
+	age.set_ylabel('Age')
+
+
 	
 
 
-
-ani = animation.FuncAnimation(fig, animate, interval = 30000)
+animate(1)
+#ani = animation.FuncAnimation(fig, animate, interval = 1000)
 plt.show()
 
 

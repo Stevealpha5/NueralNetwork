@@ -98,7 +98,7 @@ public class Arena
                 parent2pos = random.nextInt(population.size());
             }
 
-            population.get(i).setDNA(Mating.simpleDNA(population.get(parent1Pos), population.get(parent2pos)));
+            population.get(i).newNetwork(Mating.simpleDNA(population.get(parent1Pos), population.get(parent2pos)));
         }
     }
 

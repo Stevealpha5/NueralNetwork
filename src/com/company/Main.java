@@ -25,8 +25,8 @@ public class Main
 
     private static void TicTacToe()
     {
-        TicTacToeMisere g = new TicTacToeMisere(511, 9, 9, 9);
-        g.run(500);
+        TicTacToeMisere g = new TicTacToeMisere(1024, 9, 9, 9, 9);
+        g.run(3000);
     }
 
     private static void MVM()

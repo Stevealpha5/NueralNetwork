@@ -15,11 +15,10 @@ public class NeuralNetwork implements Comparable<NeuralNetwork>
      *
      * fitness = the fitness score
      */
-    Random r = new Random();//temp, I'm using it to randomize
-    // the fitness for arena testing
     private Layer[] NN;
     private int[] neuronCfg;
     public int fitness = -1;
+    public int age = 0;
     public float percentRight = 0;
     public boolean toBeReplaced = false;
 
@@ -135,7 +134,14 @@ public class NeuralNetwork implements Comparable<NeuralNetwork>
         return neuronCfg;
     }
 
-
+    public void newNetwork(byte[] DNA)
+    {
+        setDNA(DNA);
+        fitness = -1;
+        age = 0;
+        percentRight = 0;
+        toBeReplaced = false;
+    }
 
     public int compareTo(NeuralNetwork o)
     {

@@ -11,7 +11,9 @@ public class CustomCSVLogger
 {
     private String fileName;
     private ArrayList<NeuralNetwork> population;
-    private PrintWriter writer;
+    private PrintWriter writerFitness;
+    private PrintWriter writerAge;
+    private PrintWriter writerDNA;
 
     public CustomCSVLogger(ArrayList<NeuralNetwork> population, String fileName)
     {
@@ -25,7 +27,9 @@ public class CustomCSVLogger
     {
         try
         {
-            writer = new PrintWriter(fileName, "UTF-8");
+            writerFitness = new PrintWriter(fileName + "Fitness", "UTF-8");
+            writerAge = new PrintWriter(fileName + "Age", "UTF-8");
+            writerDNA = new PrintWriter(fileName + "DNA", "UTF-8");
         } catch (FileNotFoundException | UnsupportedEncodingException e)
         {
             e.printStackTrace();
@@ -35,20 +39,44 @@ public class CustomCSVLogger
     public void log()
     {
         logFitness();
+        logAge();
+        logFitness();
     }
 
     private void logFitness()
     {
         for (NeuralNetwork net: population)
         {
-            writer.print(net.fitness + ",");
+            writerFitness.print(net.fitness + ",");
         }
 
-        writer.print("\n");
+        writerFitness.print("\n");
+    }
+
+    private void logAge()
+    {
+        for (NeuralNetwork net: population)
+        {
+            writerAge.print(net.age + ",");
+        }
+
+        writerAge.print("\n");
+    }
+
+    private void logDNA()
+    {
+        for (NeuralNetwork net: population)
+        {
+            writerDNA.print(net.fitness + ",");
+        }
+
+        writerDNA.print("\n");
     }
 
     public void close()
     {
-        writer.close();
+        writerFitness.close();
+        writerAge.close();
+        writerFitness.close();
     }
 }
