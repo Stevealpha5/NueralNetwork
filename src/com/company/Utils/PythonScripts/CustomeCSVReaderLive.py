@@ -7,7 +7,7 @@ from matplotlib import style
 style.use('fivethirtyeight')
 fig = plt.figure()
 
-#data to be plotted
+#data to be plotted  
 
 
 def best_fit(X, Y, printFormaula=False):
@@ -29,16 +29,16 @@ def best_fit(X, Y, printFormaula=False):
 
 
 def animate(i):
-	raw_data_Fitness = open('C:\\Users\\Christopher\\JavaProjects\\MachineLearning\\P1Fitness', 'r').read()
-	generations = raw_data_Fitness.split('\n')
+		raw_data_Fitness = open('C:\\Users\\Christopher\\JavaProjects\\MachineLearning\\P1Fitness', 'r').read()
+		generations = raw_data_Fitness.split('\n')
 
-	gen = []
-	meanFittness = []
-	medianFittness = []
-	q1 = []
-	q3 = []
-	topFittness = []
-	lowestFittness = []
+		gen = []
+		meanFittness = []
+		medianFittness = []
+		q1 = []
+		q3 = []
+		topFittness = []
+		lowestFittness = []
 	counter = 0
 
 	for genration in generations:

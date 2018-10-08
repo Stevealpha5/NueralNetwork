@@ -139,10 +139,17 @@ public class Arena
         System.out.println("% Accuracy: " + population.get(0).percentRight);
     }
 
+    @Deprecated
     public int getHighestFitness()
     {
         return population.get(0).fitness;
     }
+
+    public NeuralNetwork getMostFitNetwork()
+    {
+        return population.get(0);
+    }
+
 
     public ArrayList<NeuralNetwork> getPopulation(){return population;}
 
@@ -156,7 +163,7 @@ public class Arena
     {
         for(NeuralNetwork net: population)
         {
-            net.fitness = 0;
+            net.fitness = -1;
         }
     }
 

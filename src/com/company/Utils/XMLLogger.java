@@ -46,7 +46,6 @@ public class XMLLogger
         }
     }
 
-
     public XMLLogger(String docName, ArrayList<NeuralNetwork> population)
     {
         this.docName = docName;
@@ -85,13 +84,10 @@ public class XMLLogger
         }
 
         serializer = new XMLSerializer(outStream, outFormat);
-
     }
 
     public void logToXML(int gen, ArrayList<NeuralNetwork> population)
     {
-
-
         generation = XMLDoc.createElement("Generation");
         generation.setAttribute("generationNum", Integer.toString(gen));
 
