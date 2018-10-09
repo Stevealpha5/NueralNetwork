@@ -9,4 +9,10 @@ public class NodeGene
     {
         INPUT, OUTPUT, HIDDEN
     }
+
+    public NodeGene(int id, Type type)
+    {
+        this.type = type;
+        this.id = id;
+    }
 }
