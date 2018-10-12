@@ -45,4 +45,14 @@ public class NodeGene
     {
         return type;
     }
+
+    public boolean equals(NodeGene node)
+    {
+        return node.getId() == id;
+    }
+
+    public void setId(int id)
+    {
+        this.id = id;
+    }
 }

@@ -13,16 +13,30 @@ public class NEATTest
         net.addNode(new NodeGene(NodeGene.Type.INPUT, InovationGenerator.getNodeInovation()));
         net.addNode(new NodeGene(NodeGene.Type.OUTPUT, InovationGenerator.getNodeInovation()));
         net.addConnection(new ConnectionGene(0, 1, 0.5f, InovationGenerator.getConnectionInovation(),true));
-        net.addConnection(new ConnectionGene(1, 0, 0.5f, InovationGenerator.getConnectionInovation(),true));
+        net.addConnection(new ConnectionGene(0, 0, 0.5f, InovationGenerator.getConnectionInovation(),true));
 
+        NEATMating.addNodeMutation(net);
         net.print();
 
+        System.out.println("========================");
+
+        Network net2 = new Network();
+
+        net2.addNode(new NodeGene(NodeGene.Type.INPUT, 0));
+        net2.addNode(new NodeGene(NodeGene.Type.OUTPUT, 1));
+        net2.addConnection(new ConnectionGene(0, 1, 0.5f, 0,true));
+        net2.addConnection(new ConnectionGene(0, 0, 0.5f, 1,true));
+
+        NEATMating.addNodeMutation(net2);
+        net2.print();
+
+        /*
         float[] out = net.fire(in);
         System.out.println(out[0]);
         out = net.fire(in);
         System.out.println(out[0]);
 
-        /*NEATMating.weightMutation(net);
+        NEATMating.weightMutation(net);
         System.out.println("========================");
         net.print();
 
@@ -91,5 +105,10 @@ public class NEATTest
         net2.fire(in);
         System.out.println("============================================================================");
         child.fire(in);
+    }
+
+    private static void trainingTest()
+    {
+
     }
 }

@@ -6,7 +6,7 @@ class Config
     static final int   OUTPUTS                       = 1;
     static final int   HIDDEN_NODES                  = 1_000_000;
 
-    static final float ADD_NODE_CHANCE               = 0.03f;
+    static final float ADD_NODE_CHANCE               = 1.03f;
     static final float ADD_CONNECTION_CHANCE         = 0.05f;
     static final float WEIGH_MUTATION_CHANCE         = 0.8f;
     static final float PERTURB_CHANCE                = 0.9f;

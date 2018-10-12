@@ -30,7 +30,6 @@ public class Network
 
         for(ConnectionGene connection : connectionGenes.values())
         {
-
             nodeGenes.get(connection.getOutNode()).incomingConnections.add(connection);
         }
     }

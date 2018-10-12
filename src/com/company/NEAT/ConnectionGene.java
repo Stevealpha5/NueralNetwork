@@ -61,4 +61,14 @@ class ConnectionGene
     {
         return new ConnectionGene(inNode, outNode, weight, innovation, expressed);
     }
+
+    public boolean equals(ConnectionGene connectionGene)
+    {
+        return connectionGene.getInNode() == inNode && connectionGene.getOutNode() == outNode;
+    }
+
+    public void setInnovation(int innovation)
+    {
+        this.innovation = innovation;
+    }
 }
