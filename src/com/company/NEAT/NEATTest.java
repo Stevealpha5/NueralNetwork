@@ -1,7 +1,5 @@
 package com.company.NEAT;
 
-import com.company.GeneticAlgorithm.Mating;
-
 public class NEATTest
 {
     public static void main (String[] args)

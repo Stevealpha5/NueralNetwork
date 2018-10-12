@@ -14,4 +14,8 @@ class Config
     static final float PERTURB_PERCENT               = 0.05f;
     static final float RANDOM_WEIGHT_UPPER_BOUND     = 2.0f;
     static final float RANDOM_WEIGHT_LOWER_BOUND     = -2.0f;
+
+    static final float C1                            = 0.0f;
+    static final float C2                            = 0.0f;
+    static final float C3                            = 0.0f;
 }
