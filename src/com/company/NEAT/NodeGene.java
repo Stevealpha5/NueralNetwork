@@ -40,4 +40,9 @@ public class NodeGene
     {
         return id;
     }
+
+    public Type getType()
+    {
+        return type;
+    }
 }

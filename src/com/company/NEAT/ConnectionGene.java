@@ -1,6 +1,6 @@
 package com.company.NEAT;
 
-public class ConnectionGene
+class ConnectionGene
 {
     private int innovation;
     private int inNode;
@@ -8,7 +8,7 @@ public class ConnectionGene
     private float weight;
     private boolean expressed;
 
-    public ConnectionGene(int inNode, int outNode, float weight, int innovation, boolean expressed)
+    ConnectionGene(int inNode, int outNode, float weight, int innovation, boolean expressed)
     {
         this.inNode = inNode;
         this.outNode = outNode;
@@ -17,32 +17,47 @@ public class ConnectionGene
         this.expressed = expressed;
     }
 
-    public int getOutNode()
+    int getOutNode()
     {
         return outNode;
     }
 
-    public int getInNode()
+    int getInNode()
     {
         return inNode;
     }
 
-    public float getWeight()
+    float getWeight()
     {
         return weight;
     }
 
-    public boolean getExpressed()
+    boolean getExpressed()
     {
         return expressed;
     }
 
-    public int getInnovation()
+    int getInnovation()
     {
         return innovation;
     }
 
-    public ConnectionGene copy()
+    void dissable()
+    {
+        expressed = false;
+    }
+
+    void enable()
+    {
+        expressed = true;
+    }
+
+    public void setWeight(float weight)
+    {
+        this.weight = weight;
+    }
+
+    ConnectionGene copy()
     {
         return new ConnectionGene(inNode, outNode, weight, innovation, expressed);
     }

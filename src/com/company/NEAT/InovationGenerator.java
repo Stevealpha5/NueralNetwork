@@ -2,11 +2,18 @@ package com.company.NEAT;
 
 public class InovationGenerator
 {
-    private int globalInovation = 0;
+    private static int globalConnectionInnovation = -1;
+    private static int globalNodeInnovation = -1;
 
-    public int getInovation()
+    static int getConnectionInovation()
     {
-        globalInovation++;
-        return globalInovation;
+        globalConnectionInnovation++;
+        return globalConnectionInnovation;
+    }
+
+    static int getNodeInovation()
+    {
+        globalNodeInnovation++;
+        return globalNodeInnovation;
     }
 }

@@ -20,11 +20,17 @@ public class Network
 
     }
 
+    //TODO make less computationally expensive
     private void formNetwork()
     {
+        for(NodeGene node : nodeGenes.values())
+        {
+            node.incomingConnections.clear();
+        }
 
         for(ConnectionGene connection : connectionGenes.values())
         {
+
             nodeGenes.get(connection.getOutNode()).incomingConnections.add(connection);
         }
     }
@@ -32,8 +38,6 @@ public class Network
     public float[] fire(float[] input)
     {
         float sum;
-        int key;
-        NodeGene node;
         float[] out = new float[Config.OUTPUTS];
 
         formNetwork();
@@ -43,55 +47,63 @@ public class Network
             nodeGenes.get(i).setValue(input[i]);
         }
 
-        for(Map.Entry<Integer, NodeGene> entry: nodeGenes.entrySet())
+        for(NodeGene node: nodeGenes.values())
         {
             sum = 0;
-            key = entry.getKey();
-            node = entry.getValue();
 
-            if(key >= Config.INPUTS)
+            for (ConnectionGene connection : node.incomingConnections)
             {
-                //System.out.println("Node: " + key);
-                for (ConnectionGene connection : node.incomingConnections)
-                {
-                    if(connection.getExpressed())
-                        sum += connection.getWeight() * nodeGenes.get(connection.getInNode()).getValue();
-
-                    //System.out.println("Connection: " + connection.getInNode() + " to " + connection.getOutNode() + " : " + connection.getWeight() + " : " + connection.getExpressed());
-                }
-
-
-                node.setValue(ActivationFunctions.sigmoid(sum));
-                //System.out.println("Node value: " + node.getValue());
-                //System.out.println("________________________________");
+                if(connection.getExpressed())
+                    sum += connection.getWeight() * nodeGenes.get(connection.getInNode()).getValue();
             }
+
+            node.setValue(ActivationFunctions.sigmoid(sum, -5));
         }
 
-        for(int i = 0; i < Config.OUTPUTS; i ++)
+        for(int i = 0; i < Config.OUTPUTS; i++)
         {
-            out[i] = nodeGenes.get(Config.INPUTS + Config.HIDDEN_NODES + i).getValue();
+            out[i] = nodeGenes.get(Config.INPUTS + i).getValue();
         }
 
         return out;
     }
 
-    public HashMap<Integer, ConnectionGene> getConnectionGenes()
+    HashMap<Integer, ConnectionGene> getConnectionGenes()
     {
         return connectionGenes;
     }
 
-    public TreeMap<Integer, NodeGene> getNodeGenes()
+    TreeMap<Integer, NodeGene> getNodeGenes()
     {
         return nodeGenes;
     }
 
-    public void addNode(NodeGene node)
+    void addNode(NodeGene node)
     {
         nodeGenes.put(node.getId(), node);
     }
 
-    public void addConnection(ConnectionGene connection)
+    void addConnection(ConnectionGene connection)
     {
         connectionGenes.put(connection.getInnovation(), connection);
     }
+
+    public void print()
+    {
+        formNetwork();
+
+        for(NodeGene node: nodeGenes.values())
+        {
+            System.out.println("Node: " + node.getId());
+
+            for (ConnectionGene connection : node.incomingConnections)
+            {
+                System.out.println("Connection: " + connection.getInNode() + " to " + connection.getOutNode() + " : " + connection.getWeight() + " : " + connection.getExpressed() + " : " + connection.getInnovation());
+            }
+
+            System.out.println("________________________________");
+        }
+    }
 }
+
+

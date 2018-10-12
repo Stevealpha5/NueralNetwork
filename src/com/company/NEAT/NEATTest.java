@@ -1,8 +1,37 @@
 package com.company.NEAT;
 
+import com.company.GeneticAlgorithm.Mating;
+
 public class NEATTest
 {
     public static void main (String[] args)
+    {
+        float[] in = {1 };
+
+        Network net = new Network();
+
+        net.addNode(new NodeGene(NodeGene.Type.INPUT, InovationGenerator.getNodeInovation()));
+        net.addNode(new NodeGene(NodeGene.Type.OUTPUT, InovationGenerator.getNodeInovation()));
+        net.addConnection(new ConnectionGene(0, 1, 0.5f, InovationGenerator.getConnectionInovation(),true));
+        net.addConnection(new ConnectionGene(1, 0, 0.5f, InovationGenerator.getConnectionInovation(),true));
+
+        net.print();
+
+        float[] out = net.fire(in);
+        System.out.println(out[0]);
+        out = net.fire(in);
+        System.out.println(out[0]);
+
+        /*NEATMating.weightMutation(net);
+        System.out.println("========================");
+        net.print();
+
+        NEATMating.weightMutation(net);
+        System.out.println("========================");
+        net.print();*/
+    }
+
+    private static void crossoverTest()
     {
         Network net1 = new Network();
 
@@ -62,6 +91,5 @@ public class NEATTest
         net2.fire(in);
         System.out.println("============================================================================");
         child.fire(in);
-
     }
 }
