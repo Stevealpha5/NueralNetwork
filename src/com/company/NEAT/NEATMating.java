@@ -2,7 +2,6 @@ package com.company.NEAT;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Random;
 
 class NEATMating
@@ -45,7 +44,7 @@ class NEATMating
         return child;
     }
 
-    static void addNodeMutation(Network net)
+    private static void addNodeMutation(Network net)
     {
         boolean mutationFound = false;
 
@@ -87,9 +86,9 @@ class NEATMating
 
                 if(!mutationFound)
                 {
-                    newNode = new NodeGene(NodeGene.Type.HIDDEN, InovationGenerator.getNodeInovation());
-                    connection1 = new ConnectionGene(connection.getInNode(), newNode.getId(), 1.0f, InovationGenerator.getConnectionInovation(), true);
-                    connection2 = new ConnectionGene(newNode.getId(), connection.getOutNode(), connection.getWeight(), InovationGenerator.getConnectionInovation(), true);
+                    newNode = new NodeGene(NodeGene.Type.HIDDEN, InovationGenerator.getNodeNewInnovation());
+                    connection1 = new ConnectionGene(connection.getInNode(), newNode.getId(), 1.0f, InovationGenerator.getConnectionNewInnovation(), true);
+                    connection2 = new ConnectionGene(newNode.getId(), connection.getOutNode(), connection.getWeight(), InovationGenerator.getConnectionNewInnovation(), true);
 
                     splitConnections.put(connection, newNode.getId());
 
@@ -127,7 +126,7 @@ class NEATMating
 
             if(!mutationFound)
             {
-                newConnection = new ConnectionGene(node1, node2, 1.0f, InovationGenerator.getConnectionInovation(), true);
+                newConnection = new ConnectionGene(node1, node2, 1.0f, InovationGenerator.getConnectionNewInnovation(), true);
                 newConnections.add(newConnection);
             }
 

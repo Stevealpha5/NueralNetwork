@@ -3,14 +3,13 @@ package com.company.NEAT;
 import com.company.Utils.ActivationFunctions;
 
 import java.util.HashMap;
-import java.util.Map;
 import java.util.TreeMap;
 
-public class Network
+public class Network implements Comparable<Network>
 {
-    int fittness = 0;
-
-    private boolean hasBais = true;
+    public int fitness = 0;
+    boolean toBeReplaced = false;
+    boolean isInSpecies = false;
 
     private HashMap<Integer, ConnectionGene> connectionGenes = new HashMap<>();
     private TreeMap<Integer, NodeGene> nodeGenes = new TreeMap<>();
@@ -18,6 +17,15 @@ public class Network
     public Network()
     {
 
+    }
+
+    public Network(int fitness, boolean toBeReplaced, boolean isInSpecies, HashMap<Integer, ConnectionGene> connectionGenes, TreeMap<Integer, NodeGene> nodeGenes)
+    {
+        this.fitness = fitness;
+        this.isInSpecies = isInSpecies;
+        this.toBeReplaced = toBeReplaced;
+        this.connectionGenes = connectionGenes;
+        this.nodeGenes = nodeGenes;
     }
 
     //TODO make less computationally expensive
@@ -101,6 +109,29 @@ public class Network
             }
 
             System.out.println("________________________________");
+        }
+    }
+
+    public Network copy()
+    {
+        return new Network(fitness, toBeReplaced, isInSpecies, connectionGenes, nodeGenes);
+    }
+
+    public int compareTo(Network o)
+    {
+
+        if(Float.isNaN(fitness))
+            return -1;
+
+        if(this.fitness > o.fitness)
+        {
+            return -1;
+        }else if(this.fitness < o.fitness)
+        {
+            return 1;
+        }else
+        {
+            return 0;
         }
     }
 }

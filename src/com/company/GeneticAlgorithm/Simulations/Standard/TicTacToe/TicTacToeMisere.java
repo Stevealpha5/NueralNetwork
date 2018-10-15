@@ -88,9 +88,7 @@ public class TicTacToeMisere
         int p1Pos;
         int p2Pos;
 
-
         resetAdvancesArray();
-
 
         for(int i = 0; i < numberOfRounds; i++)
         {

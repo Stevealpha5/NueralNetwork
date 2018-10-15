@@ -1,48 +1,14 @@
 package com.company.NEAT;
 
-import com.company.GeneticAlgorithm.Mating;
+import com.company.NEAT.Simulations.XOR;
 
 public class NEATTest
 {
     public static void main (String[] args)
     {
-        float[] in = {1 };
+        XOR sim = new XOR(1000);
+        sim.run(500);
 
-        Network net = new Network();
-
-        net.addNode(new NodeGene(NodeGene.Type.INPUT, InovationGenerator.getNodeInovation()));
-        net.addNode(new NodeGene(NodeGene.Type.OUTPUT, InovationGenerator.getNodeInovation()));
-        net.addConnection(new ConnectionGene(0, 1, 0.5f, InovationGenerator.getConnectionInovation(),true));
-        net.addConnection(new ConnectionGene(0, 0, 0.5f, InovationGenerator.getConnectionInovation(),true));
-
-        NEATMating.addNodeMutation(net);
-        net.print();
-
-        System.out.println("========================");
-
-        Network net2 = new Network();
-
-        net2.addNode(new NodeGene(NodeGene.Type.INPUT, 0));
-        net2.addNode(new NodeGene(NodeGene.Type.OUTPUT, 1));
-        net2.addConnection(new ConnectionGene(0, 1, 0.5f, 0,true));
-        net2.addConnection(new ConnectionGene(0, 0, 0.5f, 1,true));
-
-        NEATMating.addNodeMutation(net2);
-        net2.print();
-
-        /*
-        float[] out = net.fire(in);
-        System.out.println(out[0]);
-        out = net.fire(in);
-        System.out.println(out[0]);
-
-        NEATMating.weightMutation(net);
-        System.out.println("========================");
-        net.print();
-
-        NEATMating.weightMutation(net);
-        System.out.println("========================");
-        net.print();*/
     }
 
     private static void crossoverTest()
@@ -110,5 +76,73 @@ public class NEATTest
     private static void trainingTest()
     {
 
+    }
+
+    private static void mutaionTest()
+    {
+        float[] in = {1 };
+
+        Network net = new Network();
+
+        net.addNode(new NodeGene(NodeGene.Type.INPUT, InovationGenerator.getNodeNewInnovation()));
+        net.addNode(new NodeGene(NodeGene.Type.OUTPUT, InovationGenerator.getNodeNewInnovation()));
+        net.addConnection(new ConnectionGene(0, 1, 0.5f, InovationGenerator.getConnectionNewInnovation(),true));
+        net.addConnection(new ConnectionGene(0, 0, 0.5f, InovationGenerator.getConnectionNewInnovation(),true));
+
+        //NEATMating.addNodeMutation(net);
+        net.print();
+
+        System.out.println("========================");
+
+        Network net2 = new Network();
+
+        net2.addNode(new NodeGene(NodeGene.Type.INPUT, 0));
+        net2.addNode(new NodeGene(NodeGene.Type.OUTPUT, 1));
+        net2.addConnection(new ConnectionGene(0, 1, 0.5f, 0,true));
+        net2.addConnection(new ConnectionGene(0, 0, 0.5f, 1,true));
+
+       //NEATMating.addNodeMutation(net2);
+        net2.print();
+
+        /*
+        float[] out = net.fire(in);
+        System.out.println(out[0]);
+        out = net.fire(in);
+        System.out.println(out[0]);
+
+        NEATMating.weightMutation(net);
+        System.out.println("========================");
+        net.print();
+
+        NEATMating.weightMutation(net);
+        System.out.println("========================");
+        net.print();*/
+    }
+
+    private static void speciationTeest()
+    {
+        Network net1 = new Network();
+
+        net1.addNode(new NodeGene(NodeGene.Type.INPUT, 0));
+        net1.addNode(new NodeGene(NodeGene.Type.INPUT, 1));
+        net1.addNode(new NodeGene(NodeGene.Type.OUTPUT, 2));
+
+        // net1.addConnection(new ConnectionGene(0, 2, 1, 0, true));
+        net1.addConnection(new ConnectionGene(1, 2, 0.5f, 1, true));
+
+
+        Network net2 = new Network();
+
+        net2.addNode(new NodeGene(NodeGene.Type.INPUT, 0));
+        net2.addNode(new NodeGene(NodeGene.Type.INPUT, 1));
+        net2.addNode(new NodeGene(NodeGene.Type.OUTPUT, 2));
+        net2.addNode(new NodeGene(NodeGene.Type.HIDDEN, 3));
+
+        net2.addConnection(new ConnectionGene(0, 2, 1, 0, true));
+        net2.addConnection(new ConnectionGene(1, 2, 1, 1, false));
+        net2.addConnection(new ConnectionGene(1, 3, 1, 2, true));
+        net2.addConnection(new ConnectionGene(3, 2, 1, 3, true));
+
+        System.out.println(NEATUtils.getCompatibilityDistance(net1, net2));
     }
 }

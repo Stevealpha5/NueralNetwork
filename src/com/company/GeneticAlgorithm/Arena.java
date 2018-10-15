@@ -53,7 +53,6 @@ public class Arena
         repopulate();
     }
 
-
     /**
      * Randomly kills the percentage of the population defined by survivalPercent and deathPercent
      */
