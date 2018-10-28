@@ -13,6 +13,7 @@ class NEATMating
     /**
      * Parent 1 must be more fit parent
      */
+
     static Network crossover(Network parent1, Network parent2)
     {
         Network child = new Network();
@@ -56,7 +57,7 @@ class NEATMating
         {
             if(r.nextFloat() <= Config.ADD_NODE_CHANCE)
             {
-                //TODO make this a separate function
+                //TODO make this a separate function if possible
 
                 for (ConnectionGene con : splitConnections.keySet())
                 {

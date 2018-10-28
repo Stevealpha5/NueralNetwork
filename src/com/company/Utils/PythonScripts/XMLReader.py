@@ -19,14 +19,13 @@ lowestFittness = []
 tree = ET.parse('C:\\Users\\Christopher\\JavaProjects\\MachineLearning\\P2.xml')
 root = tree.getroot()
 
-
 population = []
 
 def best_fit(X, Y, printFormaula=False):
 
     xbar = sum(X)/len(X)
     ybar = sum(Y)/len(Y)
-    n = len(X) # or len(Y)
+    n = len(X) 
 
     numer = sum([xi*yi for xi,yi in zip(X, Y)]) - n * xbar * ybar
     denum = sum([xi**2 for xi in X]) - n * xbar**2
@@ -41,7 +40,6 @@ def best_fit(X, Y, printFormaula=False):
 
 def populateData():
 	
-
 	for generation in root:
 		individuals = []
 
@@ -69,7 +67,6 @@ def drawGraph():
 	fig = plt.figure()
 
 	# bins = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
-
 	# bargraph = plt.subplot2grid((1,2), (0,0), rowspan=1, colspan=1)
 	# bargraph.hist(population[33], bins, histtype='bar', rwidth=0.8)
 

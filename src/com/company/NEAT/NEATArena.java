@@ -52,7 +52,7 @@ public class NEATArena
 
                 for(int i = 0; i < speciatedPopulation.size(); i++)
                 {
-                    if(NEATUtils.getCompatibilityDistance(speciatedPopulation.get(i).getMascot(), net) < Config.SPECIES_THRESHOLD)
+                    if(NEATUtils.getCompatibilityDistance(speciatedPopulation.get(i).getMascot(), net) < Config.SPECIES_THREASHOLD)
                     {
                         speciatedPopulation.get(i).add(net);
                         break;
@@ -130,8 +130,6 @@ public class NEATArena
                 }
             }
         }
-
-
     }
 
     private void repopulate()
@@ -145,8 +143,7 @@ public class NEATArena
 
            if(speciatedPopulation.size() > 1)
            {
-               for (Species s :
-                       speciatedPopulation)
+               for (Species s : speciatedPopulation)
                {
                    s.getMascot().print();
                    System.out.println("################################");

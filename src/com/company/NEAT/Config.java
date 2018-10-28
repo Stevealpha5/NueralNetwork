@@ -19,4 +19,5 @@ class Config
     static final float C2                            = 0.0f;
     static final float C3                            = 0.0f;
     static final int SAFE_SPECIES_SIZE = 15;
+    static final float SPECIES_THREASHOLD =3.0f;
 }

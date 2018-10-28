@@ -1,7 +1,5 @@
 package com.company.NEAT;
 
-import sun.nio.ch.Net;
-
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -55,7 +53,7 @@ public abstract class Simulation
         for(int i = 0; i < numberOfGenerations; i++)
         {
             System.out.println("1");
-            assingeFittness();
+            assignFitness();
             System.out.println("2");
             arena.evolve();
 
@@ -67,5 +65,5 @@ public abstract class Simulation
     }
 
 
-    protected abstract void assingeFittness();
+    protected abstract void assignFitness();
 }
