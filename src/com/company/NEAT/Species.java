@@ -7,7 +7,7 @@ public class Species implements Comparable<Species>
 {
     static Random r = new Random();
     public ArrayList<Network> individuals = new ArrayList<>();
-    public int speciesFitness = 0;
+    private int speciesFitness = 0;
     double percentageOfPopulation;
 
     public Species(Network network)
@@ -25,12 +25,23 @@ public class Species implements Comparable<Species>
     {
         individuals.add(net);
     }
-    public void assingeFitness()
+
+    public void assignFitness()
     {
         for(Network individual : individuals)
             speciesFitness += individual.fitness;
 
         speciesFitness /= individuals.size();
+    }
+
+    public int size()
+    {
+        return individuals.size();
+    }
+
+    public int getSpeciesFitness()
+    {
+        return  speciesFitness;
     }
 
     public int compareTo(Species o)

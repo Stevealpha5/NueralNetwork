@@ -6,84 +6,98 @@ import java.util.Random;
 
 public class NEATArena
 {
-    private ArrayList<Network> population;
+    private ArrayList<Network> unspeciatedPopulation;
     private ArrayList<Species> speciatedPopulation = new ArrayList<>();
     protected float survivalPercent;
     private float deathPercent;
     private Random random = new Random();
     private int killCounter;
     private int totalFitness = 0;
+    private int popSize;
 
     public NEATArena(ArrayList<Network> population, float survivalPercent)
     {
-        this.population = population;
+        this.popSize = population.size();
+        this.unspeciatedPopulation = population;
         this.survivalPercent = survivalPercent;
         deathPercent = 1.0f - survivalPercent;
     }
 
     public void evolve()
     {
+        printSpecies();
 
         speciate();
-        setSpeciesPopsize();
+        setSpeciesPopSize();
 
        for(Species species : speciatedPopulation)
        {
            Collections.sort(species.individuals);
        }
-        Collections.sort(population);
+
+       Collections.sort(speciatedPopulation);
 
         kill();
+
         cleanSpecies();
         repopulate();
     }
 
     private void speciate()
     {
-        for(Network net : population)
+        for(Network net : unspeciatedPopulation)
         {
-            if(!net.isInSpecies)
+            if (speciatedPopulation.size() == 0)
             {
-                if(speciatedPopulation.size() == 0)
+                speciatedPopulation.add(new Species(net));
+                net.isInSpecies = true;
+                continue;
+            }
+
+            for (int i = 0; i < speciatedPopulation.size(); i++)
+            {
+                if (NEATUtils.getCompatibilityDistance(speciatedPopulation.get(i).getMascot(), net) < Config.SPECIES_THREASHOLD)
                 {
-                    speciatedPopulation.add(new Species(net));
-                    continue;
+                    speciatedPopulation.get(i).add(net);
+                    net.isInSpecies = true;
+                    break;
                 }
 
-                for(int i = 0; i < speciatedPopulation.size(); i++)
-                {
-                    if(NEATUtils.getCompatibilityDistance(speciatedPopulation.get(i).getMascot(), net) < Config.SPECIES_THREASHOLD)
-                    {
-                        speciatedPopulation.get(i).add(net);
-                        break;
-                    }
-
-                    speciatedPopulation.add(new Species(net));
-                }
+                speciatedPopulation.add(new Species(net));
+                net.isInSpecies = true;
             }
         }
+
+        unspeciatedPopulation.clear();
     }
 
-    private void setSpeciesPopsize()
+    private void setSpeciesPopSize()
     {
+        totalFitness = 0;
+
         for (Species species: speciatedPopulation)
         {
-            species.assingeFitness();
-            totalFitness += species.speciesFitness;
+            species.assignFitness();
+            totalFitness += species.getSpeciesFitness();
         }
 
         for (Species species: speciatedPopulation)
-            species.percentageOfPopulation = species.speciesFitness / totalFitness;
+        {
+            species.percentageOfPopulation = (float)species.getSpeciesFitness() / totalFitness;
+            //System.out.println("percentage Of Pop: " + (float)species.getSpeciesFitness() / totalFitness);
+        }
 
     }
 
     private void cleanSpecies()
     {
         int numSpecies = speciatedPopulation.size();
+
         for (int i = 0; i < numSpecies; i++)
         {
             if(speciatedPopulation.get(i).individuals.size() == 0)
             {
+                //System.out.println("Species Removed");
                 speciatedPopulation.remove(i);
                 i--;
                 numSpecies--;
@@ -93,43 +107,39 @@ public class NEATArena
 
     private void kill()
     {
-        float popSize = population.size();
         killCounter = 0;
+        int counter;
+        int speciesSize;
 
-        //checks to make sure that the kills are equal to the desired about (to integer precision)
-        while (killCounter < (int) (deathPercent * popSize))
+        for (Species species : speciatedPopulation)
         {
+            counter = species.size() - 1;
+            speciesSize = species.size();
 
-            for (Species species : speciatedPopulation)
+            //System.out.println("\tSpecies Percent " + species.percentageOfPopulation);
+
+            while(species.percentageOfPopulation * popSize < species.size())
             {
-                if(species.individuals.size() < Config.SAFE_SPECIES_SIZE)
-                    continue;
+                species.individuals.remove(counter);
+                killCounter++;
+                counter--;
+            }
 
-                while(species.individuals.size() > species.percentageOfPopulation * popSize)
+            counter = species.size() - 1;
+
+            while((float)species.size() /*/ (float)speciesSize*/ > (float)speciesSize * survivalPercent && counter > 0)
+            {
+                if(random.nextFloat() < 1.0f - survivalPercent)
                 {
-                    float r = random.nextFloat();
-
-                    if (r * (species.individuals.size() / (float) ((species.individuals.size() * 0.1 * i) + 1)) < deathPercent)
-                        species.individuals.get(i).toBeReplaced = true;
-
+                    species.individuals.remove(counter);
+                    killCounter++;
                 }
-
-                for(int i = 0; i < species.individuals.size(); i++)
-                {
-                    float r = random.nextFloat();
-
-                    //adjusts the chances of survival based on fitness NOTE: the population must be sorted by fitness
-                    if (r * (species.individuals.size() / (float) ((species.individuals.size() * 0.1 * i) + 1)) < deathPercent)
-                    {
-                        species.individuals.get(i).toBeReplaced = true;
-                        killCounter++;
-                    }
-
-                    if (killCounter >= (int) (deathPercent * popSize))
-                        return;
-                }
+                counter--;
             }
         }
+
+        //System.out.println("\tKill Counter: " + killCounter);
+
     }
 
     private void repopulate()
@@ -138,76 +148,51 @@ public class NEATArena
 
         for (Species species : speciatedPopulation)
         {
+            int speciesSize = species.size();
 
-            System.out.println("lsdj;lahf " + speciatedPopulation.size());
-
-           if(speciatedPopulation.size() > 1)
-           {
-               for (Species s : speciatedPopulation)
-               {
-                   s.getMascot().print();
-                   System.out.println("################################");
-               }
-
-               try
-               {
-                   Thread.sleep(30000);
-               } catch (InterruptedException e)
-               {
-                   e.printStackTrace();
-               }
-           }
-
-
-            for (int i = 0; i < species.individuals.size(); i++)
+            while (speciesSize  < popSize * species.percentageOfPopulation)
             {
-                if(!species.individuals.get(i).toBeReplaced)
-                    continue;
-
                 int parent1Pos = random.nextInt(species.individuals.size());
                 int parent2pos = random.nextInt(species.individuals.size());
 
-                System.out.println("0.5: " + species.individuals.get(parent1Pos).toBeReplaced + species.individuals.get(parent2pos).toBeReplaced);
-                System.out.println(parent1Pos + " " + parent2pos);
+                //System.out.println("0.5: " + species.individuals.get(parent1Pos).toBeReplaced + species.individuals.get(parent2pos).toBeReplaced);
+                //System.out.println(parent1Pos + " " + parent2pos);
 
-                int couter = 0;
-                while (/*parent1Pos == parent2pos ||*/ species.individuals.get(parent1Pos).toBeReplaced || species.individuals.get(parent2pos).toBeReplaced)
+                while (species.individuals.get(parent1Pos).toBeReplaced || species.individuals.get(parent2pos).toBeReplaced)
                 {
                     parent1Pos = random.nextInt(species.individuals.size());
                     parent2pos = random.nextInt(species.individuals.size());
-                    couter++;
                     System.out.println(species.individuals.get(parent1Pos).toBeReplaced +  " " + species.individuals.get(parent2pos).toBeReplaced);
                     System.out.println("parent pos: " + parent1Pos + " " + parent2pos);
-                    System.out.println("Species zis: " + species.individuals.size());
+                    System.out.println("Species size: " + species.individuals.size());
                     System.out.println("# of species: " + speciatedPopulation.size());
                 }
 
-                System.out.println("9: " + couter);
-
-                species.individuals.set(i, NEATMating.crossover(species.individuals.get(parent1Pos), species.individuals.get(parent2pos)));
+                speciesSize++;
+                unspeciatedPopulation.add(NEATMating.crossover(species.individuals.get(parent1Pos), species.individuals.get(parent2pos)));
             }
         }
     }
 
     /**
-     * Prints the fitness of each individual in the population
+     * Prints the fitness of each individual in the unspeciatedPopulation
      */
     private void printFitness()
     {
-        for (Network individual : population)
+        for (Network individual : unspeciatedPopulation)
         {
             System.out.println(individual.fitness);
         }
     }
 
     /**
-     * Prints the sorted fitness of each individual in the population
+     * Prints the sorted fitness of each individual in the unspeciatedPopulation
      */
     public void printSorttedFitness()
     {
-        Collections.sort(population);
+        Collections.sort(unspeciatedPopulation);
 
-        for (Network individual : population)
+        for (Network individual : unspeciatedPopulation)
         {
             System.out.println(individual.fitness);
         }
@@ -215,20 +200,20 @@ public class NEATArena
 
     public Network getMostFitNetwork()
     {
-        return population.get(0);
+        return unspeciatedPopulation.get(0);
     }
 
-    public ArrayList<Network> getPopulation(){return population;}
+    public ArrayList<Network> getUnspeciatedPopulation(){return unspeciatedPopulation;}
 
     public ArrayList<Network> getSortedPopulation()
     {
-        Collections.sort(population);
-        return population;
+        Collections.sort(unspeciatedPopulation);
+        return unspeciatedPopulation;
     }
 
     public void zeroFitness()
     {
-        for(Network net: population)
+        for(Network net: unspeciatedPopulation)
         {
             net.fitness = -1;
         }
@@ -236,7 +221,20 @@ public class NEATArena
 
     public void printBestStats()
     {
-        Collections.sort(population);
-        System.out.println("Fitness: " + population.get(0).fitness);
+        cleanSpecies();
+        Collections.sort(speciatedPopulation);
+        Collections.sort(speciatedPopulation.get(0).individuals);
+        System.out.println("Fitness: " + speciatedPopulation.get(0).individuals.get(0).fitness +"\n");
+        unspeciatedPopulation.get(0).print();
+    }
+
+    public void printSpecies()
+    {
+        int count = 0;
+        for(Species s : speciatedPopulation)
+        {
+            System.out.println("\tSpecies, Size, Percent: " + count + ", " + s.size() + ",  " + s.percentageOfPopulation);
+            count ++;
+        }
     }
 }

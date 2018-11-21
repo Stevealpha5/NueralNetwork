@@ -2,11 +2,30 @@ package com.company.NEAT;
 
 import com.company.Utils.ActivationFunctions;
 
+import java.io.BufferedWriter;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.TreeMap;
 
 public class Network implements Comparable<Network>
 {
+    private static BufferedWriter writer;
+
+    static
+    {
+        try
+        {
+            writer = new BufferedWriter(new FileWriter("Nural.txt"));
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
     public int fitness = 0;
     boolean toBeReplaced = false;
     boolean isInSpecies = false;
@@ -38,7 +57,20 @@ public class Network implements Comparable<Network>
 
         for(ConnectionGene connection : connectionGenes.values())
         {
-            nodeGenes.get(connection.getOutNode()).incomingConnections.add(connection);
+            if(nodeGenes.get(connection.getOutNode()) == null)
+            {
+                System.out.println("Failed out node ID: " + connection.getOutNode());
+                try
+                {
+                    write();
+                } catch (IOException e)
+                {
+                    e.printStackTrace();
+                }
+                System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+                System.exit(-13);
+            }
+             nodeGenes.get(connection.getOutNode()).incomingConnections.add(connection);
         }
     }
 
@@ -57,11 +89,17 @@ public class Network implements Comparable<Network>
         for(NodeGene node: nodeGenes.values())
         {
             sum = 0;
-
             for (ConnectionGene connection : node.incomingConnections)
             {
-                if(connection.getExpressed())
-                    sum += connection.getWeight() * nodeGenes.get(connection.getInNode()).getValue();
+                try
+                {
+                    if (connection.getExpressed())
+                        sum += connection.getWeight() * nodeGenes.get(connection.getInNode()).getValue();
+                }catch (Exception e)
+                {
+                    System.out.println("Failed at: " + connection.getInNode() + " : " + node.getId());
+                    System.exit(-57);
+                }
             }
 
             node.setValue(ActivationFunctions.sigmoid(sum, -5));
@@ -101,7 +139,7 @@ public class Network implements Comparable<Network>
 
         for(NodeGene node: nodeGenes.values())
         {
-            System.out.println("Node: " + node.getId());
+            System.out.println("Node: " + node.getId() + " : " + node.getType());
 
             for (ConnectionGene connection : node.incomingConnections)
             {
@@ -133,6 +171,33 @@ public class Network implements Comparable<Network>
         {
             return 0;
         }
+    }
+
+    public void write() throws IOException
+    {
+        writer.write("Connections: \n");
+        Iterator it = connectionGenes.entrySet().iterator();
+        while (it.hasNext())
+        {
+            Map.Entry entry = (Map.Entry)it.next();
+            ConnectionGene con = (ConnectionGene) entry.getValue();
+            writer.write("Inovation: " + con.getInnovation() + " From: " + con.getInNode() + " To: " + con.getOutNode() + "\n");
+            it.remove();
+        }
+
+        writer.write("\nNodes: \n");
+
+       it = nodeGenes.entrySet().iterator();
+
+       while(it.hasNext())
+       {
+           Map.Entry entry = (Map.Entry)it.next();
+           NodeGene nodeGene = (NodeGene) entry.getValue();
+           writer.write("ID: " + nodeGene.getId() + "\n");
+           it.remove();
+       }
+
+       writer.close();
     }
 }
 

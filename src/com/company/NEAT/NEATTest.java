@@ -2,13 +2,17 @@ package com.company.NEAT;
 
 import com.company.NEAT.Simulations.XOR;
 
+import java.util.Random;
+
 public class NEATTest
 {
     public static void main (String[] args)
     {
+        XOR sim = new XOR(50);
+        sim.run(5);
 
-        XOR sim = new XOR(1000);
-        sim.run(500);
+        //trainingTest();
+        //crossoverTest();
 
     }
 
@@ -62,21 +66,60 @@ public class NEATTest
         net2.addConnection(new ConnectionGene(Config.INPUTS,Config.INPUTS +  Config.HIDDEN_NODES,1f, 5, false));
         net2.addConnection(new ConnectionGene(Config.INPUTS +1,Config.INPUTS + Config.HIDDEN_NODES,1f, 7, true));
 
-        Network child = NEATMating.crossover(net2, net1);
+        net2 = initPopulation();
+        net1 = net2.copy();
+
+        net2.print();
+        NEATMating.addNodeMutation(net2);
+        NEATMating.addNodeMutation(net2);
+        NEATMating.addNodeMutation(net2);
+        NEATMating.addNodeMutation(net2);
+        NEATMating.addNodeMutation(net2);
+        System.out.println("111111111111111111111111111111111111111111111111111111111111111111111");
+        net2.print();
+        //NEATMating.clearSavedMutations();
+        NEATMating.addConnectionMutation(net2);
+        NEATMating.addConnectionMutation(net2);
+        NEATMating.addConnectionMutation(net2);
+        NEATMating.addConnectionMutation(net2);
+        NEATMating.addConnectionMutation(net2);
+        System.out.println("22222222222222222222222222222222222222222222222222222222222222222222");
+        net2.print();
 
 
-
-        float[] in = {1 , 1, 1};
-        net1.fire(in);
         System.out.println("============================================================================");
+        net1.print();
+        NEATMating.addNodeMutation(net1);
+        System.out.println("============================================================================");
+        net1.print();
+        NEATMating.addConnectionMutation(net1);
+        System.out.println("============================================================================");
+        net1.print();
+
+
+
+
+        float[] in = {1 , 1};
+        System.out.println(net2.fire(in)[0]);
+        System.out.println(net1.fire(in)[0]);
+        /*System.out.println("============================================================================");
         net2.fire(in);
         System.out.println("============================================================================");
-        child.fire(in);
+        child.fire(in);*/
     }
 
     private static void trainingTest()
     {
+        Network net = new Network();
 
+        net.addNode(new NodeGene(NodeGene.Type.INPUT, 0));
+        net.addNode(new NodeGene(NodeGene.Type.OUTPUT, 1));
+
+        net.addConnection(new ConnectionGene(0, 1, 0.49049497f, 0, true));
+
+        float[] in = {0,1};
+        float[] out = net.fire(in);
+        System.out.println(out[0]);
     }
 
     private static void mutaionTest()
@@ -145,5 +188,36 @@ public class NEATTest
         net2.addConnection(new ConnectionGene(3, 2, 1, 3, true));
 
         System.out.println(NEATUtils.getCompatibilityDistance(net1, net2));
+    }
+
+    private static Network initPopulation()
+    {
+        Network network = new Network();
+        Random r = new Random();
+
+        for (int i = 0; i < Config.INPUTS; i++)
+            network.addNode(new NodeGene(NodeGene.Type.INPUT, InovationGenerator.getNodeNewInnovation()));
+
+
+        for (int i = 0; i < Config.OUTPUTS; i++)
+            network.addNode(new NodeGene(NodeGene.Type.OUTPUT, InovationGenerator.getNodeNewInnovation()));
+
+        //adds connection genes
+        if(Config.INPUTS >= Config.OUTPUTS)
+        {
+            for (int i = 0; i < Config.INPUTS; i++)
+            {
+                network.addConnection(new ConnectionGene(i, (i % Config.OUTPUTS) + Config.INPUTS, r.nextFloat(), InovationGenerator.getConnectionNewInnovation(), true));
+            }
+
+        }else{
+
+            for (int i = 0; i < Config.OUTPUTS; i++)
+            {
+                network.addConnection(new ConnectionGene(i % Config.INPUTS, i + Config.INPUTS, r.nextFloat(), InovationGenerator.getConnectionNewInnovation(), true));
+            }
+        }
+
+        return network;
     }
 }

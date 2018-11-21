@@ -1,5 +1,7 @@
 package com.company.NEAT;
 
+import sun.nio.ch.Net;
+
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -29,38 +31,42 @@ public abstract class Simulation
         for (int i = 0; i < Config.OUTPUTS; i++)
             network.addNode(new NodeGene(NodeGene.Type.OUTPUT, InovationGenerator.getNodeNewInnovation()));
 
+        //adds connection genes
         if(Config.INPUTS >= Config.OUTPUTS)
         {
             for (int i = 0; i < Config.INPUTS; i++)
             {
-                network.addConnection(new ConnectionGene(i, i % Config.OUTPUTS, r.nextFloat(), InovationGenerator.getConnectionNewInnovation(), true));
+                network.addConnection(new ConnectionGene(i, (i % Config.OUTPUTS) + Config.INPUTS, r.nextFloat(), InovationGenerator.getConnectionNewInnovation(), true));
             }
 
         }else{
 
             for (int i = 0; i < Config.OUTPUTS; i++)
             {
-                network.addConnection(new ConnectionGene(i % Config.INPUTS, i, r.nextFloat(), InovationGenerator.getConnectionNewInnovation(), true));
+                network.addConnection(new ConnectionGene(i % Config.INPUTS, i + Config.INPUTS, r.nextFloat(), InovationGenerator.getConnectionNewInnovation(), true));
             }
         }
 
+        System.out.println("Init over");
+        //network.print();
+
         for (int i = 0; i < popSize; i++)
+        {
             population.add(network.copy());
+        }
     }
 
     public void run(int numberOfGenerations)
     {
         for(int i = 0; i < numberOfGenerations; i++)
         {
-            System.out.println("1");
             assignFitness();
-            System.out.println("2");
             arena.evolve();
-
 
             System.out.println("_____________________________________________________________________________________");
             System.out.println("Generation: " + i);
-            arena.printBestStats();
+            //arena.printBestStats();
+
         }
     }
 

@@ -18,6 +18,7 @@ public class InovationGenerator
     static int getNodeNewInnovation()
     {
         globalNodeInnovation++;
+        System.out.println("Node Innovation: " + globalNodeInnovation);
         return globalNodeInnovation;
     }
 

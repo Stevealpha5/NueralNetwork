@@ -3,9 +3,12 @@ package com.company.NEAT.Simulations;
 import com.company.NEAT.Network;
 import com.company.NEAT.Simulation;
 
+import java.util.Random;
+
 
 public class XOR extends Simulation
 {
+    Random r = new Random();
     public XOR(int popSize)
     {
         super(popSize);
@@ -26,11 +29,9 @@ public class XOR extends Simulation
                     float inputs[] = {i, j};
                     float output[] = net.fire(inputs);
                     int expected = i ^ j;
-                    fitness += (1 - Math.abs(expected - output[0]));
+                    fitness += (Math.abs(expected - output[0]));
                 }
             }
-
-            fitness = fitness * fitness;
 
             net.fitness = (int)(fitness * (1000));
 

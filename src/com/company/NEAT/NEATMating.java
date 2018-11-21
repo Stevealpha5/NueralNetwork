@@ -2,14 +2,16 @@ package com.company.NEAT;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Random;
+import java.util.Map;
 
 class NEATMating
 {
     private static Random r = new Random();
     private static HashMap<ConnectionGene, Integer> splitConnections = new HashMap<>(); //Integer is the ID of the node that is added, the connection gene is the gene that is split
     private static ArrayList<ConnectionGene> newConnections = new ArrayList<>();
-  ;
+
     /**
      * Parent 1 must be more fit parent
      */
@@ -45,7 +47,7 @@ class NEATMating
         return child;
     }
 
-    private static void addNodeMutation(Network net)
+    public static void addNodeMutation(Network net)
     {
         boolean mutationFound = false;
 
@@ -64,7 +66,6 @@ class NEATMating
                     if(con.equals(connection))
                     {
                         newNode = new NodeGene(NodeGene.Type.HIDDEN, splitConnections.get(con));
-
 
                         for (ConnectionGene con2 : newConnections)
                         {
@@ -88,6 +89,7 @@ class NEATMating
                 if(!mutationFound)
                 {
                     newNode = new NodeGene(NodeGene.Type.HIDDEN, InovationGenerator.getNodeNewInnovation());
+                    System.out.println("Post mutation " + connection.getInnovation());
                     connection1 = new ConnectionGene(connection.getInNode(), newNode.getId(), 1.0f, InovationGenerator.getConnectionNewInnovation(), true);
                     connection2 = new ConnectionGene(newNode.getId(), connection.getOutNode(), connection.getWeight(), InovationGenerator.getConnectionNewInnovation(), true);
 
@@ -101,12 +103,13 @@ class NEATMating
                 net.addNode(newNode);
                 net.addConnection(connection1);
                 net.addConnection(connection2);
+
                 break;
             }
         }
     }
 
-    private static void addConnectionMutation(Network net)
+    public static void addConnectionMutation(Network net)
     {
         if(r.nextFloat() <= Config.ADD_CONNECTION_CHANCE)
         {
@@ -161,6 +164,21 @@ class NEATMating
 
     static void clearSavedMutations()
     {
+        for (ConnectionGene con :
+                newConnections)
+        {
+            System.out.println("New connections: " + con.getInNode() + " : " + con.getOutNode() + " : " + con.getInnovation());
+        }
+
+        Iterator it = splitConnections.entrySet().iterator();
+        while (it.hasNext())
+        {
+            Map.Entry entry = (Map.Entry)it.next();
+            ConnectionGene con = (ConnectionGene) entry.getKey();
+            System.out.println("Split Connection Innovation: " + con.getInnovation() + " New Node ID: " + entry.getValue());
+            it.remove();
+        }
+
         splitConnections.clear();
         newConnections.clear();
     }
