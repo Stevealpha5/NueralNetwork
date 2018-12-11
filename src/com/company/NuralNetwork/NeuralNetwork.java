@@ -3,7 +3,6 @@ package com.company.NuralNetwork;
 import com.company.Utils.Utils;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 public class NeuralNetwork implements Comparable<NeuralNetwork>
 {

@@ -144,7 +144,7 @@ public class NEATArena
 
     private void repopulate()
     {
-        NEATMating.clearSavedMutations();
+        //NEATMating.clearSavedMutations();
 
         for (Species species : speciatedPopulation)
         {

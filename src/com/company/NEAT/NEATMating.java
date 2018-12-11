@@ -162,6 +162,9 @@ class NEATMating
         }
     }
 
+    /**
+     * DO NOT USE IS BROKEN or maybe not who the fuck knows
+     */
     static void clearSavedMutations()
     {
         for (ConnectionGene con :

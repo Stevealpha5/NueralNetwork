@@ -8,8 +8,8 @@ public class NEATTest
 {
     public static void main (String[] args)
     {
-        XOR sim = new XOR(50);
-        sim.run(5);
+        XOR sim = new XOR(5000);
+        sim.run(5000);
 
         //trainingTest();
         //crossoverTest();

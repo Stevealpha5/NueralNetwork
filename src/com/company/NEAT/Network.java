@@ -67,6 +67,7 @@ public class Network implements Comparable<Network>
                 {
                     e.printStackTrace();
                 }
+
                 System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
                 System.exit(-13);
             }
